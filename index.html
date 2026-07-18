@@ -1,25 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark" data-ccy="mxusdt">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 <title>AtomiX</title>
+<link rel="stylesheet" href="assets/style.css" />
 <style>
-  /* Phase 1 smoke shell — the full pixel-parity UI lands in Phase 2. Dark ground so the boot screen matches. */
-  html, body { margin: 0; background: #0B0D12; color: #EEF0F4; font-family: -apple-system, system-ui, sans-serif; }
-  #boot { padding: 24px 16px; }
-  #boot h1 { font-size: 21px; letter-spacing: -0.01em; margin: 0 0 4px; }
-  #boot .sub { color: #8B909C; font-size: 12px; }
-  #log { margin-top: 16px; font-family: ui-monospace, "JetBrains Mono", monospace; font-size: 12px; white-space: pre-wrap; color: #8B909C; }
-  #log .ok { color: #3FD0A2; } #log .err { color: #FF5C5C; }
+  #toast { position: fixed; left: 50%; bottom: calc(72px + env(safe-area-inset-bottom)); transform: translateX(-50%) translateY(20px);
+    background: var(--surface2); color: var(--text); padding: 10px 16px; border-radius: 12px; font-size: 13px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.4); opacity: 0; pointer-events: none; transition: opacity .18s, transform .18s; max-width: 80%; }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #root:empty::after { content: 'AtomiX'; display: block; padding: 40px 16px; color: var(--dim); font-size: 21px; font-weight: 700; }
 </style>
 </head>
 <body>
-<div id="boot">
-  <h1>AtomiX</h1>
-  <div class="sub">v0.0.1 · Phase 1 · initialising…</div>
-  <div id="log"></div>
-</div>
+<div id="root"></div>
 
 <script src="mds.js"></script>
 <script src="lib/rhino_shim.js"></script>
@@ -39,22 +34,16 @@
 <script src="lib/htlc.js"></script>
 <script src="lib/prng.js"></script>
 <script src="lib/boot.js"></script>
+<script src="lib/order.js"></script>
+<script src="lib/orderbook.js"></script>
+<script src="lib/fmt.js"></script>
+<script src="lib/ui.js"></script>
+<script src="lib/app.js"></script>
 <script>
-  var logEl = document.getElementById('log');
-  function line(s, cls) { logEl.innerHTML += '<div' + (cls ? ' class="' + cls + '"' : '') + '>' + s + '</div>'; }
   MDS.init(function (msg) {
-    if (msg.event !== 'inited') return;
-    line('MDS inited — deriving identity…');
-    AX.boot.init(function (err, ctx) {
-      if (err) { line('✗ ' + err.message, 'err'); return; }
-      var mx = ctx.identities.mxusdt, mn = ctx.identities.minima;
-      line('✓ mxUSDT id  ' + mx.publicId().slice(0, 22) + '…', 'ok');
-      line('✓ MINIMA id  ' + mn.publicId().slice(0, 22) + '…', 'ok');
-      line('✓ ETH addr   ' + ctx.eth.address, 'ok');
-      line('✓ HTLC addr  ' + ctx.htlc.address.slice(0, 20) + '…  (script registered)', 'ok');
-      line('✓ swap key   ' + (ctx.htlc.publickey || '').slice(0, 22) + '…', 'ok');
-      line('\nPhase 1 identity ready. UI + trading land in Phase 2+.', 'ok');
-    });
+    if (msg.event === 'inited') AX.app.start();
+    else if (msg.event === 'NEWBLOCK') { if (AX.ui.state.ctx) { AX.ui.block = parseInt(msg.data.txpow.header.block); } }
+    else if (msg.event === 'NEWBALANCE') { if (AX.ui.state.ctx && AX.app.onBalance) AX.app.onBalance(); }
   });
 </script>
 </body>

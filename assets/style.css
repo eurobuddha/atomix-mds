@@ -1,0 +1,128 @@
+/* AtomiX design system — port of Design.java tokens × TradingContext accent. Pixel parity target.
+   4 theme combos: [data-theme=dark|light] × [data-ccy=minima|mxusdt] on <html>. Sizes: native sp/dp → px 1:1. */
+
+@font-face { font-family: 'Inter'; src: url('fonts/inter_var.ttf') format('truetype'); font-weight: 400 700; font-display: swap; }
+@font-face { font-family: 'JBMono'; src: url('fonts/jetbrains_mono_var.ttf') format('truetype'); font-weight: 400 700; font-display: swap; }
+
+:root {
+  /* accent (per currency) — defaults to mxUSDT green; overridden by [data-ccy=minima] */
+  --accent: #26A17B; --grad-start: #3DBF93; --on-accent: #FFFFFF;
+  --usdt-teal: #26A69A; --warn: #E6A23C;
+}
+:root[data-ccy="minima"] { --accent: #F7931A; --grad-start: #FFAB3D; }
+/* dark (ONYX) is the default ground */
+:root, :root[data-theme="dark"] {
+  --bg: #0B0D12; --surface: #12151C; --surface2: #1B1F28; --border: rgba(255,255,255,0.07);
+  --text: #EEF0F4; --dim: #8B909C; --dim2: #6F7583; --in: #3FD0A2; --red: #FF5C5C;
+  --accent-soft: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+:root[data-theme="light"] {
+  --bg: #F3F4F7; --surface: #FFFFFF; --surface2: #EDEEF2; --border: #E6E8EE;
+  --text: #181B22; --dim: #8B909C; --dim2: #A6ABB6; --in: #12A97E; --red: #E5484D;
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+:root[data-ccy="minima"][data-theme="dark"] { --on-accent: #0B0D12; }
+:root[data-ccy="minima"][data-theme="light"] { --on-accent: #201400; }
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; background: var(--bg); color: var(--text);
+  font-family: Inter, -apple-system, system-ui, sans-serif; font-size: 14px; }
+body { padding-bottom: env(safe-area-inset-bottom); }
+.mono { font-family: JBMono, ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+/* layout */
+#app { display: flex; flex-direction: column; min-height: 100vh; }
+#scroll { flex: 1; overflow-y: auto; padding: 14px 16px 24px; }
+#pairbanner { display: none; background: var(--accent); color: var(--on-accent);
+  font-weight: 700; font-size: 13px; padding: 10px 16px; text-align: center; }
+#pairbanner.show { display: block; }
+
+/* header */
+.hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+.hdr .brand { font-size: 21px; font-weight: 700; letter-spacing: -0.01em; flex: 1; }
+.subline { color: var(--dim2); font-size: 12px; margin-bottom: 16px; }
+
+/* pills */
+.pill { display: inline-flex; align-items: center; gap: 6px; border-radius: 14px; padding: 6px 10px;
+  font-size: 11px; background: var(--surface2); color: var(--dim); border: none; cursor: pointer; font-family: inherit; }
+.pill.accent { background: var(--accent-soft); color: var(--accent); }
+.pill.solid { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+.pill.on { background: var(--accent-soft); color: var(--accent); }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.pill:active { transform: scale(0.96); }
+
+/* tab bar */
+#tabbar { display: flex; background: var(--surface); border-top: 1px solid var(--border); }
+#tabbar .tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom)); color: var(--dim); cursor: pointer; font-size: 10.5px; }
+#tabbar .tab.sel { color: var(--accent); }
+#tabbar .tab.sel .ico-wrap { background: var(--accent-soft); }
+#tabbar .ico-wrap { border-radius: 14px; padding: 3px 12px; }
+#tabbar .tab svg { width: 22px; height: 22px; display: block; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* cards + controls */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 16px 16px; margin-top: 12px; }
+.card.tight { padding: 14px; border-radius: 14px; }
+.label { color: var(--dim); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+.cta { display: block; width: 100%; border: none; border-radius: 14px; padding: 14px;
+  background: linear-gradient(var(--grad-start), var(--accent)); color: var(--on-accent);
+  font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer; margin-top: 14px; }
+.cta:active, .btn:active, .row-tap:active { transform: scale(0.98); }
+.btn { border: none; border-radius: 14px; padding: 12px; background: var(--surface2); color: var(--text);
+  font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; }
+
+/* swap segmented toggle */
+.seg { display: flex; gap: 5px; margin: 8px 0 12px; }
+.seg .segbtn { flex: 1; text-align: center; border: none; border-radius: 12px; padding: 12px; font-size: 14px;
+  background: var(--surface2); color: var(--dim); font-family: inherit; font-weight: 600; cursor: pointer; }
+.seg .segbtn.on { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+
+/* dual-amount swap card */
+.amtrow { display: flex; align-items: center; gap: 10px; }
+.coinchip { display: flex; align-items: center; gap: 8px; }
+.coinchip .disc { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 15px; color: var(--on-accent); background: var(--accent); }
+.coinchip .disc.usdt { background: var(--usdt-teal); color: #fff; }
+.coinchip .tick { font-size: 15px; font-weight: 700; }
+.coinchip .avail { color: var(--dim); font-size: 11px; }
+.amt { flex: 1; text-align: right; border: none; background: transparent; color: var(--text);
+  font-family: JBMono, monospace; font-weight: 700; font-size: 26px; outline: none; min-width: 0; }
+.amt.recv { color: var(--accent); }
+.flip { display: flex; align-items: center; margin: 12px 0; }
+.flip .ln { flex: 1; height: 1px; background: var(--border); }
+.flip .btn-flip { width: 38px; height: 38px; border-radius: 19px; border: 1px solid var(--border); background: var(--surface2);
+  color: var(--accent); font-size: 16px; font-weight: 700; cursor: pointer; }
+.bestline { color: var(--dim2); font-size: 11.5px; margin-top: 8px; }
+.sliprow { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+
+/* order book depth rows */
+.legend { display: flex; padding: 4px 6px 2px; }
+.legend span { flex: 1; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }
+.legend .buy { text-align: right; color: var(--red); } .legend .sell { color: var(--in); }
+.depth { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 12px;
+  background: var(--surface); padding: 7px 10px; margin-top: 6px; }
+.depth.best { background: var(--surface2); }
+.depth .half { flex: 1; }
+.depth .bid { text-align: right; } .depth .divider { color: var(--dim2); }
+.depth .px { font-family: JBMono, monospace; font-weight: 700; }
+.depth.best .px { font-size: 18.5px; } .depth .px { font-size: 15px; }
+.depth .bidpx { color: var(--in); } .depth .askpx { color: var(--red); }
+.depth .sz { color: var(--dim); font-family: JBMono, monospace; }
+.depth .tag { font-size: 9.5px; color: var(--dim2); } .depth .tag.you { color: var(--accent); }
+
+/* stage tracker */
+.stages { margin-top: 8px; }
+.stage { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 13px; }
+.stage .sdot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.stage.done .sdot { background: var(--in); } .stage.active .sdot { background: var(--accent); }
+.stage.warn .sdot { background: var(--warn); } .stage.pending .sdot { background: transparent; border: 1px solid var(--dim2); }
+.stage.active { color: var(--text); font-weight: 700; } .stage.pending { color: var(--dim); } .stage.warn { color: var(--warn); }
+
+/* wallet / activity cards + status pills */
+.bigval { font-family: JBMono, monospace; font-weight: 700; font-size: 22px; }
+.status { border-radius: 12px; padding: 3px 9px; font-size: 11px; background: var(--surface2); color: var(--dim); }
+.status.complete { background: var(--in); color: var(--on-accent); }
+.status.refunded, .status.error { background: var(--red); color: var(--on-accent); }
+.statusline.ok { color: var(--in); } .statusline { color: var(--dim); font-size: 12px; margin-top: 8px; }
+.empty { color: var(--dim); font-size: 12.5px; margin-top: 12px; }
+.spacer { height: 8px; }
