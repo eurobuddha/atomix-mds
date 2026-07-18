@@ -12,7 +12,13 @@
   "type": "commonjs",
   "dependencies": {
     "@noble/hashes": "^2.2.0",
+    "blakejs": "^1.2.1",
+    "elliptic": "^6.6.1",
     "ethers": "^6.17.0",
-    "libsodium-wrappers": "^0.8.4"
+    "js-sha256": "^0.12.0",
+    "js-sha3": "^0.12.0",
+    "js-sha512": "^0.9.0",
+    "libsodium-wrappers": "^0.8.4",
+    "tweetnacl": "^1.0.3"
   }
 }
