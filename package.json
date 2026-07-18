@@ -1,0 +1,9 @@
+{
+  "name": "atomix-mds",
+  "version": "0.0.1",
+  "private": true,
+  "description": "AtomiX MDS MiniDapp — native-parity trustless cross-chain swaps",
+  "scripts": {
+    "test": "node test/run.js && bash test/rhino.sh"
+  }
+}
