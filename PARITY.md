@@ -20,7 +20,7 @@ MINIMA mode, OTC cross-peer, refund, tombstone-cross-peer, sweep, mid-swap switc
 | 5 tabs Swap/Wallet/Activity/Market/OTC (m:131) | ui.js tabbar | 📱 |
 | Currency pill switch + full re-theme f(currency×dark/light) | ui.js header + data-ccy CSS | 📱 |
 | Dark/light toggle | ui.js | 📱 |
-| Welcome/help dialog (m:2650) | ui.js welcomeDialog (first-run once + header ? pill; MDS-correct Write-permission bullet — native's title still says 'usdtSwap': flagged for native backport) | ✅ 0.1.7 |
+| Welcome/help dialog (m:2650) | ui.js welcomeDialog (first-run once + header ? pill; MDS-correct Write-permission bullet) — native title fixed to AtomiX in 0.1.9 | ✅ |
 
 ## Swap tab
 | Native | MDS | Status |
@@ -43,7 +43,7 @@ MINIMA mode, OTC cross-peer, refund, tombstone-cross-peer, sweep, mid-swap switc
 | Fund/QR receive dialog: full address + QR(plain address, white quiet-zone) + all-EVM note + Copy (m:3222) | ui.js receiveDialog (vendored qrcode.js, MIT) | ✅ 0.1.6 |
 | Export key 2-step warning → reveal → Copy (m:3264/3275) | ui.js exportKeyDialog/revealKeyDialog | ✅ 0.1.6 |
 | Balance pulse on swap completion (m:2569) | ui.js walletCard pulse (one-shot on value change) | ✅ 0.1.7 |
-| **Manual Send ETH/USDT** | **MDS-ONLY EXTRA (user decision 2026-07-19)** — lib/wallet.js via the shared ethtx nonce serializer + ax_ethlock; native stays receive-only | ✅ 0.1.6 (MDS only, deliberate divergence) |
+| **Manual Send ETH/USDT** | BOTH apps (user reversed the divergence 2026-07-19): MDS lib/wallet.js 0.1.6 ↔ native eth/EthSend 0.1.9 — identical validation rules (raw balances, gas reserve ×1.2, USDT-needs-gas-ETH), mirrored test suites (wallet.test.js ↔ EthSendTest) | ✅ both |
 
 ## Activity tab
 | Native | MDS | Status |
