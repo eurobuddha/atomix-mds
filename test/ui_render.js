@@ -18,7 +18,7 @@ const nc = require('crypto');
 const FILES = [
     'lib/rhino_shim.js', 'vendor/nacl.js', 'vendor/blake.js', 'vendor/sha256.js', 'vendor/sha512.js', 'vendor/sha3.js', 'vendor/elliptic.js',
     'lib/hex.js', 'lib/flow.js', 'crypto/ax_sodium.js', 'crypto/ax_eth.js', 'lib/decimal.js', 'lib/identity.js', 'lib/trading.js',
-    'lib/order.js', 'lib/orderbook.js', 'lib/swapplan.js', 'lib/abi.js', 'lib/ethhtlc.js', 'lib/ethrpc.js', 'lib/ethtx.js', 'lib/ethops.js', 'lib/wallet.js', 'vendor/qrcode.js', 'lib/fmt.js', 'lib/ui.js'
+    'lib/order.js', 'lib/orderbook.js', 'lib/swapplan.js', 'lib/abi.js', 'lib/ethhtlc.js', 'lib/ethrpc.js', 'lib/ethtx.js', 'lib/ethops.js', 'lib/wallet.js', 'lib/htlc.js', 'lib/mdsw.js', 'lib/swapdb.js', 'lib/inspect.js', 'vendor/qrcode.js', 'lib/fmt.js', 'lib/ui.js'
 ];
 const vm = require('vm');
 for (const f of FILES) { try { vm.runInThisContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), { filename: f }); } catch (e) { console.error('LOAD', f, e); process.exit(1); } }
@@ -60,6 +60,39 @@ ok('market: order book count', root().textContent.indexOf('Order book  ·  2 liv
 ok('market: depth rows rendered', root().querySelectorAll('.depth').length >= 1);
 ok('market: best row deepest-first (cap30 before cap5)', root().querySelector('.depth.best').textContent.indexOf('30') > -1);
 ok('market: legend', root().textContent.indexOf('SELL mxUSDT (bid)') > -1);
+// market history (empty state → chart canvas + no-backfill note)
+ok('market: history header', root().textContent.indexOf('MARKET HISTORY') > -1);
+ok('market: chart canvas present', !!root().querySelector('canvas'));
+ok('market: stats line', root().textContent.indexOf('price only (buy/sell not shown)') > -1);
+ok('market: no-backfill note', root().textContent.indexOf('can’t backfill') > -1);
+// with data: rows + status pills
+AX.ui.state.market = { chart: [{ price: 0.99, createdBlock: 100 }, { price: 1.01, createdBlock: 200 }],
+    recent: [{ price: 1.01, sizeMinima: '5', status: 'EXECUTED', observedAt: Date.now() - 60000 },
+             { price: 0.98, sizeMinima: '2', status: 'OPEN', observedAt: Date.now() - 5000 },
+             { price: 0.97, sizeMinima: '1', status: 'REFUNDED', observedAt: Date.now() - 7200000 }] };
+AX.ui.render();
+ok('market: last price in stats', root().textContent.indexOf('last 1.01 USDT/mxUSDT') > -1);
+ok('market: filled/open counts', root().textContent.indexOf('1 filled · 1 open') > -1);
+ok('market: filled pill', root().textContent.indexOf('filled') > -1 && root().textContent.indexOf('cancelled') > -1);
+ok('market: relative time', root().textContent.indexOf('min. ago') > -1);
+AX.ui.state.market = { chart: [], recent: [] };
+
+// welcome dialog (header ? pill)
+root().querySelectorAll('.pill').forEach(function (p) { if (p.textContent === '?') p.dispatchEvent(new dom.window.Event('click')); });
+AX.ui.render();
+ok('welcome: title', root().textContent.indexOf('Welcome to AtomiX') > -1);
+ok('welcome: MDS-correct requirement (Write permission, not Minima Core)', root().textContent.indexOf('Write permission') > -1 && root().textContent.indexOf('Minima Core') < 0);
+ok('welcome: tab guide', root().textContent.indexOf('OTC (private deals)') > -1);
+AX.ui.closeDialog();
+
+// activity: detail hint + the swap-report dialog
+AX.ui.state.tab = 'activity'; AX.ui.render();
+ok('activity: inspect hint', root().textContent.indexOf('Tap to inspect both legs live') > -1);
+AX.ui.swapReportDialog('0xh', ['Sell 6.5 mxUSDT → 6.435 USDT  ·  started', '• Your 6.5 mxUSDT: LOCKED — refundable at block 999', '• Secret: known (you can claim)']);
+ok('report: title', root().textContent.indexOf('Swap status') > -1);
+ok('report: leg line', root().textContent.indexOf('LOCKED — refundable at block 999') > -1);
+ok('report: check again', root().textContent.indexOf('Check again') > -1);
+AX.ui.closeDialog();
 
 AX.ui.state.tab = 'wallet'; AX.ui.render();
 ok('wallet: minima balance', root().textContent.indexOf('493.8 mxUSDT') > -1);

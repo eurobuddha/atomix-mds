@@ -38,6 +38,7 @@ MDS.load('lib/take.js');           // buy handshake (engine.startLeg uses it for
 MDS.load('lib/swapplan.js');       // amount math (engine start paths quantise via it)
 MDS.load('lib/engine.js');         // taker/executor start paths (OTC execute locks leg 1)
 MDS.load('lib/otc.js');            // OTC negotiation engine + LP verify (needs mds + identity + order + orderbook + ethops + htlc)
+MDS.load('lib/market.js');         // network-wide trade-history collector (needs swapdb + htlc + flow) — service-ONLY writer
 
 var READY = false, CTX = null, POLLING = false, POLL_START = 0, RPC = null;
 var POLL_STUCK_MS = 5 * 60 * 1000;   // watchdog: a wedged poll (uncaught throw in a callback chain) must self-clear
@@ -120,7 +121,13 @@ function poll() {
                         AX.otc.scanChat(function () {
                             AX.otc.expireStale(Date.now(), function (hash, scb) {
                                 AX.swapdb.getSwap(hash, function (e, s) { scb(s ? s.status : null); });
-                            }, function () { POLLING = false; });
+                            }, function () {
+                                // market feed LAST (display data — never delays settlement); own block read.
+                                AX.htlc.currentBlock(function (eB, tip) {
+                                    if (eB) { POLLING = false; return; }
+                                    AX.market.poll(tip, function () { POLLING = false; });
+                                });
+                            });
                         });
                     });
                 });

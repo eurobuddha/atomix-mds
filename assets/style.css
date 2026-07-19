@@ -141,3 +141,10 @@ body { padding-bottom: env(safe-area-inset-bottom); }
 .dlgline.red { color: var(--red); font-size: 12px; padding-top: 8px; }
 .modal-btns { display: flex; gap: 8px; margin-top: 16px; }
 .modal-btns .pill { flex: 0 0 auto; padding: 10px 16px; }
+
+/* ---- 0.1.7: market history + balance pulse ---- */
+.pill.fill-ok { background: var(--in); color: #fff; border-color: transparent; }
+.pill.fill-ref { background: var(--red); color: #fff; border-color: transparent; }
+@keyframes balpulse { 0% { opacity: .35; } 100% { opacity: 1; } }
+.bigval.pulse { animation: balpulse .9s ease-out; }
+canvas.card { display: block; background: var(--surface); border: 1px solid var(--border); }
