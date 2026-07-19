@@ -17,11 +17,11 @@ if [ "$FIRST" != "lib/rhino_shim.js" ]; then
   echo "GATE FAIL: service.js first load is '$FIRST', expected lib/rhino_shim.js"; exit 1
 fi
 
-# 2) build the concat from service.js's MDS.load order, up to (not incl.) the first MDS-dependent module (lib/mds.js).
+# 2) build the concat from service.js's MDS.load order, up to (not incl.) the first MDS-dependent module (lib/mdsw.js).
 TMP="$(mktemp -t atomix_rhino).js"
 trap 'rm -f "$TMP"' EXIT
 grep -oE "MDS.load\('[^']+'\)" service.js | sed "s/MDS.load('//;s/')//" | while read -r f; do
-  case "$f" in lib/mds.js) break;; esac
+  case "$f" in lib/mdsw.js) break;; esac
   [ -f "$f" ] || { echo "GATE FAIL: service.js loads missing file $f" >&2; exit 1; }
   cat "$f" >> "$TMP"; echo ";" >> "$TMP"
 done
