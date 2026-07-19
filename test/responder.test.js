@@ -76,6 +76,10 @@
     T.eq('incoming: stale entry pruned, fresh kept', Object.keys(R._incoming()).length, 1);
     R._reset();
     for (var qi = 0; qi < R.INCOMING_MAX + 10; qi++) R.addIncoming('0x' + ('h' + qi));   // cap check
-    T.eq('incoming: hard cap holds', Object.keys(R._incoming()).length, R.INCOMING_MAX);
+    T.eq('incoming: hard cap holds (evict-oldest)', Object.keys(R._incoming()).length, R.INCOMING_MAX);
+    T.ok('incoming: full queue keeps the NEWEST (junk cannot squat out fresh takes)', !!R._incoming()['h' + (R.INCOMING_MAX + 9)]);
+    T.ok('incoming: the oldest was evicted', !R._incoming()['h0']);
+    R.addIncoming('0x' + 'f1'.repeat(32), true);                                        // durable OTC re-arm bypasses the cap
+    T.eq('incoming: force (OTC re-arm) bypasses the cap', Object.keys(R._incoming()).length, R.INCOMING_MAX + 1);
     R._reset();
 })();

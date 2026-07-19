@@ -3,9 +3,10 @@
     var MK = AX.maker, O = AX.order, B = AX.book, PEG = AX.peg, TR = AX.trading, MDS = AX.mds;
 
     // in-memory kv (maker persists config/state through AX.mds.kvGet/kvSet)
-    var kv = {}, savedGet = MDS.kvGet, savedSet = MDS.kvSet;
+    var kv = {}, savedGet = MDS.kvGet, savedSet = MDS.kvSet, savedDel = MDS.kvDel;
     MDS.kvGet = function (k, d, cb) { cb(k in kv ? kv[k] : d); };
     MDS.kvSet = function (k, v, cb) { kv[k] = v; cb && cb(null); };
+    MDS.kvDel = function (k, cb) { delete kv[k]; cb && cb(null); };
     // capture published orders
     var savedPub = B.publishFresh, published = [];
     B.publishFresh = function (me, order, cb) { published.push(order); cb(null); };
@@ -88,7 +89,17 @@
         T.eq('resetForReload publishes NOTHING (UI already tombstoned)', published.length, 0);
         T.eq('resetForReload cleared the live order', MK.currentOrder(), null);
         T.eq('resetForReload cleared the cfg cache', Object.keys(MK._state().cfg).length, 0);
+
+        // ---- legacy-key migration: a pre-0.1.3 un-suffixed cfg is adopted into the active currency's keys ONCE ----
+        delete kv['maker_cfg_' + ccyKey];
+        kv['maker_cfg'] = JSON.stringify({ pegEnable: true, step: 7, size: 3, levels: 1 });
+        kv['maker_manual'] = JSON.stringify({ bids: [{ p: 0.9, a: 1 }], asks: [] });
+        MK.loadConfig(function () {});
+        T.eq('legacy cfg adopted on first load', MK._state().cfg.step, 7);
+        T.ok('legacy migrated to the per-currency key', ('maker_cfg_' + ccyKey) in kv);
+        T.ok('legacy keys deleted after adoption', !('maker_cfg' in kv) && !('maker_manual' in kv));
+        T.eq('legacy manual ladder carried over', MK._state().manual.bids.length, 1);
     } finally {
-        MDS.kvGet = savedGet; MDS.kvSet = savedSet; B.publishFresh = savedPub;
+        MDS.kvGet = savedGet; MDS.kvSet = savedSet; MDS.kvDel = savedDel; B.publishFresh = savedPub;
     }
 })();

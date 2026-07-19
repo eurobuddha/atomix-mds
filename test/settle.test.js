@@ -198,5 +198,36 @@
         ST.poll(function () {});
         T.ok('R3: zero preimage NOT harvested (no bogus secret stored)', secrets3[HASH] == null);
         restore();
+
+        // ---------- (R4) a hostile mismatch coin must NOT poison the REAL claim (EV_COLLECT-poison, shared native gap) ----------
+        // Attacker locks a dust coin carrying my ACTIVE hash + my receiver key but the wrong amount. Old behavior
+        // logged EV_COLLECT → hasEvent(EV_COLLECT) then blocked the real coin's claim FOREVER (mutual-refund grief).
+        cfg();
+        var r4 = [], events4 = {};                                 // realistic event log: hasEvent reflects logEvent
+        stub(DB, 'allSwaps', function (cb) { cb(null, [{ hash: HASH, myLegIsMinima: false, status: 'STARTED', buyToken: 'mxUSDT' }]); });
+        stub(DB, 'getSecret', function (h, cb) { cb(null, '0xSECRET'); });
+        stub(DB, 'getRequest', function (h, cb) { cb(null, { reqAmount: '4.95', reqToken: 'minima' }); });
+        stub(DB, 'hasEvent', function (h, ev, cb) { cb(null, !!events4[ev]); });
+        stub(DB, 'logEvent', function (h, ev, tok, amt, note, cb) { events4[ev] = 1; r4.push('log:' + ev + ':' + note); cb && cb(null); });
+        stub(DB, 'setSwapStatus', function (h, s, cb) { r4.push('status:' + s); cb && cb(null); });
+        stub(DB, 'getSwap', function (h, cb) { cb(null, { hash: h, status: 'STARTED', buyToken: 'mxUSDT' }); });
+        var poisonCoin = { coinid: '0xBAD', tokenid: USDT, tokenamount: '0.1', state: { '0': '0xATTACKER', '2': '[minima]', '3': '999999', '4': '0xMYPK', '5': HASH } };
+        var realCoin = { coinid: '0xGOOD', tokenid: USDT, tokenamount: '4.95', state: { '0': '0xMAKER', '2': '[minima]', '3': '999999', '4': '0xMYPK', '5': HASH } };
+        stub(H, 'currentBlock', function (cb) { cb(null, 100); });
+        stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, [poisonCoin, realCoin]); });   // poison seen FIRST
+        stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });
+        stub(H, 'scanNotifySecret', function (h, d, cb) { cb(null, []); });
+        var claimed4 = null;
+        stub(H, 'claim', function (c, h, s, addr, cb) { claimed4 = { coinid: c.coinid }; cb(null, '0xTXP'); });
+        stub(EO, 'make', function () { return { getContract: function (cid, cb) { cb(null, null); } }; });
+        ST.poll(function () {});
+        T.ok('R4: mismatch logged as EV_MISMATCH, never EV_COLLECT', r4.some(function (x) { return x.indexOf('log:' + DB.EV_MISMATCH) === 0; }) && !r4.some(function (x) { return x.indexOf('log:' + DB.EV_COLLECT + ':counterparty') === 0; }));
+        T.ok('R4: the REAL coin still claims despite the poison coin', claimed4 && claimed4.coinid === '0xGOOD');
+        // second poll: the once-guard stops mismatch log spam
+        var before = r4.filter(function (x) { return x.indexOf('log:' + DB.EV_MISMATCH) === 0; }).length;
+        ST._reset(); ST.poll(function () {});
+        var after = r4.filter(function (x) { return x.indexOf('log:' + DB.EV_MISMATCH) === 0; }).length;
+        T.eq('R4: mismatch logged ONCE (no per-poll spam)', [before, after], [1, 1]);
+        restore();
     } finally { restore(); }
 })();

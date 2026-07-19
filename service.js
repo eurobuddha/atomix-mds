@@ -70,7 +70,7 @@ function configureEngines() {
         identity: AX.boot.activeIdentity(CTX), myMinimaPk: CTX.htlc.publickey, ethAddr: CTX.eth.address,
         notify: function (t, b) { MDS.notify(t + ': ' + b); }, onDealsChanged: function () { },
         onExecute: function (deal, cb) { AX.engine.executeOtc(deal, cb); },
-        onIncomingHash: function (hash) { AX.responder.addIncoming(hash); }
+        onIncomingHash: function (hash) { AX.responder.addIncoming(hash, true); }   // authenticated OTC EXECUTE → cap-exempt
     });
 }
 
