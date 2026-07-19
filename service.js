@@ -34,6 +34,10 @@ MDS.load('lib/orderbook.js');      // publish/scan the shared order book (needs 
 MDS.load('lib/peg.js');            // price oracle + auto-MM ladder (needs order + trading + mds)
 MDS.load('lib/responder.js');      // maker auto-responder (needs swapdb + htlc + ethops + dec + flow + trading + identity + order)
 MDS.load('lib/maker.js');          // maker controller: build/publish/keep-alive/tombstone (needs order + orderbook + peg)
+MDS.load('lib/take.js');           // buy handshake (engine.startLeg uses it for OTC/taker; needs identity + trading)
+MDS.load('lib/swapplan.js');       // amount math (engine start paths quantise via it)
+MDS.load('lib/engine.js');         // taker/executor start paths (OTC execute locks leg 1)
+MDS.load('lib/otc.js');            // OTC negotiation engine + LP verify (needs mds + identity + order + orderbook + ethops + htlc)
 
 var READY = false, CTX = null, POLLING = false, RPC = null;
 
@@ -58,7 +62,14 @@ function poll() {
     AX.settle.poll(function () {
         AX.maker.refreshPeg(function () {
             getBalances(function (avail) {
-                AX.maker.keepAlive(avail, function () { POLLING = false; });
+                AX.maker.keepAlive(avail, function () {
+                    // OTC: process negotiation messages + expire/settle stale deals.
+                    AX.otc.scanChat(function () {
+                        AX.otc.expireStale(Date.now(), function (hash, scb) {
+                            AX.swapdb.getSwap(hash, function (e, s) { scb(s ? s.status : null); });
+                        }, function () { POLLING = false; });
+                    });
+                });
             });
         });
     });
@@ -91,10 +102,20 @@ MDS.init(function (msg) {
                 notify: function (title, body) { MDS.notify(title + ': ' + body); },
                 onSwapsChanged: function () { }
             });
+            // Taker/executor engine (for OTC instigator leg-1 locks) + the OTC negotiation engine.
+            AX.engine.configure({ rpc: RPC, ethPriv: ctx.eth.privKey, ethAddr: ctx.eth.address, myMinimaPk: ctx.htlc.publickey, onSwapsChanged: function () { } });
+            AX.otc.configure({
+                identity: AX.boot.activeIdentity(ctx), myMinimaPk: ctx.htlc.publickey, ethAddr: ctx.eth.address,
+                notify: function (t, b) { MDS.notify(t + ': ' + b); }, onDealsChanged: function () { },
+                onExecute: function (deal, cb) { AX.engine.executeOtc(deal, cb); },
+                onIncomingHash: function (hash) { AX.responder.addIncoming(hash); }
+            });
             AX.maker.loadConfig(function () {
-                READY = true;
-                log('booted — settlement + maker/responder live; ETH ' + ctx.eth.address);
-                poll();   // catch up any in-flight swaps immediately on (re)start
+                AX.otc.initDb(function () {
+                    READY = true;
+                    log('booted — settlement + maker/responder + OTC live; ETH ' + ctx.eth.address);
+                    poll();   // catch up any in-flight swaps immediately on (re)start
+                });
             });
         });
     }
