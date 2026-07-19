@@ -26,11 +26,14 @@ MDS.load('lib/ethtx.js');          // legacy tx sign+send + nonce serializer (ne
 MDS.load('lib/ethops.js');         // ETH HTLC ops (needs ethhtlc + ethrpc + ethtx)
 MDS.load('lib/swapdb.js');         // durable swap tables — boot.init() creates them (both hosts)
 MDS.load('lib/htlc.js');
+MDS.load('lib/order.js');          // order model (responder reads my published ladder)
 MDS.load('lib/prng.js');
 MDS.load('lib/boot.js');
 MDS.load('lib/settle.js');         // taker settlement engine (needs swapdb + htlc + ethops + dec + flow + trading)
+MDS.load('lib/peg.js');            // price oracle + auto-MM ladder (needs order + trading + mds)
+MDS.load('lib/responder.js');      // maker auto-responder (needs swapdb + htlc + ethops + dec + flow + trading + identity + order)
 
-var READY = false, CTX = null, POLLING = false;
+var READY = false, CTX = null, POLLING = false, MAKER_ORDER = null;   // MAKER_ORDER set by the Phase-5c publish controller
 
 function log(s) { MDS.log('[atomix] ' + s); }
 
@@ -55,8 +58,20 @@ MDS.init(function (msg) {
                 notify: function (title, body) { MDS.notify(title + ': ' + body); },
                 onSwapsChanged: function () { }   // service has no UI to refresh; the UI polls its own SQL
             });
+            // Configure the maker auto-responder (shares the same wallet/identity). getOrder() returns my live
+            // published ladder — wired by the Phase-5c publish/keep-alive controller; null here → responder inert
+            // (scans nothing, accepts nothing) until an order is published.
+            AX.responder.configure({
+                rpc: new AX.ethrpc.Rpc(AX.ethops.NET.rpcs[0]),
+                ethPriv: ctx.eth.privKey, ethAddr: ctx.eth.address,
+                myMinimaPk: ctx.htlc.publickey, myMinimaAddr: ctx.htlc.miniaddress,
+                myIdentity: AX.boot.activeIdentity(ctx),
+                getOrder: function () { return MAKER_ORDER; },
+                notify: function (title, body) { MDS.notify(title + ': ' + body); },
+                onSwapsChanged: function () { }
+            });
             READY = true;
-            log('booted — settlement engine live; ETH ' + ctx.eth.address + ' HTLC ' + ctx.htlc.address.slice(0, 16) + '…');
+            log('booted — settlement + responder live; ETH ' + ctx.eth.address + ' HTLC ' + ctx.htlc.address.slice(0, 16) + '…');
             poll();   // catch up any in-flight swaps immediately on (re)start
         });
     }
