@@ -47,10 +47,13 @@
             return out;
         }
         function valsOf(q) { var m = /VALUES\s*\((.*)\)\s*$/s.exec(q); return m ? splitVals(m[1]) : []; }
+        var exec = {};   // otc_exec claim table (ref → owner)
         globalThis.MDS = {
             cmd: function (c, cb) { if (c.indexOf('random') === 0) return cb({ status: true, response: { random: '0x' + Math.floor(rndCtr()).toString(16) } }); cb({ status: true, response: [] }); },
             sql: function (q, cb) {
                 if (/^\s*CREATE/i.test(q)) return cb({ status: true });
+                if (/INSERT INTO `otc_exec`/.test(q)) { var mm = /SELECT '([^']*)','([^']*)' WHERE NOT EXISTS/.exec(q); if (mm && !(mm[1] in exec)) exec[mm[1]] = mm[2]; return cb({ status: true }); }
+                if (/SELECT `owner` FROM `otc_exec`/.test(q)) { var rf = /ref`='([^']*)'/.exec(q); return cb({ status: true, rows: (rf && exec[rf[1]] != null) ? [{ OWNER: exec[rf[1]] }] : [] }); }
                 if (/MERGE INTO `otc_deals`/.test(q)) { var v = valsOf(q), row = {}; DCOL.forEach(function (c, i) { row[c] = v[i]; }); deals[row.REF] = row; return cb({ status: true }); }
                 if (/INSERT INTO `otc_msgs`/.test(q)) { var v2 = valsOf(q), r2 = {}; MCOL.forEach(function (c, i) { r2[c] = v2[i]; }); msgs[r2.RANDOMID] = r2; return cb({ status: true }); }
                 if (/SELECT 1 AS X FROM `otc_msgs`/.test(q)) { var rid = /randomid`='([^']*)'/.exec(q); return cb({ status: true, rows: (rid && msgs[rid[1]]) ? [{ X: 1 }] : [] }); }
@@ -98,6 +101,14 @@
 
         // otcLpDeal links the on-chain hash back to the agreed deal (active currency).
         OTC.otcLpDeal('0x' + '22'.repeat(32), function (d) { T.ok('otcLpDeal finds the EXECUTING LP deal', d && d.ref === 'REF1'); });
+
+        // SINGLE-ACTOR: two instances (distinct tokens) racing claimExecute on one ref → exactly one wins.
+        OTC._setExecToken('instA');
+        OTC.claimExecute('REFX', function (won) { T.eq('instance A wins the claim', won, true); });
+        OTC._setExecToken('instB');
+        OTC.claimExecute('REFX', function (won) { T.eq('instance B loses (A owns it)', won, false); });
+        OTC._setExecToken('instA');
+        OTC.claimExecute('REFX', function (won) { T.eq('A re-wins on retry (idempotent)', won, true); });
     } finally { globalThis.MDS = saved; }
 
     var _rc = 0x1000; function rndCtr() { _rc += 1; return _rc; }

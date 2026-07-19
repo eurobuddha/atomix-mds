@@ -93,6 +93,28 @@
         done && done();
     }
 
+    // 7) cross-instance broadcast lock: lost → BUSY error + no broadcast; won → broadcasts + releases.
+    function runLock() {
+        var savedSign2 = AX.eth.signLegacyTx;
+        AX.eth.signLegacyTx = function () { return '0x' + 'cc'; };
+        ETX.resetAll();
+        var rLost = fakeRpc(function () { return 3; }), e1 = null;
+        ETX.useLock(function (cb) { cb(false); }, function (cb) { cb(); });
+        ETX.send(rLost, PRIV, '0xLK1', 1, '0xTo', '0xdata', 0n, 500000n, function (e) { e1 = e; });
+        T.ok('lock lost → BUSY error', !!(e1 && e1.busy));
+        T.eq('lock lost → no broadcast', rLost.sent.length, 0);
+        var rWon = fakeRpc(function () { return 3; }), released = 0, ok = null;
+        ETX.useLock(function (cb) { cb(true); }, function (cb) { released++; cb(); });
+        ETX.send(rWon, PRIV, '0xLK2', 1, '0xTo', '0xdata', 0n, 500000n, function (e, h) { ok = { e: e, h: h }; });
+        T.ok('lock won → broadcast ok', !!(ok && !ok.e && ok.h));
+        T.eq('lock won → lock released', released, 1);
+        T.eq('lock won → broadcast happened', rWon.sent.length, 1);
+        ETX.useLock(null, null);   // restore no-lock for any later tests
+        AX.eth.signLegacyTx = savedSign2;
+    }
+
     run();
     runAsync();
+    runLock();
 })();
+
