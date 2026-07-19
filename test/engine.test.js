@@ -7,7 +7,8 @@
     function stub(obj, name, fn) { undo.push([obj, name, obj[name]]); obj[name] = fn; }
     function restore() { for (var i = undo.length - 1; i >= 0; i--) undo[i][0][undo[i][1]] = undo[i][2]; undo = []; }
 
-    var maker = { minimaPublicKey: '0xMAKERMPK', ethAddress: '0xMAKERETH', commsPublicId: '0x' + 'aa'.repeat(64) };
+    // MDS Order shape uses short wire field names (mpk/eth/cid), not native's minimaPublicKey/ethAddress/commsPublicId.
+    var maker = { mpk: '0xMAKERMPK', eth: '0xMAKERETH', cid: '0x' + 'aa'.repeat(64), signerPk: '0xMAKERSIGN' };
     var HASH = '0x' + '22'.repeat(32);   // must be valid hex (contractId hashes it)
 
     try {
