@@ -8,6 +8,12 @@ shipped to a real node — never again).
 
 Native references are `MainActivity.java` (m), `SwapEngine.java` (e) in `minima-core-android-atomix` @ 0.1.8.
 
+**FIELD EVIDENCE (2026-07-19): two real mainnet interop swaps — AtomiX MDS 0.1.6 (TAKER, minimega node) ↔
+native AtomiX (MAKER, Z Fold): mxUSDT→USDT and USDT→mxUSDT, both settled cleanly, balances reconciled.**
+Validates: identity seal/open interop, book read, take handshake, HTLC lock construction, ETH signing, both
+taker settlement claims. Still pending field-verification: the MDS MAKER/responder side (matrix cases 3+4),
+MINIMA mode, OTC cross-peer, refund, tombstone-cross-peer, sweep, mid-swap switch.
+
 ## Shell
 | Native | MDS | Status |
 |---|---|---|
@@ -61,7 +67,7 @@ Native references are `MainActivity.java` (m), `SwapEngine.java` (e) in `minima-
 ## Background engine (service.js ↔ native SwapService)
 | Native | MDS | Status |
 |---|---|---|
-| Taker settlement (claim/withdraw/refund, F1 confirm-from-chain) | settle.js | 📱 (booted live on minimega) |
+| Taker settlement (claim/withdraw/refund, F1 confirm-from-chain) | settle.js | 📱 2 mainnet interop swaps (taker both directions, 2026-07-19) |
 | Responder counter-legs (accept-gates, strict chain clock, record-before-broadcast) | responder.js | ✅ |
 | Secret harvests (ETH preimage + notify state[100]) | settle.js (0.1.2) | ✅ |
 | Peg oracle + keep-alive/reprice/tombstone | peg.js + maker.js | ✅ |

@@ -44,6 +44,9 @@ var READY = false, CTX = null, POLLING = false, POLL_START = 0, RPC = null;
 var POLL_STUCK_MS = 5 * 60 * 1000;   // watchdog: a wedged poll (uncaught throw in a callback chain) must self-clear
 
 function log(s) { MDS.log('[atomix] ' + s); }
+/** Engine notification → browser toast AND the node log (native SwapLog parity: settlement/responder events
+ *  must be observable in `docker logs`/minima.log — a live interop session is diagnosed from these lines). */
+function notifyLog(title, body) { MDS.notify(title + ': ' + body); log(title + ' — ' + body); }
 
 /** (Re)wire every engine that captures the ACTIVE currency's identity. Run at boot and again whenever the UI
  *  switches currency (detected via kv) — a stale captured identity publishes/decrypts as the WRONG currency. */
@@ -51,25 +54,25 @@ function configureEngines() {
     AX.settle.configure({
         rpc: RPC, ethPriv: CTX.eth.privKey, ethAddr: CTX.eth.address,
         myMinimaPk: CTX.htlc.publickey, myMinimaAddr: CTX.htlc.miniaddress,
-        notify: function (title, body) { MDS.notify(title + ': ' + body); },
+        notify: notifyLog,
         onSwapsChanged: function () { }   // service has no UI to refresh; the UI polls its own SQL
     });
     AX.maker.configure({
         identity: AX.boot.activeIdentity(CTX), myMinimaPk: CTX.htlc.publickey, ethAddr: CTX.eth.address,
-        notify: function (title, body) { MDS.notify(title + ': ' + body); }, onOrder: function () { }
+        notify: notifyLog, onOrder: function () { }
     });
     AX.responder.configure({
         rpc: RPC, ethPriv: CTX.eth.privKey, ethAddr: CTX.eth.address,
         myMinimaPk: CTX.htlc.publickey, myMinimaAddr: CTX.htlc.miniaddress,
         myIdentity: AX.boot.activeIdentity(CTX),
         getOrder: function () { return AX.maker.currentOrder(); },
-        notify: function (title, body) { MDS.notify(title + ': ' + body); },
+        notify: notifyLog,
         onSwapsChanged: function () { }
     });
     AX.engine.configure({ rpc: RPC, ethPriv: CTX.eth.privKey, ethAddr: CTX.eth.address, myMinimaPk: CTX.htlc.publickey, onSwapsChanged: function () { } });
     AX.otc.configure({
         identity: AX.boot.activeIdentity(CTX), myMinimaPk: CTX.htlc.publickey, ethAddr: CTX.eth.address,
-        notify: function (t, b) { MDS.notify(t + ': ' + b); }, onDealsChanged: function () { },
+        notify: notifyLog, onDealsChanged: function () { },
         onExecute: function (deal, cb) { AX.engine.executeOtc(deal, cb); },
         onIncomingHash: function (hash) { AX.responder.addIncoming(hash, true); }   // authenticated OTC EXECUTE → cap-exempt
     });
