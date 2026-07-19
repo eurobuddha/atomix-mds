@@ -53,6 +53,23 @@ eq('ETH tx signed bytes (RHINO)', E.signLegacyTx(VECTORS.eth.tx, VECTORS.eth.pri
 eq('MXUSDT orderbook', TR.MXUSDT.orderBookAddr, '0x5553445453574150');
 eq('MXUSDT hkdf ctx', TR.MXUSDT.hkdfContext, 'usdtswap');
 
+// exact decimal math (BigInt on real Rhino) — grain/floor/ceil/mul/div
+var D = AX.dec;
+eq('RHINO grain6 floors', D.grain6('4.9505009'), '4.9505');
+eq('RHINO mulFloor', D.mulFloor('4.95', '0.99', 6), '4.9005');
+eq('RHINO divFloor', D.divFloor('5', '1.01', 6), '4.950495');
+eq('RHINO parseUnits 18dp', D.parseUnits('4.950495', 18).toString(), '4950495000000000000');
+
+// ETH ABI calldata + deterministic contractId (keccak selector + BigInt words) vs web3j vectors
+var AB = AX.abi, EH = AX.ethhtlc, V = VECTORS.abi;
+eq('RHINO selector approve', AB.selector('approve(address,uint256)'), '095ea7b3');
+eq('RHINO approve calldata', EH.approve(EH.NET.htlc, 0).data, V.approveData);
+eq('RHINO newContract calldata',
+    EH.newContract(V.senderMinima, V.receiverEth, V.hashlock, BigInt(V.timelock), V.token, BigInt(V.amount), BigInt(V.requestAmount), false).data,
+    V.newContractData);
+eq('RHINO withdraw calldata', EH.withdraw(V.hashlock, V.preimage).data, V.withdrawData);
+eq('RHINO contractId', EH.contractId(V.hashlock), V.contractId);
+
 print('\n' + (fail === 0 ? 'RHINO: ALL PASS' : 'RHINO: FAILURES') + ' — ' + pass + ' passed, ' + fail + ' failed');
 if (fail) { print(fails.join('\n')); quit(1); }
 quit(0);

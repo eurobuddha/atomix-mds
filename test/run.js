@@ -27,8 +27,9 @@ const ctx = vm.createContext(sandbox);
 const FILES = [
     'lib/rhino_shim.js',
     'vendor/nacl.js', 'vendor/blake.js', 'vendor/sha256.js', 'vendor/sha512.js', 'vendor/sha3.js', 'vendor/elliptic.js',
-    'lib/hex.js', 'lib/flow.js', 'crypto/ax_sodium.js', 'crypto/ax_eth.js', 'lib/identity.js', 'lib/trading.js',
-    'lib/mds.js', 'lib/htlc.js', 'lib/prng.js', 'lib/order.js', 'lib/orderbook.js', 'lib/fmt.js'
+    'lib/hex.js', 'lib/flow.js', 'crypto/ax_sodium.js', 'crypto/ax_eth.js', 'lib/abi.js', 'lib/decimal.js', 'lib/identity.js', 'lib/trading.js',
+    'lib/mds.js', 'lib/htlc.js', 'lib/prng.js', 'lib/order.js', 'lib/orderbook.js', 'lib/fmt.js', 'lib/ethhtlc.js',
+    'lib/ethrpc.js', 'lib/ethtx.js', 'lib/ethops.js', 'lib/swapdb.js', 'lib/take.js', 'lib/engine.js'
 ];
 for (const f of FILES) {
     try { vm.runInContext(read(f), ctx, { filename: f }); }

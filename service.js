@@ -14,6 +14,9 @@ MDS.load('lib/hex.js');
 MDS.load('lib/flow.js');
 MDS.load('crypto/ax_sodium.js');
 MDS.load('crypto/ax_eth.js');
+MDS.load('lib/decimal.js');       // exact BigInt decimal math (no deps) — engine amount quantisation
+MDS.load('lib/abi.js');           // ABI encode/decode (needs ax_eth keccak) — ETH calldata
+MDS.load('lib/ethhtlc.js');       // ETH HTLC interface (needs abi + sodium + hex + decimal)
 MDS.load('lib/identity.js');
 MDS.load('lib/trading.js');
 MDS.load('lib/mds.js');
