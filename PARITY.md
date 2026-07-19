@@ -14,6 +14,17 @@ Validates: identity seal/open interop, book read, take handshake, HTLC lock cons
 taker settlement claims. Still pending field-verification: the MDS MAKER/responder side (matrix cases 3+4),
 MINIMA mode, OTC cross-peer, refund, tombstone-cross-peer, sweep, mid-swap switch.
 
+**THIRD PEER — minimaCore DESKTOP (2026-07-19): the MDS engine reused BYTE-IDENTICAL in an Electron `vm`, exactly
+as PandaPools was ([[pandapools-parity]] pattern).** `~/Projects/minimacore-desktop` v0.8.0, "AtomiX" tab, all 5
+views (Swap/Market/Activity/OTC/Wallet). The engine files under `main/atomix/` are copies of atomix-mds @0.1.9
+(6f8376f), enforced by `scripts/atomix-parity-check.sh` (38 files) — a desktop change is a file COPY from this
+repo, never a hand-edit; this repo stays the canonical engine donor. Desktop-only glue = the MDS shim
+(loader.js), orchestrator (main/atomix.js), renderer tab. VERIFIED on the user's real desktop node over CDP:
+engine boots + derives its own identity/ETH address, reads the REAL mainnet book (the user's live makers at
+0.99/1.01), all 5 views render, Fund/QR shows a scannable address. Cross-realm `instanceof Array` footgun
+(fixed at the shim by marshalling cmd responses into the vm realm). Lockstep governance = [[atomix-lockstep]]
+now THREE-way; desktop keeps its own semver (pandapools precedent), feature-tracked by this ledger.
+
 ## Shell
 | Native | MDS | Status |
 |---|---|---|
