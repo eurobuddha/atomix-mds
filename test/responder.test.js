@@ -55,4 +55,27 @@
     // fractional exact accumulation (dec, not float)
     var s4 = R._selectCoins(coins(['4.95', '0.10']), '5');
     T.eq('select: fractional cover [4.95,0.10]=5.05', s4.sum, '5.05');
+
+    // ============ HOSTILE on-chain state[1]: must DECLINE, never reach BigInt parsing (a throw inside the async
+    // MDS callback chain would wedge the service poll loop forever — remote unauthenticated settlement DoS) ============
+    T.eq('sell: non-numeric state[1] → reject (no throw)', R.acceptTakerSellMinima(sellOrder, sellCoin(50, 'xyz')), false);
+    T.eq('sell: hex-garbage state[1] → reject', R.acceptTakerSellMinima(sellOrder, sellCoin(50, '0xdeadbeef')), false);
+    T.eq('sell: negative state[1] → reject', R.acceptTakerSellMinima(sellOrder, sellCoin(50, '-5')), false);
+    T.eq('sell: zero-request (malformed take) → reject', R.acceptTakerSellMinima(sellOrder, sellCoin(50, '0')), false);
+    T.eq('sell: exponent form → reject (not plain decimal)', R.acceptTakerSellMinima(sellOrder, sellCoin(50, '1e2')), false);
+    T.eq('sell: plain decimal still accepted', R.acceptTakerSellMinima(sellOrder, sellCoin(50, '49.00')), true);
+
+    // ============ incoming buy-take queue: bounded (TTL prune + hard cap) so junk handshakes can't grow it forever ============
+    R._reset();
+    R.addIncoming('0x' + '31'.repeat(32));
+    R.addIncoming('0x' + '32'.repeat(32));
+    var inc = R._incoming();
+    T.eq('incoming: entries queued with first-seen stamps', Object.keys(inc).length, 2);
+    inc[Object.keys(inc)[0]].t = Date.now() - R.INCOMING_TTL_MS - 1000;   // backdate one past the TTL
+    R.pruneIncoming();
+    T.eq('incoming: stale entry pruned, fresh kept', Object.keys(R._incoming()).length, 1);
+    R._reset();
+    for (var qi = 0; qi < R.INCOMING_MAX + 10; qi++) R.addIncoming('0x' + ('h' + qi));   // cap check
+    T.eq('incoming: hard cap holds', Object.keys(R._incoming()).length, R.INCOMING_MAX);
+    R._reset();
 })();

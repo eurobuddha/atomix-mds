@@ -47,13 +47,18 @@
             return out;
         }
         function valsOf(q) { var m = /VALUES\s*\((.*)\)\s*$/s.exec(q); return m ? splitVals(m[1]) : []; }
-        var exec = {};   // otc_exec claim table (ref → owner)
+        var exec = {};   // otc_exec claim table (ref → {owner, ts})
         globalThis.MDS = {
             cmd: function (c, cb) { if (c.indexOf('random') === 0) return cb({ status: true, response: { random: '0x' + Math.floor(rndCtr()).toString(16) } }); cb({ status: true, response: [] }); },
             sql: function (q, cb) {
                 if (/^\s*CREATE/i.test(q)) return cb({ status: true });
-                if (/INSERT INTO `otc_exec`/.test(q)) { var mm = /SELECT '([^']*)','([^']*)' WHERE NOT EXISTS/.exec(q); if (mm && !(mm[1] in exec)) exec[mm[1]] = mm[2]; return cb({ status: true }); }
-                if (/SELECT `owner` FROM `otc_exec`/.test(q)) { var rf = /ref`='([^']*)'/.exec(q); return cb({ status: true, rows: (rf && exec[rf[1]] != null) ? [{ OWNER: exec[rf[1]] }] : [] }); }
+                if (/INSERT INTO `otc_exec`/.test(q)) { var mm = /SELECT '([^']*)','([^']*)',(\d+)\s+WHERE NOT EXISTS/.exec(q); if (mm && !(mm[1] in exec)) exec[mm[1]] = { owner: mm[2], ts: Number(mm[3]) }; return cb({ status: true }); }
+                if (/UPDATE `otc_exec` SET/.test(q)) {
+                    var um = /SET `owner`='([^']*)', `ts`=(\d+) WHERE `ref`='([^']*)' AND \(`owner`='[^']*' OR `ts` IS NULL OR `ts` < (\d+)\)/.exec(q);
+                    if (um) { var er = exec[um[3]]; if (er && (er.owner === um[1] || er.ts == null || er.ts < Number(um[4]))) { er.owner = um[1]; er.ts = Number(um[2]); } }
+                    return cb({ status: true });
+                }
+                if (/SELECT `owner` FROM `otc_exec`/.test(q)) { var rf = /ref`='([^']*)'/.exec(q); return cb({ status: true, rows: (rf && exec[rf[1]] != null) ? [{ OWNER: exec[rf[1]].owner }] : [] }); }
                 if (/MERGE INTO `otc_deals`/.test(q)) { var v = valsOf(q), row = {}; DCOL.forEach(function (c, i) { row[c] = v[i]; }); deals[row.REF] = row; return cb({ status: true }); }
                 if (/INSERT INTO `otc_msgs`/.test(q)) { var v2 = valsOf(q), r2 = {}; MCOL.forEach(function (c, i) { r2[c] = v2[i]; }); msgs[r2.RANDOMID] = r2; return cb({ status: true }); }
                 if (/SELECT 1 AS X FROM `otc_msgs`/.test(q)) { var rid = /randomid`='([^']*)'/.exec(q); return cb({ status: true, rows: (rid && msgs[rid[1]]) ? [{ X: 1 }] : [] }); }
@@ -109,6 +114,14 @@
         OTC.claimExecute('REFX', function (won) { T.eq('instance B loses (A owns it)', won, false); });
         OTC._setExecToken('instA');
         OTC.claimExecute('REFX', function (won) { T.eq('A re-wins on retry (idempotent)', won, true); });
+
+        // TTL-STEAL: a DEAD claimant's row (stale ts — its instance restarted and lost the token) is taken over,
+        // so the deal can still execute; a FRESH row is never stolen (the live winner keeps it).
+        exec['REFY'] = { owner: 'deadTok', ts: Date.now() - 11 * 60 * 1000 };
+        OTC._setExecToken('instB');
+        OTC.claimExecute('REFY', function (won) { T.eq('stale (dead-instance) claim stolen', won, true); });
+        exec['REFZ'] = { owner: 'liveTok', ts: Date.now() };
+        OTC.claimExecute('REFZ', function (won) { T.eq('fresh claim NOT stolen', won, false); });
     } finally { globalThis.MDS = saved; }
 
     var _rc = 0x1000; function rndCtr() { _rc += 1; return _rc; }

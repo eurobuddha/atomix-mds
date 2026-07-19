@@ -67,3 +67,13 @@
         T.eq('all writes chainId 1', [sends[0].chainId, sends[1].chainId], [1, 1]);
     } finally { AX.ethtx.send = savedSend; }
 })();
+
+/* decodeGetContract hardening: a malformed/truncated eth_call body (broken or hostile RPC) must yield null —
+   a BigInt('0x') throw would escape the async MDS callback chain and wedge the settlement poll forever. */
+(function () {
+    var EH = AX.ethhtlc;
+    T.eq('decode: empty return → null', EH.decodeGetContract('0xCID', '0x'), null);
+    T.eq('decode: truncated tuple → null', EH.decodeGetContract('0xCID', '0x1234'), null);
+    T.eq('decode: short-by-one-word tuple → null', EH.decodeGetContract('0xCID', '0x' + '11'.repeat(32 * 11)), null);
+    T.eq('decode: non-hex garbage → null (no throw)', EH.decodeGetContract('0xCID', '0x' + 'zz'.repeat(32 * 12)), null);
+})();

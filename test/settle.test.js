@@ -113,5 +113,90 @@
         T.ok('expired lock → refund fired', refunded && refunded.addr === 'MxADDR');
         T.ok('refund → REFUNDED', c5.indexOf('status:REFUNDED') >= 0);
         restore();
+
+        // ==================== RESPONDER-PERSPECTIVE settlement (the maker NEVER generates the secret) ====================
+        // These lock in the two harvest paths (native SwapEngine:814 + :515/1208) — without them every filled maker
+        // order strands past its timelock: the maker pays its counter-leg and can never claim/withdraw the other.
+
+        // ---------- (R1) sell-take maker: taker withdrew my USDT revealing gc.preimage → harvest → NEXT poll claims ----------
+        cfg();
+        var r1 = [], secrets = {};
+        var PREIMAGE = '0x' + 'ab'.repeat(32);
+        stub(DB, 'allSwaps', function (cb) { cb(null, [{ hash: HASH, myLegIsMinima: false, status: 'LOCKED', buyToken: 'mxUSDT' }]); });
+        stub(DB, 'getSecret', function (h, cb) { cb(null, secrets[h] || null); });
+        stub(DB, 'insertSecret', function (h, s, cb) { if (!secrets[h]) secrets[h] = s; r1.push('harvest:' + s); cb(null); });
+        stub(DB, 'getRequest', function (h, cb) { cb(null, null); });                    // responder has no myhtlc row
+        stub(DB, 'hasEvent', function (h, ev, cb) { cb(null, false); });
+        stub(DB, 'logEvent', function (h, ev, tok, amt, note, cb) { r1.push('log:' + ev); cb && cb(null); });
+        stub(DB, 'setSwapStatus', function (h, s, cb) { r1.push('status:' + s); cb && cb(null); });
+        stub(DB, 'getSwap', function (h, cb) { cb(null, { hash: h, status: 'LOCKED', buyToken: 'mxUSDT' }); });
+        var takerCoin = { coinid: '0xC', tokenid: USDT, tokenamount: '5', state: { '0': '0xTAKER', '2': '[ETH:' + EO.NET.usdt + ']', '3': '999999', '4': '0xMYPK', '5': HASH } };
+        stub(H, 'currentBlock', function (cb) { cb(null, 100); });
+        stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, [takerCoin]); });
+        stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });
+        stub(H, 'scanNotifySecret', function (h, d, cb) { cb(null, []); });
+        var r1claimed = null;
+        stub(H, 'claim', function (c, h, s, addr, cb) { r1claimed = { s: s }; r1.push('claim'); cb(null, '0xTXP'); });
+        stub(EO, 'make', function () { return { getContract: function (cid, cb) {
+            cb(null, { owner: '0xeth', receiver: '0xTAKERETH', withdrawn: true, refunded: false, preimage: PREIMAGE, amount: 5000000n, tokenContract: EO.NET.usdt, timelock: 3000000000 });
+        } }; });
+        ST.poll(function () {});                                                        // poll 1: no secret → no claim; ETH pass harvests
+        T.ok('R1 poll1: preimage harvested from the withdrawn contract', secrets[HASH] === PREIMAGE);
+        T.ok('R1 poll1: no claim yet (secret unknown during the Minima pass)', r1.indexOf('claim') < 0);
+        ST._reset();
+        ST.poll(function () {});                                                        // poll 2: secret known → claim fires
+        T.ok('R1 poll2: maker claims the taker mxUSDT with the HARVESTED preimage', r1claimed && r1claimed.s === PREIMAGE);
+        T.ok('R1 poll2: → COMPLETE', r1.indexOf('status:COMPLETE') >= 0);
+        restore();
+
+        // ---------- (R2) buy-take maker: taker claimed my mxUSDT revealing state[100] → notify harvest → SAME-poll withdraw ----------
+        cfg();
+        var r2 = [], secrets2 = {};
+        var NSECRET = '0x' + 'cd'.repeat(32);
+        stub(DB, 'allSwaps', function (cb) { cb(null, [{ hash: HASH, myLegIsMinima: true, status: 'LOCKED', buyToken: 'USDT' }]); });
+        stub(DB, 'getSecret', function (h, cb) { cb(null, secrets2[h] || null); });
+        stub(DB, 'insertSecret', function (h, s, cb) { if (!secrets2[h]) secrets2[h] = s; r2.push('harvest'); cb(null); });
+        stub(DB, 'getRequest', function (h, cb) { cb(null, null); });
+        stub(DB, 'hasEvent', function (h, ev, cb) { cb(null, false); });
+        stub(DB, 'logEvent', function (h, ev, tok, amt, note, cb) { cb && cb(null); });
+        stub(DB, 'setSwapStatus', function (h, s, cb) { r2.push('status:' + s); cb && cb(null); });
+        stub(DB, 'getSwap', function (h, cb) { cb(null, { hash: h, status: 'LOCKED', buyToken: 'USDT' }); });
+        stub(H, 'currentBlock', function (cb) { cb(null, 100); });
+        stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, []); });
+        stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });
+        stub(H, 'scanNotifySecret', function (h, d, cb) { cb(null, [{ state: { '100': NSECRET, '101': HASH } }]); });
+        var r2withdrew = null;
+        stub(EO, 'make', function () { return {
+            getContract: function (cid, cb) { cb(null, { owner: '0xTAKERETH', receiver: '0xeth', withdrawn: false, refunded: false, amount: 5000000n, tokenContract: EO.NET.usdt, timelock: 3000000000, preimage: '0x' + '00'.repeat(32) }); },
+            withdraw: function (cid, secret, cb) { r2withdrew = { secret: secret }; cb(null, '0xETX'); }
+        }; });
+        ST.poll(function () {});
+        T.ok('R2: secret harvested from the notify coin', secrets2[HASH] === NSECRET);
+        T.ok('R2: maker withdraws the taker USDT with the harvested secret SAME poll', r2withdrew && r2withdrew.secret === NSECRET);
+        T.ok('R2: → CLAIMING (terminal deferred to gc.withdrawn)', r2.indexOf('status:CLAIMING') >= 0);
+        restore();
+
+        // ---------- (R3) an all-zero preimage on an UNwithdrawn contract is NOT harvested ----------
+        cfg();
+        var secrets3 = {};
+        stub(DB, 'allSwaps', function (cb) { cb(null, [{ hash: HASH, myLegIsMinima: true, status: 'LOCKED', buyToken: 'USDT' }]); });
+        stub(DB, 'getSecret', function (h, cb) { cb(null, secrets3[h] || null); });
+        stub(DB, 'insertSecret', function (h, s, cb) { secrets3[h] = s; cb(null); });
+        stub(DB, 'getRequest', function (h, cb) { cb(null, null); });
+        stub(DB, 'hasEvent', function (h, ev, cb) { cb(null, false); });
+        stub(DB, 'logEvent', function (h, ev, tok, amt, note, cb) { cb && cb(null); });
+        stub(DB, 'setSwapStatus', function (h, s, cb) { cb && cb(null); });
+        stub(DB, 'getSwap', function (h, cb) { cb(null, { hash: h, status: 'LOCKED', buyToken: 'USDT' }); });
+        stub(H, 'currentBlock', function (cb) { cb(null, 100); });
+        stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, []); });
+        stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });
+        stub(H, 'scanNotifySecret', function (h, d, cb) { cb(null, []); });
+        stub(EO, 'make', function () { return {
+            getContract: function (cid, cb) { cb(null, { owner: '0xTAKERETH', receiver: '0xeth', withdrawn: false, refunded: false, amount: 5000000n, tokenContract: EO.NET.usdt, timelock: 3000000000, preimage: '0x' + '00'.repeat(32) }); },
+            withdraw: function (cid, secret, cb) { cb(null, '0xETX'); }
+        }; });
+        ST.poll(function () {});
+        T.ok('R3: zero preimage NOT harvested (no bogus secret stored)', secrets3[HASH] == null);
+        restore();
     } finally { restore(); }
 })();

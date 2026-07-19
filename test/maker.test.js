@@ -72,6 +72,22 @@
         MK.onCurrencySwitch({ minima: 500, usdt: 500 }, function () {});
         T.eq('switch tombstones old market', published.length, 1);
         T.eq('switch tombstone disabled', published[0].pairs.USDT.en, false);
+
+        // ---- PER-CURRENCY kv keys (market memory): config parks under the ACTIVE currency's suffix, no bleed ----
+        var ccyKey = TR.active().key;
+        MK.saveConfig({ pegEnable: true, step: 2, size: 5, levels: 1 }, { bids: [], asks: [] }, function () {});
+        T.ok('maker_cfg keyed per-currency', ('maker_cfg_' + ccyKey) in kv);
+        T.ok('no un-suffixed maker_cfg written', !('maker_cfg' in kv));
+        kv['maker_cfg_' + (ccyKey === 'mxusdt' ? 'minima' : 'mxusdt')] = JSON.stringify({ pegEnable: true, step: 9 });
+        MK.loadConfig(function () {});
+        T.eq('loadConfig reads ONLY the active currency (no bleed)', MK._state().cfg.step, 2);
+
+        // ---- resetForReload (service currency-switch): drops the in-memory order + cfg without tombstoning ----
+        published.length = 0;
+        MK.resetForReload();
+        T.eq('resetForReload publishes NOTHING (UI already tombstoned)', published.length, 0);
+        T.eq('resetForReload cleared the live order', MK.currentOrder(), null);
+        T.eq('resetForReload cleared the cfg cache', Object.keys(MK._state().cfg).length, 0);
     } finally {
         MDS.kvGet = savedGet; MDS.kvSet = savedSet; B.publishFresh = savedPub;
     }

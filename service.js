@@ -39,9 +39,55 @@ MDS.load('lib/swapplan.js');       // amount math (engine start paths quantise v
 MDS.load('lib/engine.js');         // taker/executor start paths (OTC execute locks leg 1)
 MDS.load('lib/otc.js');            // OTC negotiation engine + LP verify (needs mds + identity + order + orderbook + ethops + htlc)
 
-var READY = false, CTX = null, POLLING = false, RPC = null;
+var READY = false, CTX = null, POLLING = false, POLL_START = 0, RPC = null;
+var POLL_STUCK_MS = 5 * 60 * 1000;   // watchdog: a wedged poll (uncaught throw in a callback chain) must self-clear
 
 function log(s) { MDS.log('[atomix] ' + s); }
+
+/** (Re)wire every engine that captures the ACTIVE currency's identity. Run at boot and again whenever the UI
+ *  switches currency (detected via kv) — a stale captured identity publishes/decrypts as the WRONG currency. */
+function configureEngines() {
+    AX.settle.configure({
+        rpc: RPC, ethPriv: CTX.eth.privKey, ethAddr: CTX.eth.address,
+        myMinimaPk: CTX.htlc.publickey, myMinimaAddr: CTX.htlc.miniaddress,
+        notify: function (title, body) { MDS.notify(title + ': ' + body); },
+        onSwapsChanged: function () { }   // service has no UI to refresh; the UI polls its own SQL
+    });
+    AX.maker.configure({
+        identity: AX.boot.activeIdentity(CTX), myMinimaPk: CTX.htlc.publickey, ethAddr: CTX.eth.address,
+        notify: function (title, body) { MDS.notify(title + ': ' + body); }, onOrder: function () { }
+    });
+    AX.responder.configure({
+        rpc: RPC, ethPriv: CTX.eth.privKey, ethAddr: CTX.eth.address,
+        myMinimaPk: CTX.htlc.publickey, myMinimaAddr: CTX.htlc.miniaddress,
+        myIdentity: AX.boot.activeIdentity(CTX),
+        getOrder: function () { return AX.maker.currentOrder(); },
+        notify: function (title, body) { MDS.notify(title + ': ' + body); },
+        onSwapsChanged: function () { }
+    });
+    AX.engine.configure({ rpc: RPC, ethPriv: CTX.eth.privKey, ethAddr: CTX.eth.address, myMinimaPk: CTX.htlc.publickey, onSwapsChanged: function () { } });
+    AX.otc.configure({
+        identity: AX.boot.activeIdentity(CTX), myMinimaPk: CTX.htlc.publickey, ethAddr: CTX.eth.address,
+        notify: function (t, b) { MDS.notify(t + ': ' + b); }, onDealsChanged: function () { },
+        onExecute: function (deal, cb) { AX.engine.executeOtc(deal, cb); },
+        onIncomingHash: function (hash) { AX.responder.addIncoming(hash); }
+    });
+}
+
+/** Re-read the shared kv state the UI can change under us: active currency + maker config/peg state. Without this
+ *  the service's stale in-memory copy silently UNDOES a UI withdraw/edit on the next keep-alive republish, and
+ *  keeps making the OLD currency's market after a switch. Cheap (4 kv reads per poll). cb(). */
+function reloadShared(cb) {
+    AX.mds.kvGet('trading_currency', AX.trading.active().key, function (k) {
+        if (k !== AX.trading.active().key) {
+            log('currency switch detected (' + AX.trading.active().key + ' → ' + k + ') — reconfiguring engines');
+            AX.trading.loadKey(k);
+            AX.maker.resetForReload();      // drop old-currency order/peg (the UI already tombstoned it)
+            configureEngines();             // re-capture the new currency's identity everywhere
+        }
+        AX.maker.loadConfig(function () { cb(); });   // pick up UI edits/withdrawals within one poll
+    });
+}
 
 /** Fetch the maker's sellable balances (native minima sendable + ERC20 USDT balanceOf) for keep-alive publishing. */
 function getBalances(cb) {
@@ -54,20 +100,28 @@ function getBalances(cb) {
     });
 }
 
-/** One full pass: taker settlement + responder discovery (settle.poll), then maker peg-refresh + keep-alive.
- *  A guard prevents overlap if a slow ETH RPC read spans two ticks. */
+/** One full pass: reload shared kv state, then taker settlement + responder discovery (settle.poll), then maker
+ *  peg-refresh + keep-alive + OTC. An overlap guard prevents concurrent passes; a WATCHDOG clears a pass that
+ *  wedged (an uncaught throw inside an async MDS callback would otherwise leave POLLING true FOREVER and silently
+ *  kill all claims/refunds until restart — a fund-safety hazard, not just a bug). */
 function poll() {
-    if (!READY || POLLING) return;
-    POLLING = true;
-    AX.settle.poll(function () {
-        AX.maker.refreshPeg(function () {
-            getBalances(function (avail) {
-                AX.maker.keepAlive(avail, function () {
-                    // OTC: process negotiation messages + expire/settle stale deals.
-                    AX.otc.scanChat(function () {
-                        AX.otc.expireStale(Date.now(), function (hash, scb) {
-                            AX.swapdb.getSwap(hash, function (e, s) { scb(s ? s.status : null); });
-                        }, function () { POLLING = false; });
+    if (!READY) return;
+    if (POLLING) {
+        if (Date.now() - POLL_START > POLL_STUCK_MS) { log('WATCHDOG: poll wedged >' + POLL_STUCK_MS + 'ms — resetting'); POLLING = false; }
+        else return;
+    }
+    POLLING = true; POLL_START = Date.now();
+    reloadShared(function () {
+        AX.settle.poll(function () {
+            AX.maker.refreshPeg(function () {
+                getBalances(function (avail) {
+                    AX.maker.keepAlive(avail, function () {
+                        // OTC: process negotiation messages + retry/expire/settle stale deals.
+                        AX.otc.scanChat(function () {
+                            AX.otc.expireStale(Date.now(), function (hash, scb) {
+                                AX.swapdb.getSwap(hash, function (e, s) { scb(s ? s.status : null); });
+                            }, function () { POLLING = false; });
+                        });
                     });
                 });
             });
@@ -81,35 +135,9 @@ MDS.init(function (msg) {
             if (err) { log('boot FAILED: ' + err.message); return; }
             CTX = ctx;
             RPC = new AX.ethrpc.Rpc(AX.ethops.NET.rpcs[0]);   // one ETH RPC shared by settle + responder + balances
-            // Settlement engine (its own instance vs the UI's is fund-SAFE — F1 recovers a cross-instance nonce clash).
-            AX.settle.configure({
-                rpc: RPC, ethPriv: ctx.eth.privKey, ethAddr: ctx.eth.address,
-                myMinimaPk: ctx.htlc.publickey, myMinimaAddr: ctx.htlc.miniaddress,
-                notify: function (title, body) { MDS.notify(title + ': ' + body); },
-                onSwapsChanged: function () { }   // service has no UI to refresh; the UI polls its own SQL
-            });
-            // Maker controller (build/publish/keep-alive/tombstone) + auto-responder. currentOrder() feeds the
-            // responder its live ladder; both are inert until an order is configured + published.
-            AX.maker.configure({
-                identity: AX.boot.activeIdentity(ctx), myMinimaPk: ctx.htlc.publickey, ethAddr: ctx.eth.address,
-                notify: function (title, body) { MDS.notify(title + ': ' + body); }, onOrder: function () { }
-            });
-            AX.responder.configure({
-                rpc: RPC, ethPriv: ctx.eth.privKey, ethAddr: ctx.eth.address,
-                myMinimaPk: ctx.htlc.publickey, myMinimaAddr: ctx.htlc.miniaddress,
-                myIdentity: AX.boot.activeIdentity(ctx),
-                getOrder: function () { return AX.maker.currentOrder(); },
-                notify: function (title, body) { MDS.notify(title + ': ' + body); },
-                onSwapsChanged: function () { }
-            });
-            // Taker/executor engine (for OTC instigator leg-1 locks) + the OTC negotiation engine.
-            AX.engine.configure({ rpc: RPC, ethPriv: ctx.eth.privKey, ethAddr: ctx.eth.address, myMinimaPk: ctx.htlc.publickey, onSwapsChanged: function () { } });
-            AX.otc.configure({
-                identity: AX.boot.activeIdentity(ctx), myMinimaPk: ctx.htlc.publickey, ethAddr: ctx.eth.address,
-                notify: function (t, b) { MDS.notify(t + ': ' + b); }, onDealsChanged: function () { },
-                onExecute: function (deal, cb) { AX.engine.executeOtc(deal, cb); },
-                onIncomingHash: function (hash) { AX.responder.addIncoming(hash); }
-            });
+            // Settlement + maker/responder + taker/OTC engines (its own instances vs the UI's are fund-SAFE — F1
+            // recovers a cross-instance nonce clash). configureEngines re-runs on a currency switch (reloadShared).
+            configureEngines();
             AX.maker.loadConfig(function () {
                 AX.otc.initDb(function () {
                     READY = true;
