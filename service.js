@@ -30,18 +30,38 @@ MDS.load('lib/order.js');          // order model (responder reads my published 
 MDS.load('lib/prng.js');
 MDS.load('lib/boot.js');
 MDS.load('lib/settle.js');         // taker settlement engine (needs swapdb + htlc + ethops + dec + flow + trading)
+MDS.load('lib/orderbook.js');      // publish/scan the shared order book (needs order + identity + sodium + mds)
 MDS.load('lib/peg.js');            // price oracle + auto-MM ladder (needs order + trading + mds)
 MDS.load('lib/responder.js');      // maker auto-responder (needs swapdb + htlc + ethops + dec + flow + trading + identity + order)
+MDS.load('lib/maker.js');          // maker controller: build/publish/keep-alive/tombstone (needs order + orderbook + peg)
 
-var READY = false, CTX = null, POLLING = false, MAKER_ORDER = null;   // MAKER_ORDER set by the Phase-5c publish controller
+var READY = false, CTX = null, POLLING = false, RPC = null;
 
 function log(s) { MDS.log('[atomix] ' + s); }
 
-/** One settlement pass; a guard prevents overlap if a slow ETH RPC read spans two ticks. */
+/** Fetch the maker's sellable balances (native minima sendable + ERC20 USDT balanceOf) for keep-alive publishing. */
+function getBalances(cb) {
+    MDS.cmd('balance tokenid:' + AX.trading.active().tokenId, function (r) {
+        var minima = 0;
+        try { minima = Number(r.response[0].sendable) || 0; } catch (e) { }
+        AX.ethops.make(RPC, CTX.eth.privKey, CTX.eth.address).balanceOf(AX.ethops.NET.usdt, function (e, raw) {
+            cb({ minima: minima, usdt: e ? 0 : Number(AX.dec.formatUnits(raw, 6)) });
+        });
+    });
+}
+
+/** One full pass: taker settlement + responder discovery (settle.poll), then maker peg-refresh + keep-alive.
+ *  A guard prevents overlap if a slow ETH RPC read spans two ticks. */
 function poll() {
     if (!READY || POLLING) return;
     POLLING = true;
-    AX.settle.poll(function () { POLLING = false; });
+    AX.settle.poll(function () {
+        AX.maker.refreshPeg(function () {
+            getBalances(function (avail) {
+                AX.maker.keepAlive(avail, function () { POLLING = false; });
+            });
+        });
+    });
 }
 
 MDS.init(function (msg) {
@@ -49,30 +69,33 @@ MDS.init(function (msg) {
         AX.boot.init(function (err, ctx) {
             if (err) { log('boot FAILED: ' + err.message); return; }
             CTX = ctx;
-            // Configure the settlement engine: its own ETH RPC (separate from the UI's — a cross-instance nonce
-            // clash on the shared seed-derived wallet is fund-SAFE, F1 recovers it with a fresh-pending retry).
+            RPC = new AX.ethrpc.Rpc(AX.ethops.NET.rpcs[0]);   // one ETH RPC shared by settle + responder + balances
+            // Settlement engine (its own instance vs the UI's is fund-SAFE — F1 recovers a cross-instance nonce clash).
             AX.settle.configure({
-                rpc: new AX.ethrpc.Rpc(AX.ethops.NET.rpcs[0]),
-                ethPriv: ctx.eth.privKey, ethAddr: ctx.eth.address,
+                rpc: RPC, ethPriv: ctx.eth.privKey, ethAddr: ctx.eth.address,
                 myMinimaPk: ctx.htlc.publickey, myMinimaAddr: ctx.htlc.miniaddress,
                 notify: function (title, body) { MDS.notify(title + ': ' + body); },
                 onSwapsChanged: function () { }   // service has no UI to refresh; the UI polls its own SQL
             });
-            // Configure the maker auto-responder (shares the same wallet/identity). getOrder() returns my live
-            // published ladder — wired by the Phase-5c publish/keep-alive controller; null here → responder inert
-            // (scans nothing, accepts nothing) until an order is published.
+            // Maker controller (build/publish/keep-alive/tombstone) + auto-responder. currentOrder() feeds the
+            // responder its live ladder; both are inert until an order is configured + published.
+            AX.maker.configure({
+                identity: AX.boot.activeIdentity(ctx), myMinimaPk: ctx.htlc.publickey, ethAddr: ctx.eth.address,
+                notify: function (title, body) { MDS.notify(title + ': ' + body); }, onOrder: function () { }
+            });
             AX.responder.configure({
-                rpc: new AX.ethrpc.Rpc(AX.ethops.NET.rpcs[0]),
-                ethPriv: ctx.eth.privKey, ethAddr: ctx.eth.address,
+                rpc: RPC, ethPriv: ctx.eth.privKey, ethAddr: ctx.eth.address,
                 myMinimaPk: ctx.htlc.publickey, myMinimaAddr: ctx.htlc.miniaddress,
                 myIdentity: AX.boot.activeIdentity(ctx),
-                getOrder: function () { return MAKER_ORDER; },
+                getOrder: function () { return AX.maker.currentOrder(); },
                 notify: function (title, body) { MDS.notify(title + ': ' + body); },
                 onSwapsChanged: function () { }
             });
-            READY = true;
-            log('booted — settlement + responder live; ETH ' + ctx.eth.address + ' HTLC ' + ctx.htlc.address.slice(0, 16) + '…');
-            poll();   // catch up any in-flight swaps immediately on (re)start
+            AX.maker.loadConfig(function () {
+                READY = true;
+                log('booted — settlement + maker/responder live; ETH ' + ctx.eth.address);
+                poll();   // catch up any in-flight swaps immediately on (re)start
+            });
         });
     }
     else if (msg.event === 'NEWBLOCK') { poll(); }
