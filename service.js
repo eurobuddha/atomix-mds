@@ -1,8 +1,10 @@
 /**
- * service.js — the AtomiX background engine (Rhino). Boots the crypto/identity stack + the TAKER settlement engine
- * (Phase 4): on every NEWBLOCK it drives my in-flight swaps to a terminal state — claim the mxUSDT leg / withdraw
- * the USDT leg with my secret, refund my expired legs, terminal status ONLY from the ETH contract flags (F1). The
- * maker keep-alive/responder + OTC land in Phases 5-6. Runs as long as the node runs (more reliable than Doze).
+ * service.js — the AtomiX background engine (Rhino). Boots the crypto/identity stack and, on every NEWBLOCK
+ * (+60s backstop), runs the full engine pass: taker settlement (claim/withdraw with my secret, refund expired
+ * legs — terminal status ONLY from the ETH contract flags, F1), the maker keep-alive + auto-responder
+ * counter-legs, OTC negotiation/expiry, and the market-history collector. Self-healing boot (retries until
+ * WRITE trust), per-poll kv reload (UI edits/currency switches honored), poll watchdog. Lives as long as the
+ * node runs — more reliable than Android Doze.
  */
 MDS.load('lib/rhino_shim.js');   // MUST be first — polyfills Uint8Array.slice/.fill that Rhino lacks
 MDS.load('vendor/nacl.js');
