@@ -129,24 +129,43 @@ function poll() {
     });
 }
 
-MDS.init(function (msg) {
-    if (msg.event === 'inited') {
-        AX.boot.init(function (err, ctx) {
-            if (err) { log('boot FAILED: ' + err.message); return; }
-            CTX = ctx;
-            RPC = new AX.ethrpc.Rpc(AX.ethops.NET.rpcs[0]);   // one ETH RPC shared by settle + responder + balances
-            // Settlement + maker/responder + taker/OTC engines (its own instances vs the UI's are fund-SAFE — F1
-            // recovers a cross-instance nonce clash). configureEngines re-runs on a currency switch (reloadShared).
-            configureEngines();
-            AX.maker.loadConfig(function () {
-                AX.otc.initDb(function () {
-                    READY = true;
-                    log('booted — settlement + maker/responder + OTC live; ETH ' + ctx.eth.address);
-                    poll();   // catch up any in-flight swaps immediately on (re)start
-                });
+// SELF-HEALING BOOT: MiniDapps install with READ trust by default, so first boot commonly fails on the
+// write-gated vault/seedrandom reads. Keep retrying (paced) on every block/timer event until the user grants
+// WRITE trust — the background engine then comes up ON ITS OWN, no reinstall or node restart. Log only on a
+// message CHANGE so a long-unpermissioned install doesn't spam the node log.
+var BOOTING = false, lastBootTryMs = 0, lastBootLog = '';
+var BOOT_RETRY_PACE_MS = 55000;
+function logOnce(s) { if (s !== lastBootLog) { lastBootLog = s; log(s); } }
+function tryBoot() {
+    if (READY || BOOTING) return;
+    var now = Date.now();
+    if (lastBootTryMs > 0 && now - lastBootTryMs < BOOT_RETRY_PACE_MS) return;
+    lastBootTryMs = now; BOOTING = true;
+    AX.boot.init(function (err, ctx) {
+        BOOTING = false;
+        if (err) {
+            logOnce('boot failed: ' + err.message + (err.permission
+                ? ' — grant WRITE trust (MiniHub app settings, or: mds action:permission uid:<AtomiX uid> trust:write); retrying'
+                : ' — retrying'));
+            return;
+        }
+        CTX = ctx;
+        RPC = new AX.ethrpc.Rpc(AX.ethops.NET.rpcs[0]);   // one ETH RPC shared by settle + responder + balances
+        // Settlement + maker/responder + taker/OTC engines (its own instances vs the UI's are fund-SAFE — F1
+        // recovers a cross-instance nonce clash). configureEngines re-runs on a currency switch (reloadShared).
+        configureEngines();
+        AX.maker.loadConfig(function () {
+            AX.otc.initDb(function () {
+                READY = true;
+                log('booted — settlement + maker/responder + OTC live; ETH ' + ctx.eth.address);
+                poll();   // catch up any in-flight swaps immediately on (re)start
             });
         });
-    }
-    else if (msg.event === 'NEWBLOCK') { poll(); }
-    else if (msg.event === 'MDS_TIMER_60SECONDS') { poll(); }   // backstop between blocks
+    });
+}
+
+MDS.init(function (msg) {
+    if (msg.event === 'inited') { tryBoot(); }
+    else if (msg.event === 'NEWBLOCK') { if (!READY) tryBoot(); else poll(); }
+    else if (msg.event === 'MDS_TIMER_60SECONDS') { if (!READY) tryBoot(); else poll(); }   // backstop between blocks
 });

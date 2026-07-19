@@ -72,5 +72,18 @@ ok('minima re-theme sets data-ccy', document.documentElement.getAttribute('data-
 ok('minima label in header', root().textContent.indexOf('MINIMA') > -1);
 AX.trading.setActive(AX.trading.MXUSDT);
 
+// boot-failure states (the Classic first-run): permission card with the exact grant command, no native-isms
+AX.ui.state.paired = false; AX.ui.state.bootError = { permission: true }; AX.ui.render();
+ok('boot: permission card title', root().textContent.indexOf('needs Write permission') > -1);
+ok('boot: exact grant command shown', root().textContent.indexOf('mds action:permission uid:') > -1);
+ok('boot: retry button', root().textContent.indexOf('Retry now') > -1);
+ok('boot: NO minimaCore native-ism anywhere', root().textContent.indexOf('Minima Core') < 0);
+AX.ui.state.bootError = { locked: true }; AX.ui.render();
+ok('boot: locked card', root().textContent.indexOf('password-locked') > -1);
+AX.ui.state.bootError = null; AX.ui.render();
+ok('boot: no error → starting banner copy', root().textContent.indexOf('Starting AtomiX') > -1);
+AX.ui.state.paired = true; AX.ui.state.bootError = null; AX.ui.render();
+ok('boot: paired → no overlay', root().textContent.indexOf('needs Write permission') < 0);
+
 console.log('\n' + (fail === 0 ? '✅ UI RENDER PASS' : '❌ UI RENDER FAIL') + ` — ${pass} passed, ${fail} failed`);
 if (fail) { console.log(fails.join('\n')); process.exit(1); }
