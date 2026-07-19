@@ -126,3 +126,18 @@ body { padding-bottom: env(safe-area-inset-bottom); }
 .statusline.ok { color: var(--in); } .statusline { color: var(--dim); font-size: 12px; margin-top: 8px; }
 .empty { color: var(--dim); font-size: 12.5px; margin-top: 12px; }
 .spacer { height: 8px; }
+
+/* review / confirm modal (taker) — overlay + card, theme-aware via tokens */
+.modal-ov { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center;
+  justify-content: center; padding: 20px; z-index: 50; }
+.modal-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+  padding: 20px; width: 100%; max-width: 420px; max-height: 82vh; overflow-y: auto;
+  box-shadow: 0 18px 60px rgba(0,0,0,0.45); }
+.modal-title { font-weight: 700; font-size: 17px; color: var(--text); margin-bottom: 12px; }
+.dlgline { color: var(--text); font-size: 13.5px; padding: 3px 0; line-height: 1.35; }
+.dlgline.dim { color: var(--dim); font-size: 12.5px; }
+.dlgline.mono { font-family: JBMono, ui-monospace, monospace; font-variant-numeric: tabular-nums; font-size: 12px; color: var(--text); }
+.dlgline.accent { color: var(--accent); font-weight: 700; font-size: 13px; padding-top: 8px; }
+.dlgline.red { color: var(--red); font-size: 12px; padding-top: 8px; }
+.modal-btns { display: flex; gap: 8px; margin-top: 16px; }
+.modal-btns .pill { flex: 0 0 auto; padding: 10px 16px; }

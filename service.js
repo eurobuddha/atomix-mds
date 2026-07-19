@@ -20,6 +20,7 @@ MDS.load('lib/ethhtlc.js');       // ETH HTLC interface (needs abi + sodium + he
 MDS.load('lib/identity.js');
 MDS.load('lib/trading.js');
 MDS.load('lib/mds.js');
+MDS.load('lib/swapdb.js');         // durable swap tables — boot.init() creates them (both hosts)
 MDS.load('lib/htlc.js');
 MDS.load('lib/prng.js');
 MDS.load('lib/boot.js');
