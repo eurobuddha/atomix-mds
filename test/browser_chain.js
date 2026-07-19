@@ -49,9 +49,14 @@ ok('window.MDS is the node library', typeof w.MDS === 'object' && typeof w.MDS.c
 // the BROWSER module set — settle + responder are deliberately service-only (settlement never runs in the page)
 const MODULES = ['mds', 'boot', 'flow', 'hex', 'sodium', 'eth', 'trading', 'identity', 'htlc', 'swapdb', 'ethrpc',
     'ethtx', 'ethops', 'ethhtlc', 'abi', 'dec', 'prng', 'order', 'book', 'swapplan', 'peg', 'maker',
-    'engine', 'otc', 'take', 'fmt', 'ui', 'app'];
+    'engine', 'otc', 'take', 'fmt', 'wallet', 'ui', 'app'];
 const missing = MODULES.filter(m => !(w.AX && w.AX[m]));
 ok('full AX module set attached: ' + (missing.join(',') || 'complete'), missing.length === 0);
+ok('qrcode vendor global attached', vm.runInContext('typeof qrcode', ctx) === 'function');
+
+// PARITY GUARD: no stub helper may exist or be called — a "coming later" button can never silently ship again.
+const uiSrc = fs.readFileSync(path.join(ROOT, 'lib/ui.js'), 'utf8');
+ok('no pending() stub in ui.js', !/pending\s*:\s*function|AX\.ui\.pending\(/.test(uiSrc));
 
 // boot must run INTO the MDS transport (an async XHR), never die synchronously — the exact 0.1.4 failure shape.
 let syncThrow = null;
