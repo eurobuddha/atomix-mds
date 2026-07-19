@@ -38,6 +38,9 @@
     T.eq('buy: too little USDT (50 < 50.5) → reject', R.acceptTakerBuyMinima(buyOrder, buyContract(50, 50)), false);
     T.eq('buy: over cap (150 > 100) → reject', R.acceptTakerBuyMinima(buyOrder, buyContract(150, 200)), false);
     T.eq('buy: below min (0.5 < 1) → reject', R.acceptTakerBuyMinima(buyOrder, buyContract(0.5, 1)), false);
+    // FUND-SAFETY (worthless-token drain): a non-USDT ERC20 as the paying leg must be rejected even if the numbers fit.
+    function buyWorthless(giveMinima, recvAmt) { var c = buyContract(giveMinima, recvAmt); c.tokenContract = '0x000000000000000000000000000000000000dEaD'; return c; }
+    T.eq('buy: worthless token rejected (even if amounts fit)', R.acceptTakerBuyMinima(buyOrder, buyWorthless(50, 2000)), false);
 
     // ============ selectCoins: largest-first, exact cover, MAX cap, can't-cover ============
     R._reset();
