@@ -67,6 +67,9 @@ now THREE-way; desktop keeps its own semver (pandapools precedent), feature-trac
 |---|---|---|
 | Live order book, deepest-first at equal price, tombstone-aware | orderbook.js + ui.js depth rows | 📱 |
 | Maker order editor (peg ladder, levels 1–6 default 1, manual ladder) | maker.js + ui.js editor | ✅ |
+| **Per-rung editable ladder (6 ASK + 6 BID rows, each own price+size) + auto-fill generator (mid·step·levels·ask-size·bid-size seeds the rungs)** | ui.js orderEditor/wireAutofill/saveEditor + app.js makerManual | ✅ 0.1.10 (native m: existed; MDS added) |
+| **Independent ask/bid sizes + single-sided markets (blank a side); auto-reprice peg honours per-side size + skip-empty** | peg.js applyPeg askSize/bidSize + maker.js pegCfg (native PriceOracle.applyPeg + P_ASK_SIZE/P_BID_SIZE) | ✅ 0.1.10 |
+| **Matching min-gate fix: a best-price maker's high `min` no longer `break`s the whole sweep — skip only it, fill deeper lower-min makers; 6dp grain tolerance; below-min only when nothing fills** | swapplan.js buildSweepPlan + app.js reviewSingle (native m: buildSweepPlan) | ✅ 0.1.10 |
 | Publish / keep-alive / withdraw / currency-switch tombstone | maker.js + service reloadShared | ✅ |
 | Market history + price chart (MarketCollector + MarketChartView) | lib/market.js collector (service-only writer, reconcile EXECUTED/REFUNDED/confirm-window) + swapdb market_trades restored + ui.js canvas chart (native geometry/empty-states) + history rows/stats | ✅ 0.1.7 |
 
