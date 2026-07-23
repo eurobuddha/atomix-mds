@@ -61,6 +61,7 @@ now THREE-way; desktop keeps its own semver (pandapools precedent), feature-trac
 |---|---|---|
 | Per-swap cards with live status | ui.js activityTab (reads swaps SQL) | 📱 |
 | Swap detail breakdown (legs found/claimable) (e:400-484 inspect + m:2930 checkNow) | lib/inspect.js buildReport (pure, native strings) + app.js onSwapDetail live reads + ui.swapReportDialog w/ Check again | ✅ 0.1.7 |
+| Export CSV — ALL my swaps in one file, each row tagged Maker (RESPONDER)/Taker (INITIATOR), + on-chain leg tx ids from the events log (m:doExportCsv via SAF CreateDocument, no FileProvider) | ui.js activityTab Export button → app.js onExportCsv (allSwaps+getEvents → MDS.file.save, clipboard fallback) · desktop: renderAxActivity → atomix.js exportSwaps → api.exportCsv save-dialog. Identical columns/format/CSV-injection-escaping across all 3 | ✅ 0.1.12 |
 
 ## Market tab
 | Native | MDS | Status |
