@@ -102,6 +102,15 @@ ok('wallet: Minima breakdown line', root().textContent.indexOf('confirmed 500.3'
 ok('wallet: Send pill present', root().textContent.indexOf('↑  Send') > -1);
 ok('wallet: NO stub button behavior text', root().textContent.indexOf('Coming in a later phase') < 0);
 
+// ETH-RPC failure banner (native m:2589). The pin-forever bug: a set-only assignment left this on screen after
+// the network recovered, so assert BOTH directions — it shows on failure AND clears on the next good refresh.
+AX.ui.state.ethErr = 'eth_getBalance failed on all RPCs: Unable to resolve host "eth.drpc.org"';
+AX.ui.render();
+ok('wallet: RPC error banner shown', root().textContent.indexOf('⚠ eth_getBalance failed on all RPCs') > -1);
+AX.ui.state.ethErr = null;
+AX.ui.render();
+ok('wallet: RPC error banner CLEARS (never pinned)', root().textContent.indexOf('failed on all RPCs') < 0);
+
 // receive dialog: full address + a real QR <img> + the all-EVM note + Copy
 root().querySelectorAll('.pill').forEach(function (p) { if (p.textContent.indexOf('Fund / QR') > -1) p.dispatchEvent(new dom.window.Event('click')); });
 AX.ui.render();

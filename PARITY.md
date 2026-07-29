@@ -51,6 +51,7 @@ now THREE-way; desktop keeps its own semver (pandapools precedent), feature-trac
 | ETH card with shortAddr sub-line, tap → receive (m:2526) | ui.js walletTab | ✅ 0.1.6 |
 | USDT card | ui.js walletCard | 📱 |
 | Refresh pill (both chains) (m:2544) | app.js onRefreshBal | ✅ 0.1.6 |
+| ETH-RPC failure line under the action pills, balance → '—', cleared by the next good read (m:2589,763) | ui.js walletTab `S.ethErr` + app.js refreshEthBalances — assigned unconditionally in BOTH apps | ✅ 0.1.13 |
 | Fund/QR receive dialog: full address + QR(plain address, white quiet-zone) + all-EVM note + Copy (m:3222) | ui.js receiveDialog (vendored qrcode.js, MIT) | ✅ 0.1.6 |
 | Export key 2-step warning → reveal → Copy (m:3264/3275) | ui.js exportKeyDialog/revealKeyDialog | ✅ 0.1.6 |
 | Balance pulse on swap completion (m:2569) | ui.js walletCard pulse (one-shot on value change) | ✅ 0.1.7 |
