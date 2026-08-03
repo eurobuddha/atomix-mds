@@ -1,16 +1,16 @@
-# Graph Report - atomix-mds  (2026-08-03)
+# Graph Report - atomix-mds  (2026-08-02)
 
 ## Corpus Check
-- 82 files · ~134,862 words
+- 82 files · ~133,799 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 860 nodes · 1572 edges · 72 communities (63 shown, 9 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 37 edges (avg confidence: 0.56)
+- 858 nodes · 1563 edges · 72 communities (63 shown, 9 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 38 edges (avg confidence: 0.57)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d0fc3343`
+- Built from commit: `bb8277e4`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -79,12 +79,12 @@
   vendor/elliptic.js → lib/ui.js
 - `scanChat()` --indirect_call--> `coins()`  [INFERRED]
   lib/otc.js → test/responder.test.js
+- `lockMinimaCounterLeg()` --indirect_call--> `coins()`  [INFERRED]
+  lib/responder.js → test/responder.test.js
 - `"node_modules/bn.js/lib/bn.js"()` --indirect_call--> `start()`  [INFERRED]
   vendor/elliptic.js → lib/app.js
 - `"node_modules/hash.js/lib/hash/sha/512.js"()` --indirect_call--> `start()`  [INFERRED]
   vendor/elliptic.js → lib/app.js
-- `contractId()` --references--> `S`  [EXTRACTED]
-  lib/ethhtlc.js → spike/verify_rhino.js
 
 ## Import Cycles
 - None detected.
@@ -104,12 +104,12 @@ Cohesion: 0.13
 Nodes (45): accept(), addMsg(), allDeals(), apply(), applyPropose(), approxEq(), changed(), claimExecute() (+37 more)
 
 ### Community 3 - "settle.js"
-Cohesion: 0.17
-Nodes (31): activeSwaps(), amountTokenOk(), broadcastEthRefund(), broadcastEthWithdraw(), checkCanSwapCoin(), checkEthContractBody(), checkEthContractFor(), checkExpiredMinima() (+23 more)
+Cohesion: 0.13
+Nodes (33): activeSwaps(), amountTokenOk(), broadcastEthRefund(), broadcastEthWithdraw(), checkCanSwapCoin(), checkEthContractBody(), checkEthContractFor(), checkExpiredMinima() (+25 more)
 
 ### Community 5 - "responder.js"
-Cohesion: 0.11
-Nodes (35): acceptTakerBuyMinima(), acceptTakerSellMinima(), addDec(), addIncoming(), cpBurstFull(), decimalsOf(), doScanIncoming(), ensureAllowance() (+27 more)
+Cohesion: 0.14
+Nodes (32): acceptTakerBuyMinima(), acceptTakerSellMinima(), addDec(), addIncoming(), cpBurstFull(), decimalsOf(), doScanIncoming(), ensureAllowance() (+24 more)
 
 ### Community 6 - "orderbook.js"
 Cohesion: 0.11
@@ -125,7 +125,7 @@ Nodes (31): activeHashes(), allSwaps(), deleteSwap(), esc(), executedTrades(), g
 
 ### Community 9 - "htlc.js"
 Cohesion: 0.16
-Nodes (20): claim(), coinAmount(), deleteTxn(), grain(), loadKeys(), lock(), lockFromCoins(), maybeGrain() (+12 more)
+Nodes (19): claim(), coinAmount(), deleteTxn(), grain(), loadKeys(), lock(), lockFromCoins(), maybeGrain() (+11 more)
 
 ### Community 10 - "rhino_sodium.js"
 Cohesion: 0.09
@@ -259,5 +259,5 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.0768361581920904 - nodes in this community are weakly interconnected._
 - **Should `otc.js` be split into smaller, more focused modules?**
   _Cohesion score 0.1276595744680851 - nodes in this community are weakly interconnected._
-- **Should `elliptic.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.05555555555555555 - nodes in this community are weakly interconnected._
+- **Should `settle.js` be split into smaller, more focused modules?**
+  _Cohesion score 0.12660028449502134 - nodes in this community are weakly interconnected._

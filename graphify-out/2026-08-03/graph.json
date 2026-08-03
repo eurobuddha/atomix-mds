@@ -257,21 +257,10 @@
       "norm_label": "scanbyhash()"
     },
     {
-      "label": "scanByHashDeep()",
-      "file_type": "code",
-      "source_file": "lib/htlc.js",
-      "source_location": "L271",
-      "_origin": "ast",
-      "id": "lib_htlc_scanbyhashdeep",
-      "community": 9,
-      "community_name": "htlc.js",
-      "norm_label": "scanbyhashdeep()"
-    },
-    {
       "label": "scanByKey()",
       "file_type": "code",
       "source_file": "lib/htlc.js",
-      "source_location": "L273",
+      "source_location": "L268",
       "_origin": "ast",
       "id": "lib_htlc_scanbykey",
       "community": 9,
@@ -282,7 +271,7 @@
       "label": "scanNotifySecret()",
       "file_type": "code",
       "source_file": "lib/htlc.js",
-      "source_location": "L278",
+      "source_location": "L273",
       "_origin": "ast",
       "id": "lib_htlc_scannotifysecret",
       "community": 9,
@@ -290,433 +279,15 @@
       "norm_label": "scannotifysecret()"
     },
     {
-      "label": "settle.js",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "lib_settle",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "settle.js"
-    },
-    {
-      "label": "nowUnix()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L35",
-      "_origin": "ast",
-      "id": "lib_settle_nowunix",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "nowunix()"
-    },
-    {
-      "label": "configure()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L37",
-      "_origin": "ast",
-      "id": "lib_settle_configure",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "configure()"
-    },
-    {
-      "label": "ready()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L38",
-      "_origin": "ast",
-      "id": "lib_settle_ready",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "ready()"
-    },
-    {
-      "label": "ops()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L39",
-      "_origin": "ast",
-      "id": "lib_settle_ops",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "ops()"
-    },
-    {
-      "label": "notify()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L40",
-      "_origin": "ast",
-      "id": "lib_settle_notify",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "notify()"
-    },
-    {
-      "label": "onChanged()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L41",
-      "_origin": "ast",
-      "id": "lib_settle_onchanged",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "onchanged()"
-    },
-    {
-      "label": "ethRetryDue()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L42",
-      "_origin": "ast",
-      "id": "lib_settle_ethretrydue",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "ethretrydue()"
-    },
-    {
-      "label": "markEthAttempt()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L43",
-      "_origin": "ast",
-      "id": "lib_settle_markethattempt",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "markethattempt()"
-    },
-    {
-      "label": "isMyPublishKey()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L44",
-      "_origin": "ast",
-      "id": "lib_settle_ismypublishkey",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "ismypublishkey()"
-    },
-    {
-      "label": "sameHash()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "lib_settle_samehash",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "samehash()"
-    },
-    {
-      "label": "stripReqToken()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L50",
-      "_origin": "ast",
-      "id": "lib_settle_stripreqtoken",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "stripreqtoken()"
-    },
-    {
-      "label": "decimalsOf()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L57",
-      "_origin": "ast",
-      "id": "lib_settle_decimalsof",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "decimalsof()"
-    },
-    {
-      "label": "logMismatchOnce()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L61",
-      "_origin": "ast",
-      "id": "lib_settle_logmismatchonce",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "logmismatchonce()"
-    },
-    {
-      "label": "amountTokenOk()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L68",
-      "_origin": "ast",
-      "id": "lib_settle_amounttokenok",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "amounttokenok()"
-    },
-    {
-      "label": "poll()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L80",
-      "_origin": "ast",
-      "id": "lib_settle_poll",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "poll()"
-    },
-    {
-      "label": "activeSwaps()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L96",
-      "_origin": "ast",
-      "id": "lib_settle_activeswaps",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "activeswaps()"
-    },
-    {
-      "label": "harvestNotifySecrets()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L104",
-      "_origin": "ast",
-      "id": "lib_settle_harvestnotifysecrets",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "harvestnotifysecrets()"
-    },
-    {
-      "label": "runMinimaChecks()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L132",
-      "_origin": "ast",
-      "id": "lib_settle_runminimachecks",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "runminimachecks()"
-    },
-    {
-      "label": "expectedTokenId()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L170",
-      "_origin": "ast",
-      "id": "lib_settle_expectedtokenid",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "expectedtokenid()"
-    },
-    {
-      "label": "checkCanSwapCoin()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L178",
-      "_origin": "ast",
-      "id": "lib_settle_checkcanswapcoin",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "checkcanswapcoin()"
-    },
-    {
-      "label": "sweepExpiredMinima()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L229",
-      "_origin": "ast",
-      "id": "lib_settle_sweepexpiredminima",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "sweepexpiredminima()"
-    },
-    {
-      "label": "checkExpiredMinima()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L251",
-      "_origin": "ast",
-      "id": "lib_settle_checkexpiredminima",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "checkexpiredminima()"
-    },
-    {
-      "label": "runEthChecks()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L277",
-      "_origin": "ast",
-      "id": "lib_settle_runethchecks",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "runethchecks()"
-    },
-    {
-      "label": "harvestEthPreimage()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L287",
-      "_origin": "ast",
-      "id": "lib_settle_harvestethpreimage",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "harvestethpreimage()"
-    },
-    {
-      "label": "checkEthContractFor()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L301",
-      "_origin": "ast",
-      "id": "lib_settle_checkethcontractfor",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "checkethcontractfor()"
-    },
-    {
-      "label": "checkEthContractBody()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L308",
-      "_origin": "ast",
-      "id": "lib_settle_checkethcontractbody",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "checkethcontractbody()"
-    },
-    {
-      "label": "broadcastEthWithdraw()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L339",
-      "_origin": "ast",
-      "id": "lib_settle_broadcastethwithdraw",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "broadcastethwithdraw()"
-    },
-    {
-      "label": "broadcastEthRefund()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L350",
-      "_origin": "ast",
-      "id": "lib_settle_broadcastethrefund",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "broadcastethrefund()"
-    },
-    {
-      "label": "confirmEthWithdrawn()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L357",
-      "_origin": "ast",
-      "id": "lib_settle_confirmethwithdrawn",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "confirmethwithdrawn()"
-    },
-    {
-      "label": "confirmEthRefunded()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L366",
-      "_origin": "ast",
-      "id": "lib_settle_confirmethrefunded",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "confirmethrefunded()"
-    },
-    {
-      "label": "finalizeEthLost()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L376",
-      "_origin": "ast",
-      "id": "lib_settle_finalizeethlost",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "finalizeethlost()"
-    },
-    {
-      "label": "finalize()",
-      "file_type": "code",
-      "source_file": "lib/settle.js",
-      "source_location": "L383",
-      "_origin": "ast",
-      "id": "lib_settle_finalize",
-      "community": 3,
-      "community_name": "settle.js",
-      "norm_label": "finalize()"
-    },
-    {
-      "label": "settle.test.js",
-      "file_type": "code",
-      "source_file": "test/settle.test.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "test_settle_test",
-      "community": 40,
-      "community_name": "settle.test.js",
-      "norm_label": "settle.test.js"
-    },
-    {
-      "label": "stub()",
-      "file_type": "code",
-      "source_file": "test/settle.test.js",
-      "source_location": "L18",
-      "_origin": "ast",
-      "id": "test_settle_test_stub",
-      "community": 40,
-      "community_name": "settle.test.js",
-      "norm_label": "stub()"
-    },
-    {
-      "label": "restore()",
-      "file_type": "code",
-      "source_file": "test/settle.test.js",
-      "source_location": "L19",
-      "_origin": "ast",
-      "id": "test_settle_test_restore",
-      "community": 40,
-      "community_name": "settle.test.js",
-      "norm_label": "restore()"
-    },
-    {
-      "label": "baseDbStubs()",
-      "file_type": "code",
-      "source_file": "test/settle.test.js",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "test_settle_test_basedbstubs",
-      "community": 40,
-      "community_name": "settle.test.js",
-      "norm_label": "basedbstubs()"
-    },
-    {
-      "label": "cfg()",
-      "file_type": "code",
-      "source_file": "test/settle.test.js",
-      "source_location": "L32",
-      "_origin": "ast",
-      "id": "test_settle_test_cfg",
-      "community": 40,
-      "community_name": "settle.test.js",
-      "norm_label": "cfg()"
-    },
-    {
       "label": "mdsw.js",
       "file_type": "code",
       "source_file": "lib/mdsw.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "lib_mdsw",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "mdsw.js",
-      "id": "lib_mdsw"
+      "norm_label": "mdsw.js"
     },
     {
       "label": "cmd()",
@@ -724,10 +295,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L19",
       "_origin": "ast",
+      "id": "lib_mdsw_cmd",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "cmd()",
-      "id": "lib_mdsw_cmd"
+      "norm_label": "cmd()"
     },
     {
       "label": "cmdR()",
@@ -735,10 +306,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L27",
       "_origin": "ast",
+      "id": "lib_mdsw_cmdr",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "cmdr()",
-      "id": "lib_mdsw_cmdr"
+      "norm_label": "cmdr()"
     },
     {
       "label": "rawCmdR()",
@@ -746,10 +317,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L37",
       "_origin": "ast",
+      "id": "lib_mdsw_rawcmdr",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "rawcmdr()",
-      "id": "lib_mdsw_rawcmdr"
+      "norm_label": "rawcmdr()"
     },
     {
       "label": "sql()",
@@ -757,10 +328,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L44",
       "_origin": "ast",
+      "id": "lib_mdsw_sql",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "sql()",
-      "id": "lib_mdsw_sql"
+      "norm_label": "sql()"
     },
     {
       "label": "netGet()",
@@ -768,10 +339,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L45",
       "_origin": "ast",
+      "id": "lib_mdsw_netget",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "netget()",
-      "id": "lib_mdsw_netget"
+      "norm_label": "netget()"
     },
     {
       "label": "netPost()",
@@ -779,10 +350,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L46",
       "_origin": "ast",
+      "id": "lib_mdsw_netpost",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "netpost()",
-      "id": "lib_mdsw_netpost"
+      "norm_label": "netpost()"
     },
     {
       "label": "netText()",
@@ -790,10 +361,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L49",
       "_origin": "ast",
+      "id": "lib_mdsw_nettext",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "nettext()",
-      "id": "lib_mdsw_nettext"
+      "norm_label": "nettext()"
     },
     {
       "label": "kvInit()",
@@ -801,10 +372,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L59",
       "_origin": "ast",
+      "id": "lib_mdsw_kvinit",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "kvinit()",
-      "id": "lib_mdsw_kvinit"
+      "norm_label": "kvinit()"
     },
     {
       "label": "kvGet()",
@@ -812,10 +383,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L62",
       "_origin": "ast",
+      "id": "lib_mdsw_kvget",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "kvget()",
-      "id": "lib_mdsw_kvget"
+      "norm_label": "kvget()"
     },
     {
       "label": "kvSet()",
@@ -823,10 +394,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L67",
       "_origin": "ast",
+      "id": "lib_mdsw_kvset",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "kvset()",
-      "id": "lib_mdsw_kvset"
+      "norm_label": "kvset()"
     },
     {
       "label": "kvDel()",
@@ -834,10 +405,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L70",
       "_origin": "ast",
+      "id": "lib_mdsw_kvdel",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "kvdel()",
-      "id": "lib_mdsw_kvdel"
+      "norm_label": "kvdel()"
     },
     {
       "label": "sqlErr()",
@@ -845,10 +416,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L72",
       "_origin": "ast",
+      "id": "lib_mdsw_sqlerr",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "sqlerr()",
-      "id": "lib_mdsw_sqlerr"
+      "norm_label": "sqlerr()"
     },
     {
       "label": "esc()",
@@ -856,10 +427,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L75",
       "_origin": "ast",
+      "id": "lib_mdsw_esc",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "esc()",
-      "id": "lib_mdsw_esc"
+      "norm_label": "esc()"
     },
     {
       "label": "ethLockInit()",
@@ -867,10 +438,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L83",
       "_origin": "ast",
+      "id": "lib_mdsw_ethlockinit",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "ethlockinit()",
-      "id": "lib_mdsw_ethlockinit"
+      "norm_label": "ethlockinit()"
     },
     {
       "label": "ethLockAcquire()",
@@ -878,10 +449,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L91",
       "_origin": "ast",
+      "id": "lib_mdsw_ethlockacquire",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "ethlockacquire()",
-      "id": "lib_mdsw_ethlockacquire"
+      "norm_label": "ethlockacquire()"
     },
     {
       "label": "ethLockRelease()",
@@ -889,10 +460,10 @@
       "source_file": "lib/mdsw.js",
       "source_location": "L101",
       "_origin": "ast",
+      "id": "lib_mdsw_ethlockrelease",
       "community": 18,
       "community_name": "mdsw.js",
-      "norm_label": "ethlockrelease()",
-      "id": "lib_mdsw_ethlockrelease"
+      "norm_label": "ethlockrelease()"
     },
     {
       "label": "signgate.js",
@@ -900,10 +471,10 @@
       "source_file": "lib/signgate.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "lib_signgate",
       "community": 69,
       "community_name": "signgate.js",
-      "norm_label": "signgate.js",
-      "id": "lib_signgate"
+      "norm_label": "signgate.js"
     },
     {
       "label": "signs()",
@@ -911,10 +482,10 @@
       "source_file": "lib/signgate.js",
       "source_location": "L50",
       "_origin": "ast",
+      "id": "lib_signgate_signs",
       "community": 69,
       "community_name": "signgate.js",
-      "norm_label": "signs()",
-      "id": "lib_signgate_signs"
+      "norm_label": "signs()"
     },
     {
       "label": "submit()",
@@ -922,10 +493,10 @@
       "source_file": "lib/signgate.js",
       "source_location": "L58",
       "_origin": "ast",
+      "id": "lib_signgate_submit",
       "community": 69,
       "community_name": "signgate.js",
-      "norm_label": "submit()",
-      "id": "lib_signgate_submit"
+      "norm_label": "submit()"
     },
     {
       "label": "next()",
@@ -933,10 +504,10 @@
       "source_file": "lib/signgate.js",
       "source_location": "L66",
       "_origin": "ast",
+      "id": "lib_signgate_next",
       "community": 69,
       "community_name": "signgate.js",
-      "norm_label": "next()",
-      "id": "lib_signgate_next"
+      "norm_label": "next()"
     },
     {
       "label": "service.js",
@@ -944,10 +515,10 @@
       "source_file": "service.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "service",
       "community": 33,
       "community_name": "service.js",
-      "norm_label": "service.js",
-      "id": "service"
+      "norm_label": "service.js"
     },
     {
       "label": "log()",
@@ -955,10 +526,10 @@
       "source_file": "service.js",
       "source_location": "L49",
       "_origin": "ast",
+      "id": "service_log",
       "community": 33,
       "community_name": "service.js",
-      "norm_label": "log()",
-      "id": "service_log"
+      "norm_label": "log()"
     },
     {
       "label": "notifyLog()",
@@ -966,10 +537,10 @@
       "source_file": "service.js",
       "source_location": "L52",
       "_origin": "ast",
+      "id": "service_notifylog",
       "community": 33,
       "community_name": "service.js",
-      "norm_label": "notifylog()",
-      "id": "service_notifylog"
+      "norm_label": "notifylog()"
     },
     {
       "label": "configureEngines()",
@@ -977,10 +548,10 @@
       "source_file": "service.js",
       "source_location": "L56",
       "_origin": "ast",
+      "id": "service_configureengines",
       "community": 33,
       "community_name": "service.js",
-      "norm_label": "configureengines()",
-      "id": "service_configureengines"
+      "norm_label": "configureengines()"
     },
     {
       "label": "reloadShared()",
@@ -988,10 +559,10 @@
       "source_file": "service.js",
       "source_location": "L87",
       "_origin": "ast",
+      "id": "service_reloadshared",
       "community": 33,
       "community_name": "service.js",
-      "norm_label": "reloadshared()",
-      "id": "service_reloadshared"
+      "norm_label": "reloadshared()"
     },
     {
       "label": "getBalances()",
@@ -999,10 +570,10 @@
       "source_file": "service.js",
       "source_location": "L100",
       "_origin": "ast",
+      "id": "service_getbalances",
       "community": 33,
       "community_name": "service.js",
-      "norm_label": "getbalances()",
-      "id": "service_getbalances"
+      "norm_label": "getbalances()"
     },
     {
       "label": "poll()",
@@ -1010,10 +581,10 @@
       "source_file": "service.js",
       "source_location": "L114",
       "_origin": "ast",
+      "id": "service_poll",
       "community": 33,
       "community_name": "service.js",
-      "norm_label": "poll()",
-      "id": "service_poll"
+      "norm_label": "poll()"
     },
     {
       "label": "logOnce()",
@@ -1021,10 +592,10 @@
       "source_file": "service.js",
       "source_location": "L151",
       "_origin": "ast",
+      "id": "service_logonce",
       "community": 33,
       "community_name": "service.js",
-      "norm_label": "logonce()",
-      "id": "service_logonce"
+      "norm_label": "logonce()"
     },
     {
       "label": "tryBoot()",
@@ -1032,10 +603,10 @@
       "source_file": "service.js",
       "source_location": "L152",
       "_origin": "ast",
+      "id": "service_tryboot",
       "community": 33,
       "community_name": "service.js",
-      "norm_label": "tryboot()",
-      "id": "service_tryboot"
+      "norm_label": "tryboot()"
     },
     {
       "label": "htlc.txnid.test.js",
@@ -1043,10 +614,10 @@
       "source_file": "test/htlc.txnid.test.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "test_htlc_txnid_test",
       "community": 70,
       "community_name": "htlc.txnid.test.js",
-      "norm_label": "htlc.txnid.test.js",
-      "id": "test_htlc_txnid_test"
+      "norm_label": "htlc.txnid.test.js"
     },
     {
       "label": "run.js",
@@ -1054,10 +625,10 @@
       "source_file": "test/run.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "test_run",
       "community": 22,
       "community_name": "run.js",
-      "norm_label": "run.js",
-      "id": "test_run"
+      "norm_label": "run.js"
     },
     {
       "label": "fs",
@@ -1065,10 +636,10 @@
       "source_file": "test/run.js",
       "source_location": "L9",
       "_origin": "ast",
+      "id": "test_run_fs",
       "community": 22,
       "community_name": "run.js",
-      "norm_label": "fs",
-      "id": "test_run_fs"
+      "norm_label": "fs"
     },
     {
       "label": "vm",
@@ -1076,10 +647,10 @@
       "source_file": "test/run.js",
       "source_location": "L10",
       "_origin": "ast",
+      "id": "test_run_vm",
       "community": 22,
       "community_name": "run.js",
-      "norm_label": "vm",
-      "id": "test_run_vm"
+      "norm_label": "vm"
     },
     {
       "label": "path",
@@ -1087,10 +658,10 @@
       "source_file": "test/run.js",
       "source_location": "L11",
       "_origin": "ast",
+      "id": "test_run_path",
       "community": 22,
       "community_name": "run.js",
-      "norm_label": "path",
-      "id": "test_run_path"
+      "norm_label": "path"
     },
     {
       "label": "ROOT",
@@ -1098,10 +669,10 @@
       "source_file": "test/run.js",
       "source_location": "L13",
       "_origin": "ast",
+      "id": "test_run_root",
       "community": 22,
       "community_name": "run.js",
-      "norm_label": "root",
-      "id": "test_run_root"
+      "norm_label": "root"
     },
     {
       "label": "read()",
@@ -1109,10 +680,10 @@
       "source_file": "test/run.js",
       "source_location": "L14",
       "_origin": "ast",
+      "id": "test_run_read",
       "community": 22,
       "community_name": "run.js",
-      "norm_label": "read()",
-      "id": "test_run_read"
+      "norm_label": "read()"
     },
     {
       "label": "sandbox",
@@ -1120,10 +691,10 @@
       "source_file": "test/run.js",
       "source_location": "L18",
       "_origin": "ast",
+      "id": "test_run_sandbox",
       "community": 22,
       "community_name": "run.js",
-      "norm_label": "sandbox",
-      "id": "test_run_sandbox"
+      "norm_label": "sandbox"
     },
     {
       "label": "ctx",
@@ -1131,10 +702,10 @@
       "source_file": "test/run.js",
       "source_location": "L24",
       "_origin": "ast",
+      "id": "test_run_ctx",
       "community": 22,
       "community_name": "run.js",
-      "norm_label": "ctx",
-      "id": "test_run_ctx"
+      "norm_label": "ctx"
     },
     {
       "label": "FILES",
@@ -1142,10 +713,10 @@
       "source_file": "test/run.js",
       "source_location": "L27",
       "_origin": "ast",
+      "id": "test_run_files",
       "community": 22,
       "community_name": "run.js",
-      "norm_label": "files",
-      "id": "test_run_files"
+      "norm_label": "files"
     },
     {
       "label": "nodeCrypto",
@@ -1153,10 +724,10 @@
       "source_file": "test/run.js",
       "source_location": "L40",
       "_origin": "ast",
+      "id": "test_run_nodecrypto",
       "community": 22,
       "community_name": "run.js",
-      "norm_label": "nodecrypto",
-      "id": "test_run_nodecrypto"
+      "norm_label": "nodecrypto"
     },
     {
       "label": "fails",
@@ -1164,10 +735,10 @@
       "source_file": "test/run.js",
       "source_location": "L45",
       "_origin": "ast",
+      "id": "test_run_fails",
       "community": 22,
       "community_name": "run.js",
-      "norm_label": "fails",
-      "id": "test_run_fails"
+      "norm_label": "fails"
     },
     {
       "label": "testDir",
@@ -1175,10 +746,10 @@
       "source_file": "test/run.js",
       "source_location": "L54",
       "_origin": "ast",
+      "id": "test_run_testdir",
       "community": 22,
       "community_name": "run.js",
-      "norm_label": "testdir",
-      "id": "test_run_testdir"
+      "norm_label": "testdir"
     },
     {
       "label": "signgate.test.js",
@@ -1186,10 +757,10 @@
       "source_file": "test/signgate.test.js",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "test_signgate_test",
       "community": 71,
       "community_name": "signgate.test.js",
-      "norm_label": "signgate.test.js",
-      "id": "test_signgate_test"
+      "norm_label": "signgate.test.js"
     },
     {
       "label": "PARITY.md",
@@ -6315,6 +5886,358 @@
       "id": "lib_rhino_shim"
     },
     {
+      "label": "settle.js",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "settle.js",
+      "community_name": "settle.js",
+      "id": "lib_settle"
+    },
+    {
+      "label": "nowUnix()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L29",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "nowunix()",
+      "community_name": "settle.js",
+      "id": "lib_settle_nowunix"
+    },
+    {
+      "label": "configure()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "configure()",
+      "community_name": "settle.js",
+      "id": "lib_settle_configure"
+    },
+    {
+      "label": "ready()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L32",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "ready()",
+      "community_name": "settle.js",
+      "id": "lib_settle_ready"
+    },
+    {
+      "label": "ops()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L33",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "ops()",
+      "community_name": "settle.js",
+      "id": "lib_settle_ops"
+    },
+    {
+      "label": "notify()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L34",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "notify()",
+      "community_name": "settle.js",
+      "id": "lib_settle_notify"
+    },
+    {
+      "label": "onChanged()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L35",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "onchanged()",
+      "community_name": "settle.js",
+      "id": "lib_settle_onchanged"
+    },
+    {
+      "label": "ethRetryDue()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L36",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "ethretrydue()",
+      "community_name": "settle.js",
+      "id": "lib_settle_ethretrydue"
+    },
+    {
+      "label": "markEthAttempt()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L37",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "markethattempt()",
+      "community_name": "settle.js",
+      "id": "lib_settle_markethattempt"
+    },
+    {
+      "label": "isMyPublishKey()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L38",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "ismypublishkey()",
+      "community_name": "settle.js",
+      "id": "lib_settle_ismypublishkey"
+    },
+    {
+      "label": "sameHash()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L39",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "samehash()",
+      "community_name": "settle.js",
+      "id": "lib_settle_samehash"
+    },
+    {
+      "label": "stripReqToken()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L44",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "stripreqtoken()",
+      "community_name": "settle.js",
+      "id": "lib_settle_stripreqtoken"
+    },
+    {
+      "label": "decimalsOf()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L51",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "decimalsof()",
+      "community_name": "settle.js",
+      "id": "lib_settle_decimalsof"
+    },
+    {
+      "label": "logMismatchOnce()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L55",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "logmismatchonce()",
+      "community_name": "settle.js",
+      "id": "lib_settle_logmismatchonce"
+    },
+    {
+      "label": "amountTokenOk()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L62",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "amounttokenok()",
+      "community_name": "settle.js",
+      "id": "lib_settle_amounttokenok"
+    },
+    {
+      "label": "poll()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L74",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "poll()",
+      "community_name": "settle.js",
+      "id": "lib_settle_poll"
+    },
+    {
+      "label": "activeSwaps()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L90",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "activeswaps()",
+      "community_name": "settle.js",
+      "id": "lib_settle_activeswaps"
+    },
+    {
+      "label": "harvestNotifySecrets()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L98",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "harvestnotifysecrets()",
+      "community_name": "settle.js",
+      "id": "lib_settle_harvestnotifysecrets"
+    },
+    {
+      "label": "runMinimaChecks()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L126",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "runminimachecks()",
+      "community_name": "settle.js",
+      "id": "lib_settle_runminimachecks"
+    },
+    {
+      "label": "expectedTokenId()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L159",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "expectedtokenid()",
+      "community_name": "settle.js",
+      "id": "lib_settle_expectedtokenid"
+    },
+    {
+      "label": "checkCanSwapCoin()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L167",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "checkcanswapcoin()",
+      "community_name": "settle.js",
+      "id": "lib_settle_checkcanswapcoin"
+    },
+    {
+      "label": "checkExpiredMinima()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L213",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "checkexpiredminima()",
+      "community_name": "settle.js",
+      "id": "lib_settle_checkexpiredminima"
+    },
+    {
+      "label": "runEthChecks()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L234",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "runethchecks()",
+      "community_name": "settle.js",
+      "id": "lib_settle_runethchecks"
+    },
+    {
+      "label": "harvestEthPreimage()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L244",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "harvestethpreimage()",
+      "community_name": "settle.js",
+      "id": "lib_settle_harvestethpreimage"
+    },
+    {
+      "label": "checkEthContractFor()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L258",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "checkethcontractfor()",
+      "community_name": "settle.js",
+      "id": "lib_settle_checkethcontractfor"
+    },
+    {
+      "label": "checkEthContractBody()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L265",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "checkethcontractbody()",
+      "community_name": "settle.js",
+      "id": "lib_settle_checkethcontractbody"
+    },
+    {
+      "label": "broadcastEthWithdraw()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L296",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "broadcastethwithdraw()",
+      "community_name": "settle.js",
+      "id": "lib_settle_broadcastethwithdraw"
+    },
+    {
+      "label": "broadcastEthRefund()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L307",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "broadcastethrefund()",
+      "community_name": "settle.js",
+      "id": "lib_settle_broadcastethrefund"
+    },
+    {
+      "label": "confirmEthWithdrawn()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L314",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "confirmethwithdrawn()",
+      "community_name": "settle.js",
+      "id": "lib_settle_confirmethwithdrawn"
+    },
+    {
+      "label": "confirmEthRefunded()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L323",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "confirmethrefunded()",
+      "community_name": "settle.js",
+      "id": "lib_settle_confirmethrefunded"
+    },
+    {
+      "label": "finalizeEthLost()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L333",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "finalizeethlost()",
+      "community_name": "settle.js",
+      "id": "lib_settle_finalizeethlost"
+    },
+    {
+      "label": "finalize()",
+      "file_type": "code",
+      "source_file": "lib/settle.js",
+      "source_location": "L340",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "finalize()",
+      "community_name": "settle.js",
+      "id": "lib_settle_finalize"
+    },
+    {
       "label": "swapdb.js",
       "file_type": "code",
       "source_file": "lib/swapdb.js",
@@ -8619,9 +8542,9 @@
       "source_file": "test/responder.test.js",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "responder.test.js",
-      "community_name": "responder.js",
+      "community_name": "settle.js",
       "id": "test_responder_test"
     },
     {
@@ -8630,9 +8553,9 @@
       "source_file": "test/responder.test.js",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "mkorder()",
-      "community_name": "responder.js",
+      "community_name": "settle.js",
       "id": "test_responder_test_mkorder"
     },
     {
@@ -8641,9 +8564,9 @@
       "source_file": "test/responder.test.js",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "sellcoin()",
-      "community_name": "responder.js",
+      "community_name": "settle.js",
       "id": "test_responder_test_sellcoin"
     },
     {
@@ -8652,9 +8575,9 @@
       "source_file": "test/responder.test.js",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "buycontract()",
-      "community_name": "responder.js",
+      "community_name": "settle.js",
       "id": "test_responder_test_buycontract"
     },
     {
@@ -8663,9 +8586,9 @@
       "source_file": "test/responder.test.js",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "buyworthless()",
-      "community_name": "responder.js",
+      "community_name": "settle.js",
       "id": "test_responder_test_buyworthless"
     },
     {
@@ -8674,9 +8597,9 @@
       "source_file": "test/responder.test.js",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "coins()",
-      "community_name": "responder.js",
+      "community_name": "settle.js",
       "id": "test_responder_test_coins"
     },
     {
@@ -8752,6 +8675,61 @@
       "norm_label": "scaffold.test.js",
       "community_name": "scaffold.test.js",
       "id": "test_scaffold_test"
+    },
+    {
+      "label": "settle.test.js",
+      "file_type": "code",
+      "source_file": "test/settle.test.js",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 40,
+      "norm_label": "settle.test.js",
+      "community_name": "settle.test.js",
+      "id": "test_settle_test"
+    },
+    {
+      "label": "stub()",
+      "file_type": "code",
+      "source_file": "test/settle.test.js",
+      "source_location": "L18",
+      "_origin": "ast",
+      "community": 40,
+      "norm_label": "stub()",
+      "community_name": "settle.test.js",
+      "id": "test_settle_test_stub"
+    },
+    {
+      "label": "restore()",
+      "file_type": "code",
+      "source_file": "test/settle.test.js",
+      "source_location": "L19",
+      "_origin": "ast",
+      "community": 40,
+      "norm_label": "restore()",
+      "community_name": "settle.test.js",
+      "id": "test_settle_test_restore"
+    },
+    {
+      "label": "baseDbStubs()",
+      "file_type": "code",
+      "source_file": "test/settle.test.js",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 40,
+      "norm_label": "basedbstubs()",
+      "community_name": "settle.test.js",
+      "id": "test_settle_test_basedbstubs"
+    },
+    {
+      "label": "cfg()",
+      "file_type": "code",
+      "source_file": "test/settle.test.js",
+      "source_location": "L32",
+      "_origin": "ast",
+      "community": 40,
+      "norm_label": "cfg()",
+      "community_name": "settle.test.js",
+      "id": "test_settle_test_cfg"
     },
     {
       "label": "swapdb.test.js",
@@ -9661,18 +9639,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/htlc.js",
-      "source_location": "L271",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_htlc",
-      "target": "lib_htlc_scanbyhashdeep",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/htlc.js",
-      "source_location": "L273",
+      "source_location": "L268",
       "weight": 1.0,
       "_origin": "ast",
       "source": "lib_htlc",
@@ -9683,7 +9650,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "lib/htlc.js",
-      "source_location": "L278",
+      "source_location": "L273",
       "weight": 1.0,
       "_origin": "ast",
       "source": "lib_htlc",
@@ -9773,7 +9740,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "lib/htlc.js",
-      "source_location": "L280",
+      "source_location": "L275",
       "weight": 1.0,
       "_origin": "ast",
       "source": "lib_htlc_scannotifysecret",
@@ -10049,19 +10016,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "lib/htlc.js",
-      "source_location": "L271",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_htlc_scanbyhashdeep",
-      "target": "lib_htlc_scanstate",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/htlc.js",
-      "source_location": "L273",
+      "source_location": "L268",
       "weight": 1.0,
       "_origin": "ast",
       "source": "lib_htlc_scanbykey",
@@ -10071,1117 +10026,13 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L96",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_activeswaps",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L68",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_amounttokenok",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L350",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_broadcastethrefund",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L339",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_broadcastethwithdraw",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L178",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_checkcanswapcoin",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L308",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_checkethcontractbody",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L301",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_checkethcontractfor",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L251",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_checkexpiredminima",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L37",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_configure",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L366",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_confirmethrefunded",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L357",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_confirmethwithdrawn",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L57",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_decimalsof",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L42",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_ethretrydue",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L170",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_expectedtokenid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L383",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_finalize",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L376",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_finalizeethlost",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L287",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_harvestethpreimage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L104",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_harvestnotifysecrets",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L44",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_ismypublishkey",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L61",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_logmismatchonce",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L43",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_markethattempt",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_notify",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L35",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_nowunix",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L41",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_onchanged",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L39",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_ops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L80",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_poll",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L38",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_ready",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L277",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_runethchecks",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L132",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_runminimachecks",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L45",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_samehash",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L50",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_stripreqtoken",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L229",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle",
-      "target": "lib_settle_sweepexpiredminima",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L331",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkethcontractbody",
-      "target": "lib_settle_nowunix",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L42",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_ethretrydue",
-      "target": "lib_settle_nowunix",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L43",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_markethattempt",
-      "target": "lib_settle_nowunix",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L185",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkcanswapcoin",
-      "target": "lib_settle_ready",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L82",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_poll",
-      "target": "lib_settle_ready",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L354",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_broadcastethrefund",
-      "target": "lib_settle_ops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L347",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_broadcastethwithdraw",
-      "target": "lib_settle_ops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L303",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkethcontractfor",
-      "target": "lib_settle_ops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L211",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkcanswapcoin",
-      "target": "lib_settle_notify",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L268",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkexpiredminima",
-      "target": "lib_settle_notify",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L372",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_confirmethrefunded",
-      "target": "lib_settle_notify",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L363",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_confirmethwithdrawn",
-      "target": "lib_settle_notify",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L344",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_broadcastethwithdraw",
-      "target": "lib_settle_onchanged",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L205",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkcanswapcoin",
-      "target": "lib_settle_onchanged",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L269",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkexpiredminima",
-      "target": "lib_settle_onchanged",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L372",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_confirmethrefunded",
-      "target": "lib_settle_onchanged",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L363",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_confirmethwithdrawn",
-      "target": "lib_settle_onchanged",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L379",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_finalizeethlost",
-      "target": "lib_settle_onchanged",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L352",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_broadcastethrefund",
-      "target": "lib_settle_ethretrydue",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L341",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_broadcastethwithdraw",
-      "target": "lib_settle_ethretrydue",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L202",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkcanswapcoin",
-      "target": "lib_settle_ethretrydue",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L259",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkexpiredminima",
-      "target": "lib_settle_ethretrydue",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L234",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_sweepexpiredminima",
-      "target": "lib_settle_ethretrydue",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L353",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_broadcastethrefund",
-      "target": "lib_settle_markethattempt",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L342",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_broadcastethwithdraw",
-      "target": "lib_settle_markethattempt",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L203",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkcanswapcoin",
-      "target": "lib_settle_markethattempt",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L260",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkexpiredminima",
-      "target": "lib_settle_markethattempt",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L144",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_runminimachecks",
-      "target": "lib_settle_ismypublishkey",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L241",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_sweepexpiredminima",
-      "target": "lib_settle_ismypublishkey",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L118",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_harvestnotifysecrets",
-      "target": "lib_settle_samehash",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L144",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_runminimachecks",
-      "target": "lib_settle_samehash",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L241",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_sweepexpiredminima",
-      "target": "lib_settle_samehash",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L181",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkcanswapcoin",
-      "target": "lib_settle_stripreqtoken",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L319",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkethcontractbody",
-      "target": "lib_settle_decimalsof",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L195",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkcanswapcoin",
-      "target": "lib_settle_logmismatchonce",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L321",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkethcontractbody",
-      "target": "lib_settle_logmismatchonce",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L198",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkcanswapcoin",
-      "target": "lib_settle_amounttokenok",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L320",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkethcontractbody",
-      "target": "lib_settle_amounttokenok",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L86",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_poll",
-      "target": "lib_settle_runethchecks",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L85",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_poll",
-      "target": "lib_settle_runminimachecks",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L105",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_harvestnotifysecrets",
-      "target": "lib_settle_activeswaps",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L280",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_runethchecks",
-      "target": "lib_settle_activeswaps",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L136",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_runminimachecks",
-      "target": "lib_settle_harvestnotifysecrets",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L144",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_runminimachecks",
-      "target": "lib_settle_checkcanswapcoin",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L155",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_runminimachecks",
-      "target": "lib_settle_checkexpiredminima",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L161",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_runminimachecks",
-      "target": "lib_settle_sweepexpiredminima",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L193",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkcanswapcoin",
-      "target": "lib_settle_expectedtokenid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L242",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_sweepexpiredminima",
-      "target": "lib_settle_checkexpiredminima",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L280",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_runethchecks",
-      "target": "lib_settle_checkethcontractfor",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L305",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkethcontractfor",
-      "target": "lib_settle_harvestethpreimage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L305",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkethcontractfor",
-      "target": "lib_settle_checkethcontractbody",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L332",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkethcontractbody",
-      "target": "lib_settle_broadcastethrefund",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L324",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkethcontractbody",
-      "target": "lib_settle_broadcastethwithdraw",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L328",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkethcontractbody",
-      "target": "lib_settle_confirmethrefunded",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L313",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkethcontractbody",
-      "target": "lib_settle_confirmethwithdrawn",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L314",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_checkethcontractbody",
-      "target": "lib_settle_finalizeethlost",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L361",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_confirmethwithdrawn",
-      "target": "lib_settle_finalize",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "lib/settle.js",
-      "source_location": "L370",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "lib_settle_confirmethrefunded",
-      "target": "lib_settle_finalize",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "test/settle.test.js",
-      "source_location": "L23",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "test_settle_test",
-      "target": "test_settle_test_basedbstubs",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "test/settle.test.js",
-      "source_location": "L32",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "test_settle_test",
-      "target": "test_settle_test_cfg",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "test/settle.test.js",
-      "source_location": "L19",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "test_settle_test",
-      "target": "test_settle_test_restore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "test/settle.test.js",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "test_settle_test",
-      "target": "test_settle_test_stub",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "test/settle.test.js",
-      "source_location": "L24",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "test_settle_test_basedbstubs",
-      "target": "test_settle_test_stub",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "lib/mdsw.js",
       "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_cmd"
+      "target": "lib_mdsw_cmd",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11190,9 +10041,9 @@
       "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_cmdr"
+      "target": "lib_mdsw_cmdr",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11201,9 +10052,9 @@
       "source_location": "L75",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_esc"
+      "target": "lib_mdsw_esc",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11212,9 +10063,9 @@
       "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_ethlockacquire"
+      "target": "lib_mdsw_ethlockacquire",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11223,9 +10074,9 @@
       "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_ethlockinit"
+      "target": "lib_mdsw_ethlockinit",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11234,9 +10085,9 @@
       "source_location": "L101",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_ethlockrelease"
+      "target": "lib_mdsw_ethlockrelease",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11245,9 +10096,9 @@
       "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_kvdel"
+      "target": "lib_mdsw_kvdel",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11256,9 +10107,9 @@
       "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_kvget"
+      "target": "lib_mdsw_kvget",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11267,9 +10118,9 @@
       "source_location": "L59",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_kvinit"
+      "target": "lib_mdsw_kvinit",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11278,9 +10129,9 @@
       "source_location": "L67",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_kvset"
+      "target": "lib_mdsw_kvset",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11289,9 +10140,9 @@
       "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_netget"
+      "target": "lib_mdsw_netget",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11300,9 +10151,9 @@
       "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_netpost"
+      "target": "lib_mdsw_netpost",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11311,9 +10162,9 @@
       "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_nettext"
+      "target": "lib_mdsw_nettext",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11322,9 +10173,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_rawcmdr"
+      "target": "lib_mdsw_rawcmdr",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11333,9 +10184,9 @@
       "source_location": "L44",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_sql"
+      "target": "lib_mdsw_sql",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11344,9 +10195,9 @@
       "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw",
-      "target": "lib_mdsw_sqlerr"
+      "target": "lib_mdsw_sqlerr",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11356,9 +10207,9 @@
       "source_location": "L86",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_ethlockinit",
-      "target": "lib_mdsw_cmd"
+      "target": "lib_mdsw_cmd",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11368,9 +10219,9 @@
       "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_rawcmdr",
-      "target": "lib_mdsw_cmd"
+      "target": "lib_mdsw_cmd",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11380,9 +10231,9 @@
       "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_cmdr",
-      "target": "lib_mdsw_rawcmdr"
+      "target": "lib_mdsw_rawcmdr",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11392,9 +10243,9 @@
       "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_ethlockacquire",
-      "target": "lib_mdsw_sql"
+      "target": "lib_mdsw_sql",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11404,9 +10255,9 @@
       "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_ethlockinit",
-      "target": "lib_mdsw_sql"
+      "target": "lib_mdsw_sql",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11416,9 +10267,9 @@
       "source_location": "L103",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_ethlockrelease",
-      "target": "lib_mdsw_sql"
+      "target": "lib_mdsw_sql",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11428,9 +10279,9 @@
       "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_kvdel",
-      "target": "lib_mdsw_sql"
+      "target": "lib_mdsw_sql",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11440,9 +10291,9 @@
       "source_location": "L63",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_kvget",
-      "target": "lib_mdsw_sql"
+      "target": "lib_mdsw_sql",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11452,9 +10303,9 @@
       "source_location": "L60",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_kvinit",
-      "target": "lib_mdsw_sql"
+      "target": "lib_mdsw_sql",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11464,9 +10315,9 @@
       "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_kvset",
-      "target": "lib_mdsw_sql"
+      "target": "lib_mdsw_sql",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11476,9 +10327,9 @@
       "source_location": "L60",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_kvinit",
-      "target": "lib_mdsw_sqlerr"
+      "target": "lib_mdsw_sqlerr",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11488,9 +10339,9 @@
       "source_location": "L63",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_kvget",
-      "target": "lib_mdsw_esc"
+      "target": "lib_mdsw_esc",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11500,9 +10351,9 @@
       "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_kvset",
-      "target": "lib_mdsw_esc"
+      "target": "lib_mdsw_esc",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11512,9 +10363,9 @@
       "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_kvset",
-      "target": "lib_mdsw_sqlerr"
+      "target": "lib_mdsw_sqlerr",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11524,9 +10375,9 @@
       "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_kvdel",
-      "target": "lib_mdsw_esc"
+      "target": "lib_mdsw_esc",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11536,9 +10387,9 @@
       "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_kvdel",
-      "target": "lib_mdsw_sqlerr"
+      "target": "lib_mdsw_sqlerr",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11548,9 +10399,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_ethlockacquire",
-      "target": "lib_mdsw_esc"
+      "target": "lib_mdsw_esc",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11560,9 +10411,9 @@
       "source_location": "L103",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_mdsw_ethlockrelease",
-      "target": "lib_mdsw_esc"
+      "target": "lib_mdsw_esc",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11571,9 +10422,9 @@
       "source_location": "L66",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_signgate",
-      "target": "lib_signgate_next"
+      "target": "lib_signgate_next",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11582,9 +10433,9 @@
       "source_location": "L50",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_signgate",
-      "target": "lib_signgate_signs"
+      "target": "lib_signgate_signs",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11593,9 +10444,9 @@
       "source_location": "L58",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "lib_signgate",
-      "target": "lib_signgate_submit"
+      "target": "lib_signgate_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11604,9 +10455,9 @@
       "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service",
-      "target": "service_configureengines"
+      "target": "service_configureengines",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11615,9 +10466,9 @@
       "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service",
-      "target": "service_getbalances"
+      "target": "service_getbalances",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11626,9 +10477,9 @@
       "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service",
-      "target": "service_log"
+      "target": "service_log",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11637,9 +10488,9 @@
       "source_location": "L151",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service",
-      "target": "service_logonce"
+      "target": "service_logonce",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11648,9 +10499,9 @@
       "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service",
-      "target": "service_notifylog"
+      "target": "service_notifylog",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11659,9 +10510,9 @@
       "source_location": "L114",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service",
-      "target": "service_poll"
+      "target": "service_poll",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11670,9 +10521,9 @@
       "source_location": "L87",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service",
-      "target": "service_reloadshared"
+      "target": "service_reloadshared",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11681,9 +10532,9 @@
       "source_location": "L152",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service",
-      "target": "service_tryboot"
+      "target": "service_tryboot",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11693,9 +10544,9 @@
       "source_location": "L151",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service_logonce",
-      "target": "service_log"
+      "target": "service_log",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11705,9 +10556,9 @@
       "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service_notifylog",
-      "target": "service_log"
+      "target": "service_log",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11717,9 +10568,9 @@
       "source_location": "L117",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service_poll",
-      "target": "service_log"
+      "target": "service_log",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11729,9 +10580,9 @@
       "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service_reloadshared",
-      "target": "service_log"
+      "target": "service_log",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11741,9 +10592,9 @@
       "source_location": "L173",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service_tryboot",
-      "target": "service_log"
+      "target": "service_log",
+      "confidence_score": 1.0
     },
     {
       "relation": "indirect_call",
@@ -11753,9 +10604,9 @@
       "source_location": "L60",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 0.5,
       "source": "service_configureengines",
-      "target": "service_notifylog"
+      "target": "service_notifylog",
+      "confidence_score": 0.5
     },
     {
       "relation": "calls",
@@ -11765,9 +10616,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service_reloadshared",
-      "target": "service_configureengines"
+      "target": "service_configureengines",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11777,9 +10628,9 @@
       "source_location": "L169",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service_tryboot",
-      "target": "service_configureengines"
+      "target": "service_configureengines",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11789,9 +10640,9 @@
       "source_location": "L121",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service_poll",
-      "target": "service_reloadshared"
+      "target": "service_reloadshared",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11801,9 +10652,9 @@
       "source_location": "L124",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service_poll",
-      "target": "service_getbalances"
+      "target": "service_getbalances",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11813,9 +10664,9 @@
       "source_location": "L174",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service_tryboot",
-      "target": "service_poll"
+      "target": "service_poll",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11825,9 +10676,9 @@
       "source_location": "L160",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "service_tryboot",
-      "target": "service_logonce"
+      "target": "service_logonce",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11836,9 +10687,9 @@
       "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_run",
-      "target": "test_run_ctx"
+      "target": "test_run_ctx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11847,9 +10698,9 @@
       "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_run",
-      "target": "test_run_fails"
+      "target": "test_run_fails",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11858,9 +10709,9 @@
       "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_run",
-      "target": "test_run_files"
+      "target": "test_run_files",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11869,9 +10720,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_run",
-      "target": "test_run_fs"
+      "target": "test_run_fs",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11880,9 +10731,9 @@
       "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_run",
-      "target": "test_run_nodecrypto"
+      "target": "test_run_nodecrypto",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11891,9 +10742,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_run",
-      "target": "test_run_path"
+      "target": "test_run_path",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11902,9 +10753,9 @@
       "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_run",
-      "target": "test_run_read"
+      "target": "test_run_read",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11913,9 +10764,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_run",
-      "target": "test_run_root"
+      "target": "test_run_root",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11924,9 +10775,9 @@
       "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_run",
-      "target": "test_run_sandbox"
+      "target": "test_run_sandbox",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11935,9 +10786,9 @@
       "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_run",
-      "target": "test_run_testdir"
+      "target": "test_run_testdir",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11946,9 +10797,9 @@
       "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "test_run",
-      "target": "test_run_vm"
+      "target": "test_run_vm",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -23578,6 +22429,971 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L90",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_activeswaps"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_amounttokenok"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L307",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_broadcastethrefund"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L296",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_broadcastethwithdraw"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L167",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_checkcanswapcoin"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L265",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_checkethcontractbody"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L258",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_checkethcontractfor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L213",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_checkexpiredminima"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_configure"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L323",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_confirmethrefunded"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L314",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_confirmethwithdrawn"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_decimalsof"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_ethretrydue"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L159",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_expectedtokenid"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L340",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_finalize"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L333",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_finalizeethlost"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L244",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_harvestethpreimage"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_harvestnotifysecrets"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_ismypublishkey"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L55",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_logmismatchonce"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_markethattempt"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_notify"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_nowunix"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_onchanged"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_ops"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_poll"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_ready"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L234",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_runethchecks"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L126",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_runminimachecks"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_samehash"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle",
+      "target": "lib_settle_stripreqtoken"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L288",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkethcontractbody",
+      "target": "lib_settle_nowunix"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_ethretrydue",
+      "target": "lib_settle_nowunix"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_markethattempt",
+      "target": "lib_settle_nowunix"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L174",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkcanswapcoin",
+      "target": "lib_settle_ready"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_poll",
+      "target": "lib_settle_ready"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L311",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_broadcastethrefund",
+      "target": "lib_settle_ops"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L304",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_broadcastethwithdraw",
+      "target": "lib_settle_ops"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L260",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkethcontractfor",
+      "target": "lib_settle_ops"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L200",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkcanswapcoin",
+      "target": "lib_settle_notify"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L225",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkexpiredminima",
+      "target": "lib_settle_notify"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L329",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_confirmethrefunded",
+      "target": "lib_settle_notify"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L320",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_confirmethwithdrawn",
+      "target": "lib_settle_notify"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L301",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_broadcastethwithdraw",
+      "target": "lib_settle_onchanged"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L194",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkcanswapcoin",
+      "target": "lib_settle_onchanged"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L226",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkexpiredminima",
+      "target": "lib_settle_onchanged"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L329",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_confirmethrefunded",
+      "target": "lib_settle_onchanged"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L320",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_confirmethwithdrawn",
+      "target": "lib_settle_onchanged"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L336",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_finalizeethlost",
+      "target": "lib_settle_onchanged"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L309",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_broadcastethrefund",
+      "target": "lib_settle_ethretrydue"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L298",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_broadcastethwithdraw",
+      "target": "lib_settle_ethretrydue"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L191",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkcanswapcoin",
+      "target": "lib_settle_ethretrydue"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L310",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_broadcastethrefund",
+      "target": "lib_settle_markethattempt"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L299",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_broadcastethwithdraw",
+      "target": "lib_settle_markethattempt"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L192",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkcanswapcoin",
+      "target": "lib_settle_markethattempt"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L138",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_runminimachecks",
+      "target": "lib_settle_ismypublishkey"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L112",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_harvestnotifysecrets",
+      "target": "lib_settle_samehash"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L138",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_runminimachecks",
+      "target": "lib_settle_samehash"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L170",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkcanswapcoin",
+      "target": "lib_settle_stripreqtoken"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L276",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkethcontractbody",
+      "target": "lib_settle_decimalsof"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L184",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkcanswapcoin",
+      "target": "lib_settle_logmismatchonce"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L278",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkethcontractbody",
+      "target": "lib_settle_logmismatchonce"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L187",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkcanswapcoin",
+      "target": "lib_settle_amounttokenok"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L277",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkethcontractbody",
+      "target": "lib_settle_amounttokenok"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L80",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_poll",
+      "target": "lib_settle_runethchecks"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_poll",
+      "target": "lib_settle_runminimachecks"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L99",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_harvestnotifysecrets",
+      "target": "lib_settle_activeswaps"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L237",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_runethchecks",
+      "target": "lib_settle_activeswaps"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L130",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_runminimachecks",
+      "target": "lib_settle_harvestnotifysecrets"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L138",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_runminimachecks",
+      "target": "lib_settle_checkcanswapcoin"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L149",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_runminimachecks",
+      "target": "lib_settle_checkexpiredminima"
+    },
+    {
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "lib/settle.js",
+      "source_location": "L137",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "lib_settle_runminimachecks",
+      "target": "test_responder_test_coins"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L182",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkcanswapcoin",
+      "target": "lib_settle_expectedtokenid"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L237",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_runethchecks",
+      "target": "lib_settle_checkethcontractfor"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L262",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkethcontractfor",
+      "target": "lib_settle_harvestethpreimage"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L262",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkethcontractfor",
+      "target": "lib_settle_checkethcontractbody"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L289",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkethcontractbody",
+      "target": "lib_settle_broadcastethrefund"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L281",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkethcontractbody",
+      "target": "lib_settle_broadcastethwithdraw"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L285",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkethcontractbody",
+      "target": "lib_settle_confirmethrefunded"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L270",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkethcontractbody",
+      "target": "lib_settle_confirmethwithdrawn"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L271",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_checkethcontractbody",
+      "target": "lib_settle_finalizeethlost"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L318",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_confirmethwithdrawn",
+      "target": "lib_settle_finalize"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/settle.js",
+      "source_location": "L327",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "lib_settle_confirmethrefunded",
+      "target": "lib_settle_finalize"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "lib/swapdb.js",
       "source_location": "L143",
       "weight": 1.0,
@@ -26972,6 +26788,62 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "test/settle.test.js",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "test_settle_test",
+      "target": "test_settle_test_basedbstubs"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/settle.test.js",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "test_settle_test",
+      "target": "test_settle_test_cfg"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/settle.test.js",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "test_settle_test",
+      "target": "test_settle_test_restore"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test/settle.test.js",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "test_settle_test",
+      "target": "test_settle_test_stub"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "test/settle.test.js",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "test_settle_test_basedbstubs",
+      "target": "test_settle_test_stub"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "test/swapplan.test.js",
       "source_location": "L16",
       "weight": 1.0,
@@ -27587,5 +27459,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "d0fc3343c765c5e36eff87c8d38c760dfc18e9dd"
+  "built_at_commit": "bb8277e4b1d055626eb066a95ad3cba6b1985a3f"
 }

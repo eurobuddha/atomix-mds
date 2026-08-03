@@ -75,8 +75,8 @@
     "semantic_hash": "cbd9889317f69769701485f79e0b04f6"
   },
   "lib/htlc.js": {
-    "mtime": 1785778871.7786984,
-    "ast_hash": "cbb3e96f3c936da08b2ad54986f374f7",
+    "mtime": 1785707391.018469,
+    "ast_hash": "b5e880e1243f1270096a2a6a64bd68a8",
     "semantic_hash": ""
   },
   "lib/identity.js": {
@@ -140,9 +140,9 @@
     "semantic_hash": "95d6054536197628570c8b81c1bb5e2d"
   },
   "lib/settle.js": {
-    "mtime": 1785778871.7792006,
-    "ast_hash": "cad528e85b81a948b4d9fb9322917bb3",
-    "semantic_hash": ""
+    "mtime": 1784622356.5004435,
+    "ast_hash": "6859adb7c493988b13f5dc42763ee1b2",
+    "semantic_hash": "6859adb7c493988b13f5dc42763ee1b2"
   },
   "lib/swapdb.js": {
     "mtime": 1784466050.0059302,
@@ -330,9 +330,9 @@
     "semantic_hash": "e5efe413d4b85a6271dfa80a4d1ce843"
   },
   "test/settle.test.js": {
-    "mtime": 1785778871.7798512,
-    "ast_hash": "ac964527847e18cb402e877c6dc54574",
-    "semantic_hash": ""
+    "mtime": 1784460815.6488183,
+    "ast_hash": "aac698a78008a3eb4181047eb94bb62a",
+    "semantic_hash": "aac698a78008a3eb4181047eb94bb62a"
   },
   "test/swapdb.test.js": {
     "mtime": 1784422477.7623057,
