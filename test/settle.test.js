@@ -114,6 +114,64 @@
         T.ok('refund → REFUNDED', c5.indexOf('status:REFUNDED') >= 0);
         restore();
 
+        // ---------- refund must survive a post callback that NEVER arrives ----------
+        // The old guard was a bare `inflight[key] = true` cleared only inside the callback, so one lost reply
+        // wedged the refund forever. Cost a real 35.014005 MINIMA lock: refundable, polled every 30s, never sent.
+        cfg();
+        var c6 = [], clock = 1000000;
+        ST._setNow(function () { return clock * 1000; });
+        baseDbStubs([{ hash: HASH, myLegIsMinima: true, status: 'STARTED' }], '0xSECRET', null, c6);
+        var deadLock = { coinid: '0xC', tokenid: USDT, tokenamount: '4.95', state: { '0': '0xMYPK', '3': '50', '5': HASH } };
+        stub(H, 'currentBlock', function (cb) { cb(null, 100); });
+        stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, []); });
+        stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, [deadLock]); });
+        var tries = 0;
+        stub(H, 'refund', function (c, addr, cb) { tries++; /* never calls back */ });
+        stub(EO, 'make', function () { return { getContract: function (cid, cb) { cb(null, null); } }; });
+        ST.poll(function () {});
+        T.eq('lost-callback refund: first attempt fires', tries, 1);
+        ST.poll(function () {});
+        T.eq('lost-callback refund: same window does NOT re-sign', tries, 1);
+        clock += 1000;                                   // well past ETH_RETRY_SECS
+        ST.poll(function () {});
+        T.eq('lost-callback refund: retries after the window', tries, 2);
+        ST._setNow(function () { return Date.now(); });
+        restore();
+
+        // ---------- a lock older than the shallow scan is still found, via the DB-driven sweep ----------
+        // scanByKey (HTLC_SCAN_DEPTH) returns nothing — exactly what happens once a coin is >256 blocks old.
+        // The swap row still knows the leg and its timelock, so the refund must still happen.
+        cfg();
+        var c7 = [], deepArgs = null;
+        baseDbStubs([{ hash: HASH, myLegIsMinima: true, status: 'STARTED', myTimelock: 50 }], '0xSECRET', null, c7);
+        var oldLock = { coinid: '0xC', tokenid: USDT, tokenamount: '4.95', state: { '0': '0xMYPK', '3': '50', '5': HASH } };
+        stub(H, 'currentBlock', function (cb) { cb(null, 2000); });     // 1950 blocks past the timelock
+        stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, []); });
+        stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });            // shallow scan is blind
+        stub(H, 'scanByHashDeep', function (h, ca, d, cb) { deepArgs = { h: h, d: d }; cb(null, [oldLock]); });
+        var deepRefund = null;
+        stub(H, 'refund', function (c, addr, cb) { deepRefund = addr; cb(null, '0xTXP'); });
+        stub(EO, 'make', function () { return { getContract: function (cid, cb) { cb(null, null); } }; });
+        ST.poll(function () {});
+        T.ok('sweep used the deep per-hash scan', deepArgs && deepArgs.h === HASH);
+        T.eq('sweep scanned past the tree-shallow depth', deepArgs && deepArgs.d, 1024);
+        T.ok('out-of-scan lock still refunded', deepRefund === 'MxADDR');
+        T.ok('sweep refund → REFUNDED', c7.indexOf('status:REFUNDED') >= 0);
+        restore();
+
+        // ---------- the sweep must not touch a swap that is not yet refundable ----------
+        cfg();
+        var c8 = [], deepCalled = false;
+        baseDbStubs([{ hash: HASH, myLegIsMinima: true, status: 'STARTED', myTimelock: 5000 }], '0xSECRET', null, c8);
+        stub(H, 'currentBlock', function (cb) { cb(null, 2000); });     // still short of the timelock
+        stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, []); });
+        stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });
+        stub(H, 'scanByHashDeep', function (h, ca, d, cb) { deepCalled = true; cb(null, []); });
+        stub(EO, 'make', function () { return { getContract: function (cid, cb) { cb(null, null); } }; });
+        ST.poll(function () {});
+        T.ok('sweep skips a lock that is not yet refundable', deepCalled === false);
+        restore();
+
         // ==================== RESPONDER-PERSPECTIVE settlement (the maker NEVER generates the secret) ====================
         // These lock in the two harvest paths (native SwapEngine:814 + :515/1208) — without them every filled maker
         // order strands past its timelock: the maker pays its counter-leg and can never claim/withdraw the other.
