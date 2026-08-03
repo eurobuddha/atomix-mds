@@ -67,8 +67,5 @@
   "65": "scaffold.test.js",
   "66": "swapdb.test.js",
   "67": "wallet.test.js",
-  "68": "PARITY — native AtomiX ↔ AtomiX MDS feature ledger",
-  "69": "signgate.js",
-  "70": "htlc.txnid.test.js",
-  "71": "signgate.test.js"
+  "68": "PARITY — native AtomiX ↔ AtomiX MDS feature ledger"
 }

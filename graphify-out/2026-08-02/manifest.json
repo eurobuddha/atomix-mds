@@ -75,9 +75,9 @@
     "semantic_hash": "cbd9889317f69769701485f79e0b04f6"
   },
   "lib/htlc.js": {
-    "mtime": 1785707391.018469,
-    "ast_hash": "b5e880e1243f1270096a2a6a64bd68a8",
-    "semantic_hash": ""
+    "mtime": 1784622315.7608483,
+    "ast_hash": "8a1d9fe33379174b5d83b171eb13b3b5",
+    "semantic_hash": "8a1d9fe33379174b5d83b171eb13b3b5"
   },
   "lib/identity.js": {
     "mtime": 1784409820.9152372,
@@ -100,9 +100,9 @@
     "semantic_hash": "ece543ddb809ea897f38eebd623a7331"
   },
   "lib/mdsw.js": {
-    "mtime": 1785707179.4557369,
-    "ast_hash": "401796ceae9234cf41c8becc0081f250",
-    "semantic_hash": ""
+    "mtime": 1784463749.1817284,
+    "ast_hash": "ff0b0567675c9555e616460b7ccdb101",
+    "semantic_hash": "ff0b0567675c9555e616460b7ccdb101"
   },
   "lib/order.js": {
     "mtime": 1784466140.9904497,
@@ -185,9 +185,9 @@
     "semantic_hash": "24ecb822202e66acb6990248667c6847"
   },
   "service.js": {
-    "mtime": 1785707179.4561915,
-    "ast_hash": "71533034aa76ba89e8a576be23d0c4f4",
-    "semantic_hash": ""
+    "mtime": 1784470017.4819634,
+    "ast_hash": "8a4174509339c133bae6a9e2214b09f3",
+    "semantic_hash": "8a4174509339c133bae6a9e2214b09f3"
   },
   "spike/interop_vectors.json": {
     "mtime": 1784419932.1025434,
@@ -320,9 +320,9 @@
     "semantic_hash": "6b889dc0f5f1ea6be0dc899ccac064eb"
   },
   "test/run.js": {
-    "mtime": 1785707244.597157,
-    "ast_hash": "cc0c759e9377c3b909dd7d19daff3117",
-    "semantic_hash": ""
+    "mtime": 1784466637.8671865,
+    "ast_hash": "c6fc521639445cef7634b80524fc7f6a",
+    "semantic_hash": "c6fc521639445cef7634b80524fc7f6a"
   },
   "test/scaffold.test.js": {
     "mtime": 1784408246.245866,
@@ -395,28 +395,13 @@
     "semantic_hash": ""
   },
   "index.html": {
-    "mtime": 1785707179.455076,
-    "ast_hash": "5adcf88f010f27f6ba79591d02a39040",
+    "mtime": 1784466554.5484326,
+    "ast_hash": "dd0ae8e072ec106fd42eed81c82a1ee1",
     "semantic_hash": ""
   },
   "favicon.png": {
     "mtime": 1784408474.7765582,
     "ast_hash": "a5d81d0d46efbfd2608b5ac3fe46a0e9",
-    "semantic_hash": ""
-  },
-  "lib/signgate.js": {
-    "mtime": 1785707312.0300717,
-    "ast_hash": "2cdd98fcb7167390703080c722c7cfd5",
-    "semantic_hash": ""
-  },
-  "test/htlc.txnid.test.js": {
-    "mtime": 1785707369.9952345,
-    "ast_hash": "db682b3fc69476b75033f86699a5c4fb",
-    "semantic_hash": ""
-  },
-  "test/signgate.test.js": {
-    "mtime": 1785707354.915043,
-    "ast_hash": "4ee53801e23332e638f36687cca61300",
     "semantic_hash": ""
   }
 }
