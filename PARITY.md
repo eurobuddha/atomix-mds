@@ -79,6 +79,7 @@ now THREE-way; desktop keeps its own semver (pandapools precedent), feature-trac
 | Native | MDS | Status |
 |---|---|---|
 | LP availability publish/withdraw, board, propose/counter/accept/reject/execute, deals list | otc.js + ui.js | ✅ |
+| **OTC quiesces WITH the order side on a currency switch** — the OTC board sentinel is per-currency, so an armed offer must not carry across (native 0.1.16 `doSwitchCurrency` clears `otc_enable`/`otc_auto` and parks them per currency alongside `otc_sell_size`/`otc_buy_size`) | app.js switchCurrency → `otc.setMyOffer(false,0,0)`; `otcBoard` cleared and rescanned for the ARRIVING currency. Native's persisted-flag half is ✖ n/a here — MDS `myOffer` is in-memory and the service never arms it, so there is no cross-currency publish stamp to leak | ✅ 0.1.16 |
 
 ## Background engine (service.js ↔ native SwapService)
 | Native | MDS | Status |
@@ -89,6 +90,8 @@ now THREE-way; desktop keeps its own semver (pandapools precedent), feature-trac
 | Peg oracle + keep-alive/reprice/tombstone | peg.js + maker.js | ✅ |
 | Ladder BACKING CLAMP (e:177 checkLadderCoins — native REMOVED pre-splitting; clamp asks to the cumulative-backed prefix, fail-safe to 1) | maker.clampAsks at publish + order.trimAsks; dead splitCoins deleted | ✅ 0.1.7 |
 | Doze keep-alive stack | ✖ n/a — MDS service lives as long as the node (platform difference) | ✖ |
+| Persistent FGS notification: title + market-health status line (native 0.1.16 un-hardcoded a legacy `usdtSwap` title and made every state line name the currency) | ✖ n/a — no notification shade. The MDS equivalents already name the currency via `TR.active().coinLabel` (maker.js:158, otc.js, responder.js), and MDS.notify carries the dapp.conf name "AtomiX". The only `usdtswap` literals here are the HKDF identity contexts (trading.js:28, identity.js:20), which MUST NOT change — they are the legacy comms domain | ✖ |
+| Book-presence belt: reconcile my published coin vs the book, warn "isn't landing on-chain" after 2 misses (native 0.1.16 made the warning retractable + currency/stream attributed, on fixed ids) | ✖ n/a — no reconcile pass exists in service.js; the MDS keep-alive runs off in-memory `lastPublishMs` with no persisted ok-stamp, so there is no stamp that can lie and no shade to leave a stale warning in. Revisit if an MDS presence belt is ever added | ✖ |
 
 ## Platform-specific (no native equivalent required)
 | Item | Status |
