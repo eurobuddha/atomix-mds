@@ -41,6 +41,7 @@
         var coin = { coinid: '0xC', tokenid: USDT, tokenamount: '4.95', state: { '0': '0xMAKER', '2': '[ETH:' + EO.NET.usdt + ']', '3': '999999', '4': '0xMYPK', '5': HASH } };
         stub(H, 'currentBlock', function (cb) { cb(null, 100); });
         stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, [coin]); });
+        stub(H, 'scanByHashDeep', function (h, ca, d, cb) { cb(null, [coin]); });   // claim discovery is DEEP (0.1.17)
         stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });
         var claimed = null;
         stub(H, 'claim', function (c, h, s, addr, cb) { claimed = { h: h, s: s, addr: addr }; calls.push('claim'); cb(null, '0xTXP'); });
@@ -59,6 +60,7 @@
         var shortCoin = { coinid: '0xC', tokenid: USDT, tokenamount: '4.90', state: { '0': '0xMAKER', '2': '[minima]', '3': '999999', '4': '0xMYPK', '5': HASH } };
         stub(H, 'currentBlock', function (cb) { cb(null, 100); });
         stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, [shortCoin]); });
+        stub(H, 'scanByHashDeep', function (h, ca, d, cb) { cb(null, [shortCoin]); });
         stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });
         stub(H, 'claim', function () { c2.push('claim'); });
         stub(EO, 'make', function () { return { getContract: function (cid, cb) { cb(null, null); } }; });
@@ -191,6 +193,7 @@
         var takerCoin = { coinid: '0xC', tokenid: USDT, tokenamount: '5', state: { '0': '0xTAKER', '2': '[ETH:' + EO.NET.usdt + ']', '3': '999999', '4': '0xMYPK', '5': HASH } };
         stub(H, 'currentBlock', function (cb) { cb(null, 100); });
         stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, [takerCoin]); });
+        stub(H, 'scanByHashDeep', function (h, ca, d, cb) { cb(null, [takerCoin]); });
         stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });
         stub(H, 'scanNotifySecret', function (h, d, cb) { cb(null, []); });
         var r1claimed = null;
@@ -273,6 +276,7 @@
         var realCoin = { coinid: '0xGOOD', tokenid: USDT, tokenamount: '4.95', state: { '0': '0xMAKER', '2': '[minima]', '3': '999999', '4': '0xMYPK', '5': HASH } };
         stub(H, 'currentBlock', function (cb) { cb(null, 100); });
         stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, [poisonCoin, realCoin]); });   // poison seen FIRST
+        stub(H, 'scanByHashDeep', function (h, ca, d, cb) { cb(null, [poisonCoin, realCoin]); });
         stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });
         stub(H, 'scanNotifySecret', function (h, d, cb) { cb(null, []); });
         var claimed4 = null;

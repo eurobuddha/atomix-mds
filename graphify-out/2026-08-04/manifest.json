@@ -20,8 +20,8 @@
     "semantic_hash": "630514087c1d23e339941fbd2fc575ee"
   },
   "lib/app.js": {
-    "mtime": 1785832804.6086535,
-    "ast_hash": "93080ef7f2d7055c9555ab66efb4e1e6",
+    "mtime": 1785346940.687304,
+    "ast_hash": "06e188b8aa911609e293cbc0f72d3f69",
     "semantic_hash": ""
   },
   "lib/boot.js": {
@@ -390,8 +390,8 @@
     "semantic_hash": "1c79a9a644be07ed01c3d297ef54ef09"
   },
   "PARITY.md": {
-    "mtime": 1785832889.5603275,
-    "ast_hash": "29f65ef3001762784222e3abcb88ef62",
+    "mtime": 1785346019.4515452,
+    "ast_hash": "aa0df11a79f00041a3f932e5ccf673c9",
     "semantic_hash": ""
   },
   "index.html": {
