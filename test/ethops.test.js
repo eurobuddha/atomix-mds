@@ -59,11 +59,11 @@
         o.newContract('0x' + '11'.repeat(32), '0xdead', '0x' + '22'.repeat(32), 1800000000n, EO.NET.usdt, 5000000n, 1n, false, function () {});
         o.withdraw('0x' + '22'.repeat(32), '0x' + '33'.repeat(32), function () {});
         o.refund('0x' + '22'.repeat(32), function () {});
-        T.eq('approve → token, 100k gas', [sends[0].to, sends[0].gas], [EO.NET.usdt, '100000']);
+        T.eq('approve → token, 80k gas', [sends[0].to, sends[0].gas], [EO.NET.usdt, '80000']);
         T.eq('approve selector', sends[0].sel, '0x' + AB.selector('approve(address,uint256)'));
-        T.eq('newContract → htlc, 500k gas', [sends[1].to, sends[1].gas], [EO.NET.htlc, '500000']);
-        T.eq('withdraw → htlc, 500k gas', [sends[2].to, sends[2].gas], [EO.NET.htlc, '500000']);
-        T.eq('refund → htlc, 500k gas', [sends[3].to, sends[3].gas], [EO.NET.htlc, '500000']);
+        T.eq('newContract → htlc, 375k gas', [sends[1].to, sends[1].gas], [EO.NET.htlc, '375000']);
+        T.eq('withdraw → htlc, 160k gas', [sends[2].to, sends[2].gas], [EO.NET.htlc, '160000']);
+        T.eq('refund → htlc, 160k gas', [sends[3].to, sends[3].gas], [EO.NET.htlc, '160000']);
         T.eq('all writes chainId 1', [sends[0].chainId, sends[1].chainId], [1, 1]);
     } finally { AX.ethtx.send = savedSend; }
 })();

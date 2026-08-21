@@ -12,10 +12,10 @@
     T.eq('isEthAddr rejects short', W.isEthAddr('0x1234'), false);
     T.eq('isEthAddr rejects non-hex', W.isEthAddr('0x' + 'zz'.repeat(20)), false);
 
-    // ---- gas math: reserve mirrors the serializer's +20% headroom ----
-    T.eq('gasReserve ETH = 21000 × 1.2gp', W.gasReserveWei(GP, W.GAS_ETH).toString(), (21000n * 1200000000n).toString());
+    // ---- gas math: reserve mirrors the serializer's +12.5% headroom (0.1.40: was +20%) ----
+    T.eq('gasReserve ETH = 21000 × 1.125gp', W.gasReserveWei(GP, W.GAS_ETH).toString(), (21000n * 1125000000n).toString());
     T.eq('maxEthSend = balance − reserve', W.maxEthSendWei(100000000000000000n, GP).toString(),
-        (100000000000000000n - 21000n * 1200000000n).toString());
+        (100000000000000000n - 21000n * 1125000000n).toString());
     T.eq('maxEthSend floors at 0', W.maxEthSendWei(1000n, GP).toString(), '0');
 
     // ---- checkSend: every refusal path (raw balances, not display strings) ----

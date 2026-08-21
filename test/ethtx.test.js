@@ -58,11 +58,11 @@
             T.eq('failed send errors, next succeeds', errs, [true, false]);
             T.eq('dropped nonce NOT advanced (reused)', nonces.slice(), [7, 7]);
 
-            // 5) F5 gas floor: gasPrice floored at 2× base fee when the raw price is below it.
+            // 5) F5 gas floor (0.1.40): gasPrice floored at base fee +12.5% + a 0.2 gwei tip (was 2× base).
             ETX.resetAll(); gps.length = 0;
-            var r5 = fakeRpc(function () { return 0; }, { gp: 1000000000n, baseFee: 5000000000n }); // gp*1.2=1.2gwei < 2×base=10gwei
+            var r5 = fakeRpc(function () { return 0; }, { gp: 1000000000n, baseFee: 5000000000n }); // gp*1.125=1.125gwei < floor 5.825gwei
             ETX.send(r5, PRIV, '0xADDR5', 1, '0xTo', '0xdata', 0n, 500000n, function () {});
-            T.eq('gas floored at 2× base fee', String(gps[0]), '10000000000');
+            T.eq('gas floored at base+12.5%+tip', String(gps[0]), '5825000000');
         } finally { AX.eth.signLegacyTx = savedSign; }
     }
 
