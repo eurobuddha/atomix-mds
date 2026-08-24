@@ -122,6 +122,21 @@
         OTC.claimExecute('REFY', function (won) { T.eq('stale (dead-instance) claim stolen', won, true); });
         exec['REFZ'] = { owner: 'liveTok', ts: Date.now() };
         OTC.claimExecute('REFZ', function (won) { T.eq('fresh claim NOT stolen', won, false); });
+
+        // INBOUND EXPIRY: an ignored inbound offer (my turn) ages out after INBOUND_EXPIRE_MS (24h) — it used to
+        // sit forever. Within 24h it must survive the 1h peer-turn sweep: the user still gets their window.
+        var NOW = Date.now(), HR = 60 * 60 * 1000;
+        function seedInbound(ref, ageMs) {
+            deals[ref] = { REF: ref, ROLE: 'LP', PEERCID: PEER, PEERMPK: '0xPEERM', PEERETH: '0xPEERE',
+                SIDE: OTC.SELL, AMOUNT: '50', PRICE: '1.0', STATUS: OTC.ST_PROPOSED, WHOSETURN: OTC.TURN_ME,
+                HASH: '', CURRENCY: 'minima', CREATED: NOW - ageMs, UPDATED: NOW - ageMs };
+        }
+        seedInbound('REFOLD', 25 * HR);
+        seedInbound('REFRECENT', 2 * HR);
+        OTC.expireStale(NOW, function (h, cb2) { cb2(null); }, function () {
+            T.eq('ignored inbound offer past 24h → EXPIRED', deals['REFOLD'].STATUS, OTC.ST_EXPIRED);
+            T.eq('inbound offer within 24h (my turn) survives the sweeps', deals['REFRECENT'].STATUS, OTC.ST_PROPOSED);
+        });
     } finally { globalThis.MDS = saved; }
 
     var _rc = 0x1000; function rndCtr() { _rc += 1; return _rc; }
