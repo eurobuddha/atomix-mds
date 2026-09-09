@@ -57,6 +57,18 @@
     while (rels.length) { openCount--; rels.shift()(); }
     T.eq('signgate: queue drains completely', G._pending(), 0);
 
+    // A long elapsed hold is not evidence that the node stopped signing.
+    var savedNow = Date.now, held = null, delayed = [];
+    try {
+        Date.now = function () { return 1000000; };
+        G.submit(function (release) { held = release; delayed.push('first'); });
+        Date.now = function () { return 2000000; };
+        G.submit(function (release) { delayed.push('second'); release(); });
+        T.eq('signgate: elapsed time cannot dispatch overlapping signatures', delayed, ['first']);
+        held();
+        T.eq('signgate: real callback safely drains delayed work', delayed, ['first', 'second']);
+    } finally { Date.now = savedNow; }
+
     // ---- the queue survives an operation that never releases ----
     // No timers exist in the Rhino service context, so the stale-hold check is lazy: it runs when the
     // NEXT operation is submitted. Here the dead hold is recent, so the next op must still wait.

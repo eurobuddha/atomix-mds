@@ -146,7 +146,7 @@
         // The swap row still knows the leg and its timelock, so the refund must still happen.
         cfg();
         var c7 = [], deepArgs = null;
-        baseDbStubs([{ hash: HASH, myLegIsMinima: true, status: 'STARTED', myTimelock: 50 }], '0xSECRET', null, c7);
+        baseDbStubs([{ hash: HASH, myLegIsMinima: true, status: 'ERROR', myTimelock: 50 }], '0xSECRET', null, c7);
         var oldLock = { coinid: '0xC', tokenid: USDT, tokenamount: '4.95', state: { '0': '0xMYPK', '3': '50', '5': HASH } };
         stub(H, 'currentBlock', function (cb) { cb(null, 2000); });     // 1950 blocks past the timelock
         stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, []); });

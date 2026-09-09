@@ -40,6 +40,13 @@
                 target[key] = old;
             });
         }
+        var rpcReply = null, eth = AX.ethops.make({ ethCall: function (to, data, done) { done(null, rpcReply); } }, '', '');
+        [null, '', '0x', '0x00', '0x' + '0'.repeat(63) + '2'].forEach(function (value) {
+            rpcReply = value; eth.canCollect('0x' + '11'.repeat(32), function (e) { T.ok('malformed ETH boolean is an error: ' + value, !!e); });
+        });
+        rpcReply = '0x' + '0'.repeat(768);
+        eth.getContract('0x' + '11'.repeat(32), function (e, c) { T.ok('valid zero-owner tuple means absent', !e && c === null); });
+        rpcReply = '0x'; eth.getContract('0x' + '11'.repeat(32), function (e) { T.ok('truncated ETH tuple is an error', !!e); });
         reset(); H.verifyPreimage('0xAB;send amount:1', '0xCD', function (e, ok) { T.ok('invalid preimage cannot inject a node command', !ok && commands.length === 0); });
         var lines = AX.inspect.buildReport({ swap: { myLegIsMinima: true, direction: 'ERC20_TO_MINIMA', status: 'LOCKED', sellToken: 'MxUSD', buyToken: 'USDT' },
             block: 100, secretKnown: false, myMin: null, gc: { withdrawn: false, refunded: false }, events: [] });

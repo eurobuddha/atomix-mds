@@ -16,9 +16,9 @@
     });
 
     // canCollect → bool decode.
-    rpc._ret = pad('1');
+    rpc._ret = '0x' + pad('1');
     o.canCollect('0x' + '22'.repeat(32), function (e, v) { T.eq('canCollect true', v, true); });
-    rpc._ret = pad('0');
+    rpc._ret = '0x' + pad('0');
     o.canCollect('0x' + '22'.repeat(32), function (e, v) { T.eq('canCollect false', v, false); });
 
     // getContract → 12-word decode; owner nonzero required.
