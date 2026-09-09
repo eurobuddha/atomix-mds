@@ -22,6 +22,7 @@
 
     function baseDbStubs(swaps, secret, req, calls) {
         stub(DB, 'allSwaps', function (cb) { cb(null, swaps.slice()); });
+        stub(DB, 'getEvents', function (h, cb) { cb(null, []); });
         stub(DB, 'getSecret', function (h, cb) { cb(null, secret); });
         stub(DB, 'getRequest', function (h, cb) { cb(null, req); });
         stub(DB, 'hasEvent', function (h, ev, cb) { cb(null, false); });
@@ -50,7 +51,7 @@
         ST.poll(function () { done = true; });
         T.ok('BUY poll completes', done);
         T.ok('BUY claim fired with my secret+addr', claimed && claimed.s === '0xSECRET' && claimed.addr === 'MxADDR');
-        T.ok('BUY claim → CLAIMING then COMPLETE', calls.indexOf('status:CLAIMING') >= 0 && calls.indexOf('status:COMPLETE') >= 0 && calls.indexOf('claim') >= 0);
+        T.ok('BUY submission stays CLAIMING until confirmed', calls.indexOf('status:CLAIMING') >= 0 && calls.indexOf('status:COMPLETE') < 0 && calls.indexOf('claim') >= 0);
         restore();
 
         // ---------- claim BLOCKED when the maker locked LESS than I asked (amountTokenOk) ----------
@@ -113,7 +114,7 @@
         stub(EO, 'make', function () { return { getContract: function (cid, cb) { cb(null, null); } }; });
         ST.poll(function () {});
         T.ok('expired lock → refund fired', refunded && refunded.addr === 'MxADDR');
-        T.ok('refund → REFUNDED', c5.indexOf('status:REFUNDED') >= 0);
+        T.ok('refund submission is pending', c5.indexOf('status:REFUNDED') < 0 && c5.some(function (x) { return x.indexOf('log:MINIMA_REFUND_SUBMITTED:') === 0; }));
         restore();
 
         // ---------- refund must survive a post callback that NEVER arrives ----------
@@ -158,7 +159,7 @@
         T.ok('sweep used the deep per-hash scan', deepArgs && deepArgs.h === HASH);
         T.eq('sweep scanned past the tree-shallow depth', deepArgs && deepArgs.d, 1024);
         T.ok('out-of-scan lock still refunded', deepRefund === 'MxADDR');
-        T.ok('sweep refund → REFUNDED', c7.indexOf('status:REFUNDED') >= 0);
+        T.ok('sweep refund awaits confirmation', c7.indexOf('status:REFUNDED') < 0);
         restore();
 
         // ---------- the sweep must not touch a swap that is not yet refundable ----------
@@ -174,6 +175,25 @@
         T.ok('sweep skips a lock that is not yet refundable', deepCalled === false);
         restore();
 
+        // Stored submissions survive restart and can confirm after the HTLC input disappears.
+        [false, true].forEach(function (refund) {
+            cfg(); var receiptCalls = [], receiptDepth = -1;
+            baseDbStubs([{ hash: HASH, myLegIsMinima: refund, status: 'CLAIMING' }], null, null, receiptCalls);
+            stub(DB, 'getEvents', function (h, cb) { cb(null, [{ event: refund ? DB.EV_MINIMA_REFUND_SUBMITTED : DB.EV_MINIMA_CLAIM_SUBMITTED,
+                note: '0x' + '55'.repeat(32), amount: '1', token: '0x00' }]); });
+            stub(H, 'currentBlock', function (cb) { cb(null, 100); });
+            stub(H, 'scanByHashDeep', function (h, ca, d, cb) { cb(null, []); });
+            stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });
+            stub(H, 'scanNotifySecret', function (h, d, cb) { cb(null, []); });
+            stub(H, 'confirmationDepth', function (id, cb) { cb(null, receiptDepth); });
+            stub(EO, 'make', function () { return { getContract: function (id, cb) { cb(null, null); } }; });
+            ST.poll(function () {});
+            T.ok('absent receipt does not finalize: refund=' + refund, !receiptCalls.some(function (x) { return x === 'status:COMPLETE' || x === 'status:REFUNDED'; }));
+            ST._reset(); receiptDepth = 2; ST.poll(function () {});
+            T.ok('confirmed stored receipt finalizes: refund=' + refund, receiptCalls.indexOf('status:' + (refund ? 'REFUNDED' : 'COMPLETE')) >= 0);
+            restore();
+        });
+
         // ==================== RESPONDER-PERSPECTIVE settlement (the maker NEVER generates the secret) ====================
         // These lock in the two harvest paths (native SwapEngine:814 + :515/1208) — without them every filled maker
         // order strands past its timelock: the maker pays its counter-leg and can never claim/withdraw the other.
@@ -182,6 +202,9 @@
         cfg();
         var r1 = [], secrets = {};
         var PREIMAGE = '0x' + 'ab'.repeat(32);
+        HASH = '0x' + AXSHA256(AX.hex.from(PREIMAGE));
+        stub(AX.mds, 'cmdR', function (cmd, cb) { var data = cmd.match(/^hash type:sha2 data:(0x[0-9a-f]+)$/i); cb(null, data ? { hash: '0x' + AXSHA256(AX.hex.from(data[1])) } : null); });
+        stub(DB, 'getEvents', function (h, cb) { cb(null, []); });
         stub(DB, 'allSwaps', function (cb) { cb(null, [{ hash: HASH, myLegIsMinima: false, status: 'LOCKED', buyToken: 'mxUSDT' }]); });
         stub(DB, 'getSecret', function (h, cb) { cb(null, secrets[h] || null); });
         stub(DB, 'insertSecret', function (h, s, cb) { if (!secrets[h]) secrets[h] = s; r1.push('harvest:' + s); cb(null); });
@@ -207,13 +230,16 @@
         ST._reset();
         ST.poll(function () {});                                                        // poll 2: secret known → claim fires
         T.ok('R1 poll2: maker claims the taker mxUSDT with the HARVESTED preimage', r1claimed && r1claimed.s === PREIMAGE);
-        T.ok('R1 poll2: → COMPLETE', r1.indexOf('status:COMPLETE') >= 0);
+        T.ok('R1 poll2: claim submitted, awaiting confirmation', r1.indexOf('log:MINIMA_CLAIM_SUBMITTED') >= 0 && r1.indexOf('status:COMPLETE') < 0);
         restore();
 
         // ---------- (R2) buy-take maker: taker claimed my mxUSDT revealing state[100] → notify harvest → SAME-poll withdraw ----------
         cfg();
         var r2 = [], secrets2 = {};
         var NSECRET = '0x' + 'cd'.repeat(32);
+        HASH = '0x' + AXSHA256(AX.hex.from(NSECRET));
+        stub(AX.mds, 'cmdR', function (cmd, cb) { var data = cmd.match(/^hash type:sha2 data:(0x[0-9a-f]+)$/i); cb(null, data ? { hash: '0x' + AXSHA256(AX.hex.from(data[1])) } : null); });
+        stub(DB, 'getEvents', function (h, cb) { cb(null, []); });
         stub(DB, 'allSwaps', function (cb) { cb(null, [{ hash: HASH, myLegIsMinima: true, status: 'LOCKED', buyToken: 'USDT' }]); });
         stub(DB, 'getSecret', function (h, cb) { cb(null, secrets2[h] || null); });
         stub(DB, 'insertSecret', function (h, s, cb) { if (!secrets2[h]) secrets2[h] = s; r2.push('harvest'); cb(null); });

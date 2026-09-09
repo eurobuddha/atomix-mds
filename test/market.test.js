@@ -62,22 +62,22 @@
     T.ok('trim to zero ALSO clears the legacy scalar (no synthetic resurrect)', p.asks.length === 0 && p.buy === 0);
 
     // clampAsks: cumulative backing over combined coins; read-failure fails SAFE to 1
-    var savedFree = H.myFreeCoins;
+    var savedFree = H.tokenBalance;
     try {
         var o = O.make(); o.pairs.USDT = pair3();
-        H.myFreeCoins = function (tok, cb) { cb(null, [{ coinid: '0xA', tokenamount: '15' }, { coinid: '0xB', tokenamount: '7' }]); };
+        H.tokenBalance = function (tok, cb) { cb(null, { coins: 120, sendable: '22' }); };
         AX.maker.clampAsks(o, function (r) {
             T.eq('clamp: 22 free backs 2 of the 10+10+10 ladder', r.pairs.USDT.asks.length, 2);
         });
         var o2 = O.make(); o2.pairs.USDT = pair3();
-        H.myFreeCoins = function (tok, cb) { cb(new Error('node busy')); };
+        H.tokenBalance = function (tok, cb) { cb(new Error('node busy')); };
         AX.maker.clampAsks(o2, function (r) {
             T.eq('clamp: coin-read failure fails SAFE to the best tranche only', r.pairs.USDT.asks.length, 1);
         });
         var o3 = O.make(); var single = O.pair(true, 0, 0, 0); single.asks = [O.level(1.0, 10)]; o3.pairs.USDT = single;
-        H.myFreeCoins = function () { throw new Error('must not be called for a single-tranche ladder'); };
+        H.tokenBalance = function () { throw new Error('must not be called for a single-tranche ladder'); };
         AX.maker.clampAsks(o3, function (r) { T.eq('clamp: single tranche skips the coin read', r.pairs.USDT.asks.length, 1); });
-    } finally { H.myFreeCoins = savedFree; }
+    } finally { H.tokenBalance = savedFree; }
 
     // ---- inspect report builder (pure) ----
     var swap = { status: 'STARTED', role: 'INITIATOR', direction: 'MINIMA_TO_ERC20', sellAmount: '6.5', sellToken: 'mxUSDT',
@@ -91,5 +91,5 @@
     T.ok('report: warning events surfaced', lines.some(function (l) { return l.indexOf('⚠') === 0; }));
     var done = AX.inspect.buildReport({ swap: Object.assign({}, swap, { status: 'COMPLETE' }), block: -1, secretKnown: true, myMin: null, cpMin: null, gc: null, events: [] });
     T.ok('report: complete has no patience note', !done.some(function (l) { return l.indexOf('swaps take a few minutes') > 0; }));
-    T.ok('report: complete says claimed by counterparty', done.some(function (l) { return l.indexOf('claimed by the counterparty (complete)') > 0; }));
+    T.ok('report: absent coin is not proof of a spend', done.some(function (l) { return l.indexOf('does not prove it was spent') > 0; }));
 })();

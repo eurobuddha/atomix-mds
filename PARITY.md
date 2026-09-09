@@ -84,6 +84,7 @@ now THREE-way; desktop keeps its own semver (pandapools precedent), feature-trac
 ## Background engine (service.js ↔ native SwapService)
 | Native | MDS | Status |
 |---|---|---|
+| **Bounded wallet reads and confirmed settlement** (native 0.1.46–0.1.53) — avoid the Android Binder kill with fresh balance caps; expose declines and uncertain scans; validate transactions and confirm claim/refund receipts before finalizing. `htlc.js`, `responder.js`, `maker.js`, `settle.js`, `inspect.js`, `app.js` | balance caps, validation, receipts and honest diagnostics | ✅ 0.1.25 |
 | Taker settlement (claim/withdraw/refund, F1 confirm-from-chain) | settle.js | 📱 2 mainnet interop swaps (taker both directions, 2026-07-19) |
 | Responder counter-legs (accept-gates, strict chain clock, record-before-broadcast) | responder.js | ✅ |
 | Secret harvests (ETH preimage + notify state[100]) | settle.js (0.1.2) | ✅ |
