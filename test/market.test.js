@@ -17,9 +17,11 @@
 
     try {
         var upserts = [], executed = [], refunded = [];
-        var openRows = [];
+        var openRows = [], openScopes = [];
         stub(DB, 'upsertOpenTrade', function (t, cb) { upserts.push(t); cb && cb(null); });
-        stub(DB, 'openTrades', function (cb) { cb(null, openRows.slice()); });
+        // openTrades is TOKEN-SCOPED: the scan it reconciles against is token-filtered, so an unscoped read
+        // handed the collector the OTHER currency's open locks and marked them all EXECUTED/REFUNDED.
+        stub(DB, 'openTrades', function (tokenId, cb) { openScopes.push(tokenId); cb(null, openRows.slice()); });
         stub(DB, 'markTradeExecuted', function (id, secret, cb) { executed.push({ id: id, secret: secret }); cb && cb(null); });
         stub(DB, 'markTradeRefunded', function (id, cb) { refunded.push(id); cb && cb(null); });
         var notifyResult = [];
@@ -36,6 +38,9 @@
         T.eq('open lock ingested once', upserts.length, 1);
         T.eq('ingest price', upserts[0].price, 0.99);
         T.eq('ingest block/timelock', [upserts[0].createdBlock, upserts[0].timelock], [500, 600]);
+        // every print is tagged with the market it was observed in, so the two currencies never share a series
+        T.eq('ingest tags the active market', upserts[0].tokenId, AX.trading.active().tokenId);
+        T.eq('reconcile is scoped to the scanned market', openScopes[0], AX.trading.active().tokenId);
 
         // (2) a previously-OPEN lock gone from the scan + notify present → EXECUTED with the secret
         scanCoins = [];
