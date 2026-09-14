@@ -72,10 +72,9 @@
   "70": "htlc.txnid.test.js",
   "71": "signgate.test.js",
   "72": "identitywatch.js",
-  "73": "identity.js",
-  "74": "prng.js",
+  "73": "responder.test.js",
+  "74": "identitywatch.test.js",
   "75": "atomix-mds — working rules",
   "76": "install.sh",
-  "77": "pre-commit",
-  "78": "sha512.js"
+  "77": "pre-commit"
 }

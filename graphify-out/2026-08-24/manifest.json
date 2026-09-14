@@ -115,8 +115,8 @@
     "semantic_hash": "0914380058ac42ccadc72e149108ca1d"
   },
   "lib/otc.js": {
-    "mtime": 1787586238.7838485,
-    "ast_hash": "bee0b35ad1ac5f1002a4e28081b97bf8",
+    "mtime": 1786012992.6304646,
+    "ast_hash": "2d70df9c6b232f6e0e4b58fa94375e0a",
     "semantic_hash": ""
   },
   "lib/peg.js": {
@@ -140,8 +140,8 @@
     "semantic_hash": "95d6054536197628570c8b81c1bb5e2d"
   },
   "lib/settle.js": {
-    "mtime": 1787938702.1514251,
-    "ast_hash": "b44af467565c8ef27607be4a05335cbd",
+    "mtime": 1787314596.4641185,
+    "ast_hash": "dfb702bad72f2905d698d014a770d94e",
     "semantic_hash": ""
   },
   "lib/swapdb.js": {
@@ -191,8 +191,8 @@
   },
   "spike/interop_vectors.json": {
     "mtime": 1784419932.1025434,
-    "ast_hash": "",
-    "semantic_hash": ""
+    "ast_hash": "fd0e1c84180488242b0795b000ebdf18",
+    "semantic_hash": "fd0e1c84180488242b0795b000ebdf18"
   },
   "spike/package.json": {
     "mtime": 1784407236.468156,
@@ -276,8 +276,8 @@
   },
   "test/interop_vectors.json": {
     "mtime": 1784419932.1003287,
-    "ast_hash": "",
-    "semantic_hash": ""
+    "ast_hash": "fd0e1c84180488242b0795b000ebdf18",
+    "semantic_hash": "fd0e1c84180488242b0795b000ebdf18"
   },
   "test/maker.test.js": {
     "mtime": 1784460793.7280197,
@@ -295,9 +295,9 @@
     "semantic_hash": "f0d1b58b05658ebd641922c47e9bd121"
   },
   "test/otc.test.js": {
-    "mtime": 1787586261.242978,
-    "ast_hash": "d91b2bbb88612b53cad24190578a781f",
-    "semantic_hash": ""
+    "mtime": 1784459948.2894864,
+    "ast_hash": "36eb6fcf5a8c197aa73b21ebfa979ed5",
+    "semantic_hash": "36eb6fcf5a8c197aa73b21ebfa979ed5"
   },
   "test/peg.test.js": {
     "mtime": 1784452038.3064337,
@@ -390,8 +390,8 @@
     "semantic_hash": "1c79a9a644be07ed01c3d297ef54ef09"
   },
   "PARITY.md": {
-    "mtime": 1787938775.636297,
-    "ast_hash": "1e57b758368ccaf70529ee3fa3087ce9",
+    "mtime": 1787148969.9266481,
+    "ast_hash": "561a5afe001e3c6e55a435e3dc1b62ce",
     "semantic_hash": ""
   },
   "index.html": {

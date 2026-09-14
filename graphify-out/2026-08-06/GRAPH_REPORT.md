@@ -1,16 +1,16 @@
-# Graph Report - mds/atomix-mds  (2026-09-04)
+# Graph Report - atomix-mds  (2026-08-05)
 
 ## Corpus Check
-- 87 files · ~139,994 words
+- 82 files · ~135,931 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 890 nodes · 1632 edges · 79 communities (67 shown, 12 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 40 edges (avg confidence: 0.58)
+- 860 nodes · 1575 edges · 72 communities (63 shown, 9 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 37 edges (avg confidence: 0.56)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fa632355`
+- Built from commit: `9c522b04`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,7 +19,6 @@
 - app.js
 - otc.js
 - settle.js
-- elliptic.js
 - responder.js
 - orderbook.js
 - dependencies
@@ -62,49 +61,43 @@
 - build.sh
 - rhino.sh
 - PARITY — native AtomiX ↔ AtomiX MDS feature ledger
-- identitywatch.js
-- identity.js
-- prng.js
-- atomix-mds — working rules
-- install.sh
-- pre-commit
 
 ## God Nodes (most connected - your core abstractions)
-1. `el()` - 40 edges
-2. `render()` - 23 edges
-3. `esc()` - 16 edges
-4. `ccy()` - 16 edges
-5. `norm()` - 14 edges
-6. `swapTab()` - 14 edges
-7. `Rpc()` - 13 edges
-8. `write()` - 13 edges
-9. `read()` - 13 edges
-10. `orderEditor()` - 13 edges
+1. `el()` - 39 edges
+2. `render()` - 22 edges
+3. `ccy()` - 16 edges
+4. `esc()` - 16 edges
+5. `swapTab()` - 14 edges
+6. `norm()` - 14 edges
+7. `orderEditor()` - 13 edges
+8. `Rpc()` - 13 edges
+9. `write()` - 13 edges
+10. `read()` - 13 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `setup()` --indirect_call--> `info()`  [INFERRED]
-  mds/atomix-mds/lib/htlc.js → mds/atomix-mds/spike/verify_rhino.js
-- `scanChat()` --indirect_call--> `coins()`  [INFERRED]
-  mds/atomix-mds/lib/otc.js → mds/atomix-mds/test/responder.test.js
-- `runMinimaChecks()` --indirect_call--> `coins()`  [INFERRED]
-  mds/atomix-mds/lib/settle.js → mds/atomix-mds/test/responder.test.js
 - `"node_modules/hash.js/lib/hash/sha/512.js"()` --indirect_call--> `el()`  [INFERRED]
-  mds/atomix-mds/vendor/elliptic.js → mds/atomix-mds/lib/ui.js
+  vendor/elliptic.js → lib/ui.js
+- `scanChat()` --indirect_call--> `coins()`  [INFERRED]
+  lib/otc.js → test/responder.test.js
 - `"node_modules/bn.js/lib/bn.js"()` --indirect_call--> `start()`  [INFERRED]
-  mds/atomix-mds/vendor/elliptic.js → mds/atomix-mds/lib/app.js
+  vendor/elliptic.js → lib/app.js
+- `"node_modules/hash.js/lib/hash/sha/512.js"()` --indirect_call--> `start()`  [INFERRED]
+  vendor/elliptic.js → lib/app.js
+- `contractId()` --references--> `S`  [EXTRACTED]
+  lib/ethhtlc.js → spike/verify_rhino.js
 
 ## Import Cycles
 - None detected.
 
-## Communities (79 total, 12 thin omitted)
+## Communities (72 total, 9 thin omitted)
 
 ### Community 0 - "ui.js"
 Cohesion: 0.10
-Nodes (68): activeSwap(), activityTab(), amtField(), banner(), bidiInput(), bootErrorCard(), ccy(), clean() (+60 more)
+Nodes (67): activeSwap(), activityTab(), amtField(), banner(), bidiInput(), bootErrorCard(), ccy(), clean() (+59 more)
 
 ### Community 1 - "app.js"
 Cohesion: 0.08
-Nodes (53): armPulse(), attemptBoot(), axCsvCell(), axCsvRow(), axDirLabel(), axIso(), axIsTx(), axPickTx() (+45 more)
+Nodes (56): armPulse(), attemptBoot(), axCsvCell(), axCsvRow(), axDirLabel(), axIso(), axIsTx(), axPickTx() (+48 more)
 
 ### Community 2 - "otc.js"
 Cohesion: 0.13
@@ -112,19 +105,15 @@ Nodes (45): accept(), addMsg(), allDeals(), apply(), applyPropose(), approxEq(),
 
 ### Community 3 - "settle.js"
 Cohesion: 0.17
-Nodes (32): activeSwaps(), amountTokenOk(), broadcastEthRefund(), broadcastEthWithdraw(), checkCanSwapCoin(), checkEthContractBody(), checkEthContractFor(), checkExpiredMinima() (+24 more)
-
-### Community 4 - "elliptic.js"
-Cohesion: 0.05
-Nodes (3): start(), "node_modules/bn.js/lib/bn.js"(), "node_modules/hash.js/lib/hash/sha/512.js"()
+Nodes (31): activeSwaps(), amountTokenOk(), broadcastEthRefund(), broadcastEthWithdraw(), checkCanSwapCoin(), checkEthContractBody(), checkEthContractFor(), checkExpiredMinima() (+23 more)
 
 ### Community 5 - "responder.js"
 Cohesion: 0.11
-Nodes (36): acceptTakerBuyMinima(), acceptTakerSellMinima(), addDec(), addIncoming(), cpBurstFull(), decimalsOf(), doScanIncoming(), ensureAllowance() (+28 more)
+Nodes (35): acceptTakerBuyMinima(), acceptTakerSellMinima(), addDec(), addIncoming(), cpBurstFull(), decimalsOf(), doScanIncoming(), ensureAllowance() (+27 more)
 
 ### Community 6 - "orderbook.js"
-Cohesion: 0.22
-Nodes (16): aggSide(), bestMakers(), cmp(), compareForFill(), isMine(), levelCap(), mergeFreshest(), nowMs() (+8 more)
+Cohesion: 0.11
+Nodes (29): boxPkOf(), canonicalId(), fromSeed(), isValidPublicId(), makeIdentity(), open(), seal(), seedBytes() (+21 more)
 
 ### Community 7 - "dependencies"
 Cohesion: 0.06
@@ -135,12 +124,12 @@ Cohesion: 0.20
 Nodes (31): activeHashes(), allSwaps(), deleteSwap(), esc(), executedTrades(), getEvents(), getRequest(), getSecret() (+23 more)
 
 ### Community 9 - "htlc.js"
-Cohesion: 0.17
-Nodes (24): claim(), coinAmount(), deleteTxn(), grain(), isDecimal(), isHex(), isHexOrMinima(), loadKeys() (+16 more)
+Cohesion: 0.16
+Nodes (20): claim(), coinAmount(), deleteTxn(), grain(), loadKeys(), lock(), lockFromCoins(), maybeGrain() (+12 more)
 
 ### Community 10 - "rhino_sodium.js"
 Cohesion: 0.09
-Nodes (13): blake, hkdfSha256(), hmacSha256(), RFC-5869, nacl, { sha256 }, { sha512 }, fs (+5 more)
+Nodes (12): blake, hkdfSha256(), hmacSha256(), RFC-5869, nacl, { sha256 }, { sha512 }, fs (+4 more)
 
 ### Community 11 - "peg.js"
 Cohesion: 0.15
@@ -156,14 +145,14 @@ Nodes (19): bumpFrac(), ceilDp(), divFloor(), floorDp(), formatUnits(), fromScal
 
 ### Community 14 - "browser_chain.js"
 Cohesion: 0.11
-Nodes (17): collisions, ctx, dom, fails, fs, html, { JSDOM }, loadErrors (+9 more)
+Nodes (16): collisions, ctx, dom, fails, fs, html, { JSDOM }, loadErrors (+8 more)
 
 ### Community 15 - "engine.js"
 Cohesion: 0.25
 Nodes (16): baseSwap(), confirmMyLock(), ensureAllowance(), ethChainNow(), executeOtc(), isMyPublishKey(), normKey(), notifyChanged() (+8 more)
 
 ### Community 16 - "Rpc"
-Cohesion: 0.24
+Cohesion: 0.23
 Nodes (5): big(), hexToBig(), host(), Rpc(), snippet()
 
 ### Community 17 - "ethhtlc.js"
@@ -171,12 +160,12 @@ Cohesion: 0.14
 Nodes (4): b32(), contractId(), make(), safeBig()
 
 ### Community 18 - "mdsw.js"
-Cohesion: 0.17
-Nodes (15): cmd(), cmdR(), esc(), ethLockAcquire(), ethLockInit(), ethLockRelease(), kvDel(), kvGet() (+7 more)
+Cohesion: 0.25
+Nodes (13): cmd(), cmdR(), esc(), ethLockAcquire(), ethLockInit(), ethLockRelease(), kvDel(), kvGet() (+5 more)
 
 ### Community 19 - "order.js"
-Cohesion: 0.23
-Nodes (14): canonicalJson(), effectiveAsks(), effectiveBids(), finite(), fromJson(), hasLiquidity(), isHex(), level() (+6 more)
+Cohesion: 0.24
+Nodes (13): canonicalJson(), effectiveAsks(), effectiveBids(), finite(), fromJson(), hasLiquidity(), level(), make() (+5 more)
 
 ### Community 20 - "ui_render.js"
 Cohesion: 0.15
@@ -250,37 +239,25 @@ Nodes (3): fakeRpc(), run(), runLock()
 Cohesion: 0.20
 Nodes (9): Activity tab, Background engine (service.js ↔ native SwapService), Market tab, OTC tab, PARITY — native AtomiX ↔ AtomiX MDS feature ledger, Platform-specific (no native equivalent required), Shell, Swap tab (+1 more)
 
-### Community 72 - "identitywatch.js"
-Cohesion: 0.29
-Nodes (6): check(), checkEth(), checkMinima(), halted(), raiseOrClear(), summary()
-
-### Community 73 - "identity.js"
-Cohesion: 0.31
-Nodes (9): boxPkOf(), canonicalId(), fromSeed(), isValidPublicId(), makeIdentity(), open(), seal(), seedBytes() (+1 more)
-
-### Community 74 - "prng.js"
-Cohesion: 0.83
-Nodes (3): init(), initBrowser(), initService()
-
 ## Knowledge Gaps
-- **89 isolated node(s):** `install.sh script`, `build.sh script`, `RFC-5869`, `name`, `version` (+84 more)
+- **86 isolated node(s):** `Shell`, `Swap tab`, `Wallet tab`, `Activity tab`, `Market tab` (+81 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `"node_modules/hash.js/lib/hash/sha/512.js"()` connect `elliptic.js` to `ui.js`?**
-  _High betweenness centrality (0.019) - this node is a cross-community bridge._
-- **Why does `el()` connect `ui.js` to `elliptic.js`?**
-  _High betweenness centrality (0.017) - this node is a cross-community bridge._
-- **Why does `start()` connect `elliptic.js` to `app.js`?**
-  _High betweenness centrality (0.016) - this node is a cross-community bridge._
-- **What connects `install.sh script`, `build.sh script`, `RFC-5869` to the rest of the system?**
-  _89 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `"node_modules/hash.js/lib/hash/sha/512.js"()` connect `app.js` to `ui.js`, `elliptic.js`?**
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+- **Why does `el()` connect `ui.js` to `app.js`?**
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
+- **What connects `Shell`, `Swap tab`, `Wallet tab` to the rest of the system?**
+  _86 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `ui.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.09548167092924126 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09569798068481124 - nodes in this community are weakly interconnected._
 - **Should `app.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.08395989974937343 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07740112994350283 - nodes in this community are weakly interconnected._
 - **Should `otc.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.12950971322849214 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1276595744680851 - nodes in this community are weakly interconnected._
+- **Should `elliptic.js` be split into smaller, more focused modules?**
+  _Cohesion score 0.05555555555555555 - nodes in this community are weakly interconnected._
