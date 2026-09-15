@@ -32,7 +32,7 @@
   "30": "ax_eth.js",
   "31": "swapplan.js",
   "32": "wallet.js",
-  "33": "visibility.test.js",
+  "33": "service.js",
   "34": "fmt.js",
   "35": "trading.js",
   "36": "otc.test.js",

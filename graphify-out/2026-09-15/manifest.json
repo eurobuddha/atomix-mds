@@ -20,8 +20,8 @@
     "semantic_hash": "630514087c1d23e339941fbd2fc575ee"
   },
   "lib/app.js": {
-    "mtime": 1789408085.380934,
-    "ast_hash": "7fb0e0d21a79633286e7ab20fdeb6a20",
+    "mtime": 1785952189.7659082,
+    "ast_hash": "beca51a8f11c13ee38c8abd6adf6adfc",
     "semantic_hash": ""
   },
   "lib/boot.js": {
@@ -45,9 +45,9 @@
     "semantic_hash": ""
   },
   "lib/ethops.js": {
-    "mtime": 1788964421.6737618,
-    "ast_hash": "4f5e7d3819011011c0400a5f74054240",
-    "semantic_hash": ""
+    "mtime": 1784459350.9490957,
+    "ast_hash": "e34f562d14921c3fe4c626d34c8de4c4",
+    "semantic_hash": "e34f562d14921c3fe4c626d34c8de4c4"
   },
   "lib/ethrpc.js": {
     "mtime": 1784422458.7846346,
@@ -75,8 +75,8 @@
     "semantic_hash": "cbd9889317f69769701485f79e0b04f6"
   },
   "lib/htlc.js": {
-    "mtime": 1788962332.6231701,
-    "ast_hash": "82bfbed89a8d4abab7ff2074660e97d0",
+    "mtime": 1787148617.6153607,
+    "ast_hash": "c1dcf7e3dbdd12866a033970f13388f4",
     "semantic_hash": ""
   },
   "lib/identity.js": {
@@ -85,19 +85,19 @@
     "semantic_hash": "eea384592a17a2787f91121011662afb"
   },
   "lib/inspect.js": {
-    "mtime": 1788962332.6235518,
-    "ast_hash": "1e89f5dfa3ddc5297a56a06f3b80527f",
+    "mtime": 1785952204.0717742,
+    "ast_hash": "378b9f6d37c5db43caa1327f55ffeccf",
     "semantic_hash": ""
   },
   "lib/maker.js": {
-    "mtime": 1788962332.6232805,
-    "ast_hash": "367dc9bf80dfd602f511341ee2cd118b",
+    "mtime": 1786012992.6284077,
+    "ast_hash": "cbd6e1b3dea9bc1ec1eedd730eac1c5c",
     "semantic_hash": ""
   },
   "lib/market.js": {
-    "mtime": 1789408085.3526351,
-    "ast_hash": "b196ede2229bab38d4c3d172a8a14eb2",
-    "semantic_hash": ""
+    "mtime": 1784470017.482462,
+    "ast_hash": "ece543ddb809ea897f38eebd623a7331",
+    "semantic_hash": "ece543ddb809ea897f38eebd623a7331"
   },
   "lib/mdsw.js": {
     "mtime": 1785707179.4557369,
@@ -130,8 +130,8 @@
     "semantic_hash": "66c294c83d5f436b6fa453e16d6a4a1e"
   },
   "lib/responder.js": {
-    "mtime": 1788962332.6233268,
-    "ast_hash": "bb2c594b8c4c989147821283e3993381",
+    "mtime": 1786013053.087762,
+    "ast_hash": "0010e8cd6499a9a5a20c9baac51e5538",
     "semantic_hash": ""
   },
   "lib/rhino_shim.js": {
@@ -140,14 +140,14 @@
     "semantic_hash": "95d6054536197628570c8b81c1bb5e2d"
   },
   "lib/settle.js": {
-    "mtime": 1789407835.596107,
-    "ast_hash": "3ab5a73623348ee420fd71291f298835",
+    "mtime": 1787938702.1514251,
+    "ast_hash": "b44af467565c8ef27607be4a05335cbd",
     "semantic_hash": ""
   },
   "lib/swapdb.js": {
-    "mtime": 1789418532.8413868,
-    "ast_hash": "c7a8c6e1b853f943dc44a3293fc8eccc",
-    "semantic_hash": ""
+    "mtime": 1784466050.0059302,
+    "ast_hash": "18bef760a34c9a38824e41bde04fff45",
+    "semantic_hash": "18bef760a34c9a38824e41bde04fff45"
   },
   "lib/swapplan.js": {
     "mtime": 1784501897.812325,
@@ -160,13 +160,13 @@
     "semantic_hash": "eaa7abb75ab4fc7c8dd1b65318e234cb"
   },
   "lib/trading.js": {
-    "mtime": 1789407868.94047,
-    "ast_hash": "f3886570c173a28431fb70d0ca149354",
-    "semantic_hash": ""
+    "mtime": 1784407592.6759925,
+    "ast_hash": "1e48044b482d7ca8c51666d58ff6d9da",
+    "semantic_hash": "1e48044b482d7ca8c51666d58ff6d9da"
   },
   "lib/ui.js": {
-    "mtime": 1789407923.2774858,
-    "ast_hash": "c6df259855ba611d7cab7c22456b80c5",
+    "mtime": 1786013130.758164,
+    "ast_hash": "9059fe3c1b71c9d622687c12e29dd54b",
     "semantic_hash": ""
   },
   "lib/wallet.js": {
@@ -245,8 +245,8 @@
     "semantic_hash": "54885e76a43e0710b965d14ec429d250"
   },
   "test/ethops.test.js": {
-    "mtime": 1788964421.673967,
-    "ast_hash": "06dd9b5a63bab68ac55811c57c2ba24d",
+    "mtime": 1787313792.7829072,
+    "ast_hash": "d0ca14cb05f4d10daebc8f731539c3ce",
     "semantic_hash": ""
   },
   "test/ethrpc.test.js": {
@@ -285,9 +285,9 @@
     "semantic_hash": "51c5074096b50b3359182703abee770b"
   },
   "test/market.test.js": {
-    "mtime": 1789408112.9254286,
-    "ast_hash": "c6528e41e966498f331047ea1681023f",
-    "semantic_hash": ""
+    "mtime": 1784466613.7066946,
+    "ast_hash": "dcbb5eada9db8d78bf34a33d041a6b23",
+    "semantic_hash": "dcbb5eada9db8d78bf34a33d041a6b23"
   },
   "test/order.test.js": {
     "mtime": 1784417636.6747715,
@@ -330,8 +330,8 @@
     "semantic_hash": "e5efe413d4b85a6271dfa80a4d1ce843"
   },
   "test/settle.test.js": {
-    "mtime": 1788964421.673828,
-    "ast_hash": "fcd9002817828a4697335defc8cf6a89",
+    "mtime": 1785952329.111377,
+    "ast_hash": "8eb00c9bbc01333bab5fcb9041bd70d2",
     "semantic_hash": ""
   },
   "test/swapdb.test.js": {
@@ -390,8 +390,8 @@
     "semantic_hash": "1c79a9a644be07ed01c3d297ef54ef09"
   },
   "PARITY.md": {
-    "mtime": 1789408143.9013834,
-    "ast_hash": "6d4baabd477fd5d5ff6fb08573abbe25",
+    "mtime": 1787938775.636297,
+    "ast_hash": "1e57b758368ccaf70529ee3fa3087ce9",
     "semantic_hash": ""
   },
   "index.html": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "lib/signgate.js": {
-    "mtime": 1788964421.6736655,
-    "ast_hash": "0ade76efd2eeab728245cda8c35ca96f",
+    "mtime": 1785707312.0300717,
+    "ast_hash": "2cdd98fcb7167390703080c722c7cfd5",
     "semantic_hash": ""
   },
   "test/htlc.txnid.test.js": {
@@ -415,8 +415,8 @@
     "semantic_hash": ""
   },
   "test/signgate.test.js": {
-    "mtime": 1788964421.6738777,
-    "ast_hash": "9cd79a8a25b46a0272c5747cedbbf81e",
+    "mtime": 1785707354.915043,
+    "ast_hash": "4ee53801e23332e638f36687cca61300",
     "semantic_hash": ""
   },
   "lib/identitywatch.js": {
@@ -435,23 +435,13 @@
     "semantic_hash": ""
   },
   ".githooks/pre-commit": {
-    "mtime": 1789425562.6033018,
-    "ast_hash": "57dbf99414a5b767867e31104bee2d7e",
+    "mtime": 1786883745.4278843,
+    "ast_hash": "e7d55f53bc57c5815e854cdbc1bc30dc",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
     "mtime": 1786883745.4411223,
     "ast_hash": "558fa790550b47206aefe031d9ce6936",
-    "semantic_hash": ""
-  },
-  "test/safety.test.js": {
-    "mtime": 1788964421.674057,
-    "ast_hash": "323db86ec3cf29b21e71211e7959f4fe",
-    "semantic_hash": ""
-  },
-  "test/visibility.test.js": {
-    "mtime": 1789407948.5325677,
-    "ast_hash": "e1eebd2e6abbc60856b7009cb745bbc7",
     "semantic_hash": ""
   }
 }
