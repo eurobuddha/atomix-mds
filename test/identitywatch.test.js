@@ -93,7 +93,8 @@
         stub(M, 'kvGet', function (k, d, cb) { cb(stored[k] === undefined ? d : stored[k]); });
         stub(M, 'kvSet', function (k, v, cb) { stored[k] = v; cb && cb(null); });
         stub(M, 'cmdR', function (cmd, cb) {
-            if (String(cmd).indexOf('newscript') === 0) return cb(null, {});
+            if (String(cmd).indexOf('scripts address:') === 0) return cb(new Error('cmd failed: not found'), null, { status: false });
+            if (String(cmd).indexOf('newscript') === 0) return cb(null, { miniaddress: AX.htlc.ADDRESS });   // the node confirms the address it computed
             if (String(cmd).indexOf('getaddress') === 0) {
                 getaddressCalls++;
                 return cb(null, { miniaddress: 'MxPICK' + getaddressCalls, address: '0xA' + getaddressCalls,

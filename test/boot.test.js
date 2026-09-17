@@ -14,7 +14,11 @@
                 if (c.indexOf('random size:8') === 0) return cb({ status: true, response: { random: hex(8, 'cd') } });
                 if (c.indexOf('vault') === 0) return cb(o.vault || { status: false, error: 'no vault stub' });
                 if (c.indexOf('seedrandom') === 0) return cb(o.seedrandom || { status: false, error: 'no seedrandom stub' });
-                if (c.indexOf('newscript') === 0) return cb({ status: true, response: {} });
+                // The node answers a script query by ADDRESS with the row (or a failure when unknown); a fresh
+                // node knows nothing, so boot must register and the node reports the address it computed.
+                if (c.indexOf('scripts address:') === 0) return cb({ status: false, error: 'script not found' });
+                if (c.indexOf('newscript') === 0) return cb({ status: true, response: { miniaddress: AX.htlc.ADDRESS, address: AX.htlc.ADDRESS_HEX, track: false } });
+                if (c.indexOf('txnlist') === 0) return cb({ status: true, response: [] });
                 if (c.indexOf('getaddress') === 0) return cb({ status: true, response: { miniaddress: 'MxTEST', address: '0xADDR', publickey: '0xPUB' } });
                 cb({ status: true, response: [] });
             },

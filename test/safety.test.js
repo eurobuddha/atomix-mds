@@ -7,7 +7,8 @@
     M.cmd = function () {};
     M.cmdR = function (command, done) {
         commands.push(command);
-        var response = command.indexOf('balance ') === 0 ? balance : command.indexOf('coins ') === 0 ? [] : command.indexOf('txncheck ') === 0 ? valid : { txpowid: '0x' + '55'.repeat(32) };
+        var response = command.indexOf('balance ') === 0 ? balance : command.indexOf('coins ') === 0 ? [] : command.indexOf('txncheck ') === 0 ? valid
+            : command.indexOf('scripts address:') === 0 ? { miniaddress: H.ADDRESS, address: H.ADDRESS_HEX } : { txpowid: '0x' + '55'.repeat(32) };
         done(null, response, { status: true, response: response });
     };
     try {
