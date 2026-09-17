@@ -99,6 +99,23 @@
         T.ok('legacy migrated to the per-currency key', ('maker_cfg_' + ccyKey) in kv);
         T.ok('legacy keys deleted after adoption', !('maker_cfg' in kv) && !('maker_manual' in kv));
         T.eq('legacy manual ladder carried over', MK._state().manual.bids.length, 1);
+
+        // ---- 0.1.33: a FAILED tombstone aborts the switch (error reported, state untouched) ----
+        B.publishFresh = function (me, order, cb) { cb(new Error('cmd failed: send — Insufficient funds.. you only have 0')); };
+        var switchErr = null; MK.onCurrencySwitch({ minima: 500, usdt: 500 }, function (e) { switchErr = e; });
+        T.ok('tombstone failure is reported to the switch caller', switchErr && /Insufficient funds/.test(switchErr.message));
+        B.publishFresh = function (me, order, cb) { published.push(order); cb(null); };
+
+        // ---- 0.1.33: keep-alive re-reads the shared currency and stands down if another context switched it ----
+        MK.saveConfig({ pegEnable: false, step: 1, size: 10, bias: 0, levels: 1, min: 1, reprice: 1 }, { bids: [{ p: 0.99, a: 100 }], asks: [] }, function () {});
+        MK._setLastPublish(0); published.length = 0;
+        kv.trading_currency = TR.active().key === 'minima' ? 'mxusdt' : 'minima';   // the page moved the kv mid-pass
+        MK.keepAlive({ minima: 500, usdt: 500 }, function () {});
+        T.eq('keep-alive publishes nothing when the kv currency differs from the one it was configured for', published.length, 0);
+        kv.trading_currency = TR.active().key;
+        MK.keepAlive({ minima: 500, usdt: 500 }, function () {});
+        T.eq('keep-alive publishes once the kv agrees', published.length, 1);
+        delete kv.trading_currency;
     } finally {
         MDS.kvGet = savedGet; MDS.kvSet = savedSet; MDS.kvDel = savedDel; B.publishFresh = savedPub;
     }
