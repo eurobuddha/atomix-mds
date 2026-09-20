@@ -54,5 +54,18 @@
         T.ok('no-secret report never promises collection', lines.join('\n').indexOf('claimable now') < 0 && lines.join('\n').indexOf('waiting for the secret') > 0);
         lines = AX.inspect.buildReport({ swap: { myLegIsMinima: false, status: 'STARTED' }, minimaError: 'node timeout', events: [] });
         T.ok('failed scan is unknown rather than not found', lines.join('\n').indexOf('UNKNOWN — node timeout') > 0);
+
+        // A row with no recorded transaction must SAY the leg was never posted — not point at a line it
+        // never prints (native parity: atomix 0.1.61; live phantom lock 2026-09-20).
+        lines = AX.inspect.buildReport({ swap: { myLegIsMinima: true, status: 'STARTED', sellToken: 'MINIMA', buyToken: 'USDT' },
+            block: 2325091, secretKnown: true, myMin: null, gc: null, events: [] });
+        var txt = lines.join('\n');
+        T.ok('phantom row names the missing broadcast', txt.indexOf('Recorded transactions: NONE') > 0 && txt.indexOf('never posted') > 0);
+        T.ok('phantom row states nothing is locked', txt.indexOf('Nothing is locked') > 0);
+        T.ok('no dangling pointer to an unprinted transaction', txt.indexOf('check the recorded transaction.') < 0);
+        lines = AX.inspect.buildReport({ swap: { myLegIsMinima: true, status: 'LOCKED', sellToken: 'MINIMA', buyToken: 'USDT' },
+            block: 2325091, secretKnown: true, myMin: null, gc: null,
+            events: [{ note: '0x00004FB40585D5D6DAC724C22DE81CB5DDE65D3EEFA888F8B5B0ACDE8F3FBD97' }] });
+        T.ok('recorded transactions are counted', lines.join('\n').indexOf('Recorded transactions: 1 (listed above).') > 0);
     } finally { M.cmdR = saved; M.cmd = deleted; }
 })();
