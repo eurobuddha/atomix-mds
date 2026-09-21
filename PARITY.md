@@ -112,6 +112,8 @@ now THREE-way; desktop keeps its own semver (pandapools precedent), feature-trac
 
 | **"Add ETH for gas" names the wallet in full** (native 0.1.60) | ✖ n/a — the MDS engine has no gas-affordability precheck and no notifier (the lib keeps no logger); the low-ETH prompt is a native-only surface, the same deliberate asymmetry recorded for native 0.1.40. The MDS Wallet view already shows the ETH address in full |
 
+| **A wedged node is not a revoked permission** (native 0.1.62) | ✖ n/a — the native defect is specific to broadcast IPC: `NodeApi.cmd`'s timeout called `noteEnabled(false)`, so three silent commands manufactured a permissions verdict the node never gave, and a wedged node was reported as "Enable AtomiX in Minima Core → Apps" (live 2026-09-21: a node 3d21h up, Dalvik heap at 93% of the 512MB cap, thrashing GC, no longer following the chain). A MiniDapp runs INSIDE the node over MDS — there is no pairing handshake and no silence to misread. `boot.js` raises `permErr`/`lockedErr` only from an explicit `checkmode` reply (`writemode === false` / `dblocked === true`) or an explicit `pending === true`, never from a timeout, and `lib/mdsw.js` has no timeout path at all. `ui.js bootErrorCard` already branches permission / locked / other. Verified, not assumed — nothing to mirror |
+
 ## Platform-specific (no native equivalent required)
 | Item | Status |
 |---|---|
