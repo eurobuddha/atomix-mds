@@ -51,6 +51,28 @@ body { padding-bottom: env(safe-area-inset-bottom); }
 .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 .pill:active { transform: scale(0.96); }
 
+/* The currency switch. It used to be `.pill.accent`, byte-identical to the Mainnet status pill two
+   elements along - same fill, same colour, same radius, and that one is not clickable. Users were not
+   missing a button, they were correctly reading a badge. The border and the ⇄ are what separate them,
+   and BOTH are static: the glow below is removed wholesale under prefers-reduced-motion, so it can
+   never be the thing carrying the affordance. (native 0.1.65) */
+.pill.ccy { border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  font-weight: 700; animation: ccyglow 2.6s ease-in-out infinite; }
+/* ::before, not a child element: the desktop mirror refreshes this label with textContent on every
+   status poll, which would silently eat a real node. Keeping the glyph in CSS on both web surfaces
+   means the same treatment cannot be undone by a label refresh on either. */
+.pill.ccy::before { content: '⇄'; font-size: 12px; line-height: 1; opacity: 0.9; }
+@keyframes ccyglow {
+  0%, 100% { border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+             box-shadow: 0 0 0 0 transparent; }
+  50%      { border-color: var(--accent);
+             box-shadow: 0 0 6px 0 color-mix(in srgb, var(--accent) 45%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Border and glyph stay - only the breathing stops. */
+  .pill.ccy { animation: none; border-color: var(--accent); }
+}
+
 /* tab bar */
 #tabbar { display: flex; background: var(--surface); border-top: 1px solid var(--border); }
 #tabbar .tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;

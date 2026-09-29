@@ -30,6 +30,8 @@ now THREE-way; desktop keeps its own semver (pandapools precedent), feature-trac
 |---|---|---|
 | 5 tabs Swap/Wallet/Activity/Market/OTC (m:131) | ui.js tabbar | 📱 |
 | Currency pill switch + full re-theme f(currency×dark/light) | ui.js header + data-ccy CSS | 📱 |
+
+| **The currency switch reads as a control, not a badge** (native 0.1.65) — it carried the same fill, text colour and radius as the Mainnet status pill sitting two elements away, which is not clickable, so users were correctly reading a badge and never tried it. Users reported not realising it was a button at all. A ⇄ glyph and an accent border separate the two; a slow border/box-shadow glow draws the eye on top. Both marks are STATIC by design — the glow is dropped wholesale under `prefers-reduced-motion` (and `ValueAnimator.areAnimatorsEnabled()` natively), so it can never be the thing carrying the affordance. The label is never animated: it names the market your money is in, and a chip that periodically showed the currency you are NOT trading would be a real-funds hazard | lib/ui.js:160 `pill accent ccy` + `aria-label`; assets/style.css `.pill.ccy` + `@keyframes ccyglow` + reduced-motion guard. Glyph is `::before`, not a child node, because the desktop mirror rewrites this label with `textContent` on every status poll and would eat a real element | ✅ 0.1.35 |
 | Dark/light toggle | ui.js | 📱 |
 | Welcome/help dialog (m:2650) | ui.js welcomeDialog (first-run once + header ? pill; MDS-correct Write-permission bullet) — native title fixed to AtomiX in 0.1.9 | ✅ |
 
