@@ -10,6 +10,10 @@
   --usdt-teal: #26A69A; --warn: #E6A23C;
 }
 :root[data-ccy="minima"] { --accent: #F7931A; --grad-start: #FFAB3D; }
+/* The colour of the moving ring on the currency switch: always the OTHER market's accent, because
+   that is where the tap takes you. Green pill -> orange ring; orange pill -> green ring. */
+:root { --ccy-other: #F7931A; }
+:root[data-ccy="minima"] { --ccy-other: #26A17B; }
 /* dark (ONYX) is the default ground */
 :root, :root[data-theme="dark"] {
   --bg: #0B0D12; --surface: #12151C; --surface2: #1B1F28; --border: rgba(255,255,255,0.07);
@@ -51,26 +55,48 @@ body { padding-bottom: env(safe-area-inset-bottom); }
 .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 .pill:active { transform: scale(0.96); }
 
-/* The currency switch. It used to be `.pill.accent`, byte-identical to the Mainnet status pill two
-   elements along - same fill, same colour, same radius, and that one is not clickable. Users were not
-   missing a button, they were correctly reading a badge. The border and the ⇄ are what separate them,
-   and BOTH are static: the glow below is removed wholesale under prefers-reduced-motion, so it can
-   never be the thing carrying the affordance. (native 0.1.65) */
-.pill.ccy { border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
-  font-weight: 700; animation: ccyglow 2.6s ease-in-out infinite; }
-/* ::before, not a child element: the desktop mirror refreshes this label with textContent on every
-   status poll, which would silently eat a real node. Keeping the glyph in CSS on both web surfaces
-   means the same treatment cannot be undone by a label refresh on either. */
-.pill.ccy::before { content: '⇄'; font-size: 12px; line-height: 1; opacity: 0.9; }
-@keyframes ccyglow {
-  0%, 100% { border-color: color-mix(in srgb, var(--accent) 40%, transparent);
-             box-shadow: 0 0 0 0 transparent; }
-  50%      { border-color: var(--accent);
-             box-shadow: 0 0 6px 0 color-mix(in srgb, var(--accent) 45%, transparent); }
+/* The currency switch.
+   Two earlier attempts are worth not repeating. It first looked exactly like the Mainnet status pill
+   next to it - same fill, colour and radius, and that one is not clickable - so people read it as a
+   badge. Replacing that with a 1px border that breathed stopped the confusion and communicated
+   nothing about what the button DOES: too quiet to notice, too static to read as an invitation.
+
+   What carries the meaning is the COLOUR OF THE MOVING PART: it is the currency you would switch TO.
+   An orange dot orbiting the green dollar pill says "MINIMA is over there" continuously, while the
+   label still names the market your money is actually in - which matters, because settlement is
+   currency-agnostic and history is currency-scoped, so a chip that periodically displayed the
+   currency you are NOT trading would be a real-funds hazard at a glance.
+
+     dollar market (green pill)  -> a tight ORANGE stop reads as a dot orbiting
+     MINIMA market (orange pill) -> a wide GREEN stop reads as an arc of glow sweeping
+
+   One technique, two gradients. --ccy-other is set per data-ccy above. (native 0.1.66) */
+@property --ccy-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
+.pill.ccy { position: relative; border: none; font-weight: 700; padding: 7px 12px; isolation: isolate; }
+.pill.ccy::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 2px; z-index: -1;
+  background: conic-gradient(from var(--ccy-angle),
+      transparent 0deg, transparent 300deg, var(--ccy-other) 342deg, transparent 360deg);
+  /* Ring, not a filled blob: punch the middle out so only the 2px rim paints. */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: ccyspin 2.4s linear infinite;
 }
+/* MINIMA: a wider, softer band so it reads as a sweeping glow rather than a travelling dot. */
+:root[data-ccy="minima"] .pill.ccy::after {
+  background: conic-gradient(from var(--ccy-angle),
+      transparent 0deg, transparent 200deg, var(--ccy-other) 300deg, transparent 360deg);
+}
+/* A faint constant rim, so the edge never disappears entirely between passes. */
+.pill.ccy::before { content: '⇄'; font-size: 12px; line-height: 1; opacity: 0.9; margin-right: 2px; }
+@keyframes ccyspin { to { --ccy-angle: 360deg; } }
+
 @media (prefers-reduced-motion: reduce) {
-  /* Border and glyph stay - only the breathing stops. */
-  .pill.ccy { animation: none; border-color: var(--accent); }
+  /* Motion is the point, but it must not be the ONLY signal: pin the ring as a full static rim. */
+  .pill.ccy::after { animation: none;
+    background: var(--ccy-other); }
 }
 
 /* tab bar */
