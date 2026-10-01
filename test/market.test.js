@@ -96,5 +96,14 @@
     T.ok('report: warning events surfaced', lines.some(function (l) { return l.indexOf('⚠') === 0; }));
     var done = AX.inspect.buildReport({ swap: Object.assign({}, swap, { status: 'COMPLETE' }), block: -1, secretKnown: true, myMin: null, cpMin: null, gc: null, events: [] });
     T.ok('report: complete has no patience note', !done.some(function (l) { return l.indexOf('swaps take a few minutes') > 0; }));
-    T.ok('report: absent coin is not proof of a spend', done.some(function (l) { return l.indexOf('does not prove it was spent') > 0; }));
+    // Assert the PRINCIPLE, not the phrasing: an empty bounded lookup must never be rendered as a verdict.
+    // Live 2026-10-01 a 1,304-block-old lock — provably unspent in the archive — was reported to its owner as
+    // "spent/claimed" purely because the scan came back empty, and nothing could then refund it.
+    var myLeg = done.filter(function (l) { return l.indexOf('• Your ') === 0; })[0] || '';
+    T.ok('report: absent coin is not proof of a spend', /does NOT mean|does not prove/.test(myLeg));
+    T.ok('report: absent coin never claims it was spent', myLeg.indexOf('spent/claimed') < 0);
+    T.ok('report: absent coin explains the lookup limit', myLeg.indexOf('1024') > 0);
+    // and it must say which way out the user has
+    T.ok('report: absent coin states the recovery path',
+        /refund is built from that record|needs manual recovery/.test(myLeg));
 })();
