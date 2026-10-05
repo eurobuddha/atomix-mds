@@ -30,6 +30,14 @@
     var sellLadder = mkOrder([O.level(1.00, 40), O.level(0.98, 200)], [], 0);
     T.eq('sell ladder: 50 fits the 0.98/200 tranche', R.acceptTakerSellMinima(sellLadder, sellCoin(50, 49)), true);   // 49 ≤ 50×0.98=49
     T.eq('sell ladder: 50 @ 49.5 exceeds every tranche it fits', R.acceptTakerSellMinima(sellLadder, sellCoin(50, 49.5)), false); // >40 cap on lvl0; 49.5>49 on lvl1
+    // REGRESSION (live 2026-10-05): a take priced EXACTLY on the bid. 44.4×0.99 is exactly 43.956, but the old
+    // DOUBLE product gave 43.955999999999996 — the gate silently declined the Fold's take every poll until it
+    // refunded at timelock. The gate must now compare exactly.
+    var incident = mkOrder([O.level(0.99, 5500)], [], 1);
+    T.eq('sell: exactly-priced take accepted (44.4×0.99 = 43.956, float product rounds DOWN)',
+        R.acceptTakerSellMinima(incident, sellCoin('44.4', '43.956')), true);
+    T.eq('sell: one µUSDT over the exact price still rejects',
+        R.acceptTakerSellMinima(incident, sellCoin('44.4', '43.956001')), false);
 
     // ============ acceptTakerBuyMinima: I SELL mxUSDT at my ASK; accept only if I get enough USDT ============
     var buyOrder = mkOrder([], [O.level(1.01, 100)], 1);   // ask 1.01, cap 100, min 1
@@ -41,6 +49,11 @@
     // FUND-SAFETY (worthless-token drain): a non-USDT ERC20 as the paying leg must be rejected even if the numbers fit.
     function buyWorthless(giveMinima, recvAmt) { var c = buyContract(giveMinima, recvAmt); c.tokenContract = '0x000000000000000000000000000000000000dEaD'; return c; }
     T.eq('buy: worthless token rejected (even if amounts fit)', R.acceptTakerBuyMinima(buyOrder, buyWorthless(50, 2000)), false);
+    // REGRESSION twin of the 2026-10-05 sell case, opposite rounding: 2.5×0.99 as a double is 2.4750000000000001,
+    // so an exactly-priced 2.475 USDT payment used to FAIL the ≥ compare. Exact compare accepts it.
+    var buyExact = mkOrder([], [O.level(0.99, 100)], 1);
+    T.eq('buy: exactly-priced take accepted (2.5×0.99 = 2.475, float product rounds UP)',
+        R.acceptTakerBuyMinima(buyExact, buyContract('2.5', '2.475')), true);
 
     // ============ selectCoins: largest-first, exact cover, MAX cap, can't-cover ============
     R._reset();
