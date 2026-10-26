@@ -160,6 +160,29 @@ AX.ui.closeDialog();
 AX.ui.state.tab = 'activity'; AX.ui.render();
 ok('activity: swap card', root().textContent.indexOf('6.5') > -1 && root().textContent.indexOf('waiting') > -1);
 
+// swap-status visibility (0.1.39): maker notice, timeout, refund countdown → Refund now, refund tx IN FULL
+(function () {
+    const now = Math.floor(Date.now() / 1000), sw = AX.ui.state.swaps[0], TX = '0x' + 'ab'.repeat(32);
+    let asked = null; AX.ui.onRefundNow = function (h) { asked = h; };
+    sw.vis = { blocks: false, respondBy: now - 60, refundAt: now + 3000, steps: ['Locked your 6.5 USDT', 'Maker notified'], timedOut: true,
+        notice: { state: 'declined', reason: 'Maker wallet: TOO_MANY_COINS — it consolidates automatically and retries.', at: 1 }, refundSent: '', refunded: false };
+    AX.ui.render();
+    const txt = () => root().textContent, btn = () => Array.from(root().querySelectorAll('button')).find(b => b.textContent.indexOf('Refund now') === 0);
+    ok('vis: steps shown', txt().indexOf('✓ Locked your 6.5 USDT') > -1 && txt().indexOf('Maker notified') > -1);
+    ok('vis: maker notice shown', txt().indexOf('Maker declined: Maker wallet: TOO_MANY_COINS') > -1);
+    ok('vis: refund-open time shown after the timeout', txt().indexOf('Refund opens') > -1 && txt().indexOf('automatic, app open or not') > -1);
+    ok('vis: Refund now disabled with a countdown before refundAt', btn() && btn().disabled && /opens in \d+ min/.test(btn().textContent));
+    sw.vis.timedOut = false; sw.vis.respondBy = now + 600; AX.ui.render();
+    ok('vis: respond-by shown while waiting', txt().indexOf('Maker must respond by') > -1 && txt().indexOf('Refund opens') < 0);
+    sw.vis.refundAt = now - 1; AX.ui.render();
+    ok('vis: Refund now enabled after refundAt', btn() && !btn().disabled);
+    btn().dispatchEvent(new dom.window.Event('click', { bubbles: true }));
+    ok('vis: Refund now calls onRefundNow with the swap hash (and not the inspect dialog)', asked === '0xh' && !AX.ui.state.modal);
+    sw.status = 'REFUNDED'; sw.vis.refundSent = TX; sw.vis.refunded = true; AX.ui.render();
+    ok('vis: refund tx shown IN FULL + Refunded', txt().indexOf('Refund sent: ' + TX) > -1 && txt().indexOf('Refunded') > -1 && !btn());
+    sw.status = 'STARTED'; delete sw.vis; AX.ui.render();
+})();
+
 // currency re-theme flips data-ccy → accent
 AX.trading.setActive(AX.trading.MINIMA); AX.ui.render();
 ok('minima re-theme sets data-ccy', document.documentElement.getAttribute('data-ccy') === 'minima');

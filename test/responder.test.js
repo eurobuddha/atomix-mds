@@ -96,3 +96,45 @@
     T.eq('incoming: force (OTC re-arm) bypasses the cap', Object.keys(R._incoming()).length, R.INCOMING_MAX + 1);
     R._reset();
 })();
+
+/* wallet keeper — merge before the safe coin read refuses (live 2026-10-26: 56 MxUSD coins declined every buy). */
+(function () {
+    var R = AX.responder, TR = AX.trading, MX = TR.USDT_TOKENID, ADDR = '0xAA';
+    function bal(coins, sendable, unconf) { return { coins: coins, sendable: String(sendable), confirmed: String(sendable), unconfirmed: String(unconf || 0) }; }
+    var m = R.keepPlan(bal(56, 21615.6), MX, ADDR);
+    T.eq('keeper: 56 token coins → merge', m && m.kind, 'merge');
+    T.eq('keeper: merge uses the native consolidate command', m.cmd, 'consolidate tokenid:' + MX + ' coinage:3 maxcoins:20 maxsigs:5');
+    T.eq('keeper: 30 token coins is fine', R.keepPlan(bal(30, 500), MX, ADDR), null);
+    T.eq('keeper: 31 token coins → merge', R.keepPlan(bal(31, 500), MX, ADDR).kind, 'merge');
+    T.eq('keeper: MINIMA allows up to 120', R.keepPlan(bal(120, 9e5), '0x00', ADDR), null);
+    T.eq('keeper: 121 MINIMA coins → merge', R.keepPlan(bal(121, 9e5), '0x00', ADDR).kind, 'merge');
+    var s = R.keepPlan(bal(1, 500), MX, ADDR);
+    T.eq('keeper: one coin → split into 10 to myself', s && s.cmd, 'send amount:500 address:0xAA tokenid:' + MX + ' split:10 coinage:1 mine:true');
+    T.eq('keeper: two coins is enough', R.keepPlan(bal(2, 500), MX, ADDR), null);
+    T.eq('keeper: dust is never split', R.keepPlan(bal(1, 9), MX, ADDR), null);
+    T.eq('keeper: no coins → nothing', R.keepPlan(bal(0, 0), MX, ADDR), null);
+    T.eq('keeper: unconfirmed funds → wait (never act mid-settlement)', R.keepPlan(bal(56, 500, '0.5'), MX, ADDR), null);
+    T.eq('keeper: no address → no split', R.keepPlan(bal(1, 500), MX, ''), null);
+
+    // runner: one op at a time, never while a lock holds coins, rate-limited, next() never waits on the node
+    var H = AX.htlc, origBal = H.tokenBalance, origCmd = AX.mds.cmdR, sent = [], pending = null, t = 1e12;
+    H.tokenBalance = function (tok, cb) { cb(null, bal(56, 21615.6)); };
+    AX.mds.cmdR = function (cmd, cb) { sent.push(cmd); pending = cb; };
+    R._reset(); R._resetKeeper(); R._setNow(function () { return t; });
+    R.configure({ myMinimaAddr: ADDR });
+    var nexts = 0; R.keepWallet(function () { nexts++; });
+    T.eq('keeper run: merge sent', sent.length, 1);
+    T.eq('keeper run: poll continues without waiting', nexts, 1);
+    R.keepWallet(function () { nexts++; });
+    T.eq('keeper run: no second op while one is in flight', sent.length, 1);
+    pending(null, { txpowid: '0x01' });
+    t += 60000; R.keepWallet(function () { nexts++; });
+    T.eq('keeper run: rate-limited for 2 minutes after an op', sent.length, 1);
+    t += 61000; R.addIncoming('0x' + 'ab'.repeat(32));
+    R._selectCoins([{ coinid: '0xC1', tokenamount: '5' }], '1');
+    R.keepWallet(function () { nexts++; });
+    T.eq('keeper run: acts again after the gap', sent.length, 2);
+    pending(new Error('boom'), null);
+    T.eq('keeper run: a failure frees the keeper', (t += 121000, R.keepWallet(function () {}), sent.length), 3);
+    H.tokenBalance = origBal; AX.mds.cmdR = origCmd; R._reset(); R._resetKeeper(); R._setNow(Date.now); R.configure(null);
+})();

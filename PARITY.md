@@ -120,6 +120,11 @@ now THREE-way; desktop keeps its own semver (pandapools precedent), feature-trac
 | **"Add ETH for gas" names the wallet in full** (native 0.1.60) | ✖ n/a — the MDS engine has no gas-affordability precheck and no notifier (the lib keeps no logger); the low-ETH prompt is a native-only surface, the same deliberate asymmetry recorded for native 0.1.40. The MDS Wallet view already shows the ETH address in full |
 
 | **A wedged node is not a revoked permission** (native 0.1.62) | ✖ n/a — the native defect is specific to broadcast IPC: `NodeApi.cmd`'s timeout called `noteEnabled(false)`, so three silent commands manufactured a permissions verdict the node never gave, and a wedged node was reported as "Enable AtomiX in Minima Core → Apps" (live 2026-09-21: a node 3d21h up, Dalvik heap at 93% of the 512MB cap, thrashing GC, no longer following the chain). A MiniDapp runs INSIDE the node over MDS — there is no pairing handshake and no silence to misread. `boot.js` raises `permErr`/`lockedErr` only from an explicit `checkmode` reply (`writemode === false` / `dblocked === true`) or an explicit `pending === true`, never from a timeout, and `lib/mdsw.js` has no timeout path at all. `ui.js bootErrorCard` already branches permission / locked / other. Verified, not assumed — nothing to mirror |
+| Wallet keeper: auto-merge >30 token / >120 MINIMA coins, split <2 (native SwapEngine.keepWallet, 0.1.84) | responder.js keepPlan/keepWallet | 📱 0.1.39 |
+| Maker decline reasons recorded + sealed notice to taker (recordDecline, SwapTake.notice, max 3/hash) | responder.js recordDecline, take.js notice | 📱 0.1.39 |
+| Taker: TAKE_SENT, onMakerNotice (own INITIATOR swap, notified maker only), deadlines, timeout notice, REFUND_SENT, refundNow | engine.js, settle.js, service.js MDSCOMMS refundNow | 📱 0.1.39 |
+| Swap card: maker notice, deadlines, refund tx, Refund now (statusView) | ui.js card + app.js onRefundNow | 📱 0.1.39 |
+| pollEthOnly (settle ETH legs with no Minima node) | — | ✖ n/a: the MDS service always runs beside its node |
 
 ## Platform-specific (no native equivalent required)
 | Item | Status |
