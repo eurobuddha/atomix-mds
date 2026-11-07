@@ -77,13 +77,24 @@
         P._reset();
         try {
             globalThis.MDS = { net: { GET: function (url, cb) {
-                if (url.indexOf('depth') >= 0) cb({ response: JSON.stringify({ bids: [['0.020', '2000']], asks: [['0.021', '2000']] }) });
+                if (url.indexOf('depth') >= 0) cb({ response: JSON.stringify({ bids: [['0.020', '10000']], asks: [['0.021', '10000']] }) });
                 else cb({ response: '{}' });
             } } };
             var got = null;
             P.fetch(function (e, saved) { got = { e: e, saved: saved }; });
             T.ok('MEXC fetch ok', got && !got.e && got.saved);
             T.ok('MEXC mid ≈ 0.0205', Math.abs(got.saved.lastPrice - 0.0205) < 1e-9);
+            // review 7 Nov: a +46 % read is HELD (no new price) and marks a jump pending → fresh() false, takes declined
+            globalThis.MDS = { net: { GET: function (url, cb) {
+                if (url.indexOf('depth') >= 0) cb({ response: JSON.stringify({ bids: [['0.0295', '10000']], asks: [['0.0305', '10000']] }) });
+                else cb({ response: '{}' });
+            } } };
+            P._unpace();
+            var got2 = null; P.fetch(function (e, saved) { got2 = { e: e, saved: saved }; });
+            T.ok('a >3 % jump is held', got2 && !got2.saved);
+            T.ok('jump pending', P.jumpPending() === true);
+            T.ok('not fresh while it confirms', P.fresh() === false);
+            P._reset();   // leave no pending jump behind for the later suites (shared sandbox)
         } finally { globalThis.MDS = savedMDS; TR.setActive(savedActive); }
     })();
 })();
