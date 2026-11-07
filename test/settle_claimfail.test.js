@@ -7,6 +7,7 @@
  * once at once, a persistent failure is logged/notified once per distinct reason, and a healed/transport
  * failure clears the retry stamp so the next poll retries. */
 (function () {
+    function cov(c) { var v13 = String(c).indexOf('version=1.3') >= 0 || String(c).indexOf(AX.htlc.ADDRESS_V13) >= 0; return v13 ? { miniaddress: AX.htlc.ADDRESS_V13, address: AX.htlc.ADDRESS_V13_HEX } : { miniaddress: AX.htlc.ADDRESS, address: AX.htlc.ADDRESS_HEX }; }   // the covenant a scripts/newscript command names
     var ST = AX.settle, DB = AX.swapdb, H = AX.htlc, M = AX.mds, EO = AX.ethops, TR = AX.trading;
     var undo = [];
     function stub(o, n, f) { undo.push([o, n, o[n]]); o[n] = f; }
@@ -20,8 +21,8 @@
     (function () {
         var cmds = [], registered = false, checks = 0;
         function node(command) {
-            if (command.indexOf('scripts address:') === 0) return registered ? { miniaddress: H.ADDRESS } : null;
-            if (command.indexOf('newscript') === 0) { registered = true; return { miniaddress: H.ADDRESS, address: H.ADDRESS_HEX }; }
+            if (command.indexOf('scripts address:') === 0) return registered ? cov(command) : null;
+            if (command.indexOf('newscript') === 0) { registered = true; return cov(command); }
             if (command.indexOf('txncheck ') === 0) {
                 checks++;
                 var scripts = registered ? 1 : 0;
@@ -53,8 +54,9 @@
     (function () {
         var cmds = [], vanishAfterRead = true, registered = true;
         function node(command) {
-            if (command.indexOf('scripts address:') === 0) { var r = registered ? { miniaddress: H.ADDRESS } : null; if (vanishAfterRead) { registered = false; vanishAfterRead = false; } return r; }
-            if (command.indexOf('newscript') === 0) { registered = true; return { miniaddress: H.ADDRESS }; }
+            // the row vanishes after the LAST pre-read (the v1.3 covenant is read second)
+            if (command.indexOf('scripts address:') === 0) { var r = registered ? cov(command) : null; if (vanishAfterRead && command.indexOf(AX.htlc.ADDRESS_V13) >= 0) { registered = false; vanishAfterRead = false; } return r; }
+            if (command.indexOf('newscript') === 0) { registered = true; return cov(command); }
             if (command.indexOf('txncheck ') === 0) {
                 var scripts = registered ? 1 : 0;
                 return { inputs: 1, scripts: scripts, validamounts: true, allsignaturesvalid: true, validtransaction: scripts === 1,
@@ -71,7 +73,7 @@
         var deletes = cmds.filter(function (c) { return c.indexOf('txndelete ') === 0; }).length;
         var posts = cmds.filter(function (c) { return c.indexOf('txnpost ') === 0; }).length;
         T.ok('refused build is deleted, covenant re-registered, rebuilt once, posted', out && !out.e && creates === 2 && checks === 2 && deletes === 1 && posts === 1
-            && cmds.filter(function (c) { return c.indexOf('newscript') === 0; }).length === 1);
+            && cmds.filter(function (c) { return c.indexOf('newscript') === 0; }).length === 2);   // both covenants re-registered
         T.ok('the first txndelete precedes the second txncreate', cmds.indexOf('txndelete id:' + cmds[cmds.indexOf('txncreate id:' + cmds.filter(function (c) { return c.indexOf('txncreate ') === 0; })[0].slice(13)) ].slice(13)) < cmds.lastIndexOf(cmds.filter(function (c) { return c.indexOf('txncreate ') === 0; })[1]));
         restore();
     })();
@@ -82,7 +84,7 @@
         stub(M, 'cmd', function (c, cb) { cmds.push(c); cb && cb({ status: true, response: [] }); });
         stub(M, 'cmdR', function (c, cb) {
             cmds.push(c);
-            var r = c.indexOf('scripts address:') === 0 ? { miniaddress: H.ADDRESS }
+            var r = c.indexOf('scripts address:') === 0 ? cov(c)
                 : c.indexOf('txncheck ') === 0 ? { inputs: 1, scripts: 1, validamounts: true, allsignaturesvalid: true, validtransaction: false, valid: { basic: true, mmrproofs: true, scripts: false } }
                 : { txpowid: '0xTXP' };
             cb(null, r, { status: true, response: r });

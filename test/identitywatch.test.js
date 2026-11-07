@@ -5,6 +5,7 @@
  * rotating-identity defect (getaddress returns a RANDOM default key per call).
  */
 (function () {
+    function cov(c) { var v13 = String(c).indexOf('version=1.3') >= 0 || String(c).indexOf(AX.htlc.ADDRESS_V13) >= 0; return v13 ? { miniaddress: AX.htlc.ADDRESS_V13, address: AX.htlc.ADDRESS_V13_HEX } : { miniaddress: AX.htlc.ADDRESS, address: AX.htlc.ADDRESS_HEX }; }   // the covenant a scripts/newscript command names
     'use strict';
     var IW = AX.identitywatch, H = AX.htlc, M = AX.mds, E = AX.eth;
 
@@ -94,7 +95,7 @@
         stub(M, 'kvSet', function (k, v, cb) { stored[k] = v; cb && cb(null); });
         stub(M, 'cmdR', function (cmd, cb) {
             if (String(cmd).indexOf('scripts address:') === 0) return cb(new Error('cmd failed: not found'), null, { status: false });
-            if (String(cmd).indexOf('newscript') === 0) return cb(null, { miniaddress: AX.htlc.ADDRESS });   // the node confirms the address it computed
+            if (String(cmd).indexOf('newscript') === 0) return cb(null, cov(cmd));   // the node confirms the address it computed
             if (String(cmd).indexOf('getaddress') === 0) {
                 getaddressCalls++;
                 return cb(null, { miniaddress: 'MxPICK' + getaddressCalls, address: '0xA' + getaddressCalls,

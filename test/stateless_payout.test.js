@@ -5,6 +5,7 @@
  * wallets (PandaPools, PandaDEX) rightly refuse state-bearing coins. Only output 0, the notify, must keep state
  * (the covenant's VERIFYOUT(@INPUT 0xFFEEDD9999 0.0001 @TOKENID TRUE)). */
 (function () {
+    function cov(c) { var v13 = String(c).indexOf('version=1.3') >= 0 || String(c).indexOf(AX.htlc.ADDRESS_V13) >= 0; return v13 ? { miniaddress: AX.htlc.ADDRESS_V13, address: AX.htlc.ADDRESS_V13_HEX } : { miniaddress: AX.htlc.ADDRESS, address: AX.htlc.ADDRESS_HEX }; }   // the covenant a scripts/newscript command names
     var H = AX.htlc, M = AX.mds, TR = AX.trading, EO = AX.ethops;
     var undo = [];
     function stub(o, n, f) { undo.push([o, n, o[n]]); o[n] = f; }
@@ -16,7 +17,7 @@
         stub(M, 'cmd', function (c, cb) { cmds.push(c); cb && cb({ status: true, response: [] }); });
         stub(M, 'cmdR', function (c, cb) {
             cmds.push(c);
-            if (c.indexOf('scripts address:') === 0) return cb(null, { miniaddress: H.ADDRESS }, { status: true });
+            if (c.indexOf('scripts address:') === 0) return cb(null, cov(c), { status: true });
             if (c.indexOf('txncheck ') === 0) return cb(null, { inputs: 1, scripts: 1, validamounts: true, allsignaturesvalid: true, validtransaction: true,
                 valid: { basic: true, mmrproofs: true, scripts: true } }, { status: true });
             cb(null, { txpowid: '0x' + '55'.repeat(32) }, { status: true });

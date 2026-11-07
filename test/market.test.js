@@ -69,11 +69,11 @@
     // clampAsks: cumulative backing over combined coins; read-failure fails SAFE to 1
     var savedFree = H.tokenBalance, savedPause = AX.htlc.ETH_FIRST_PAUSED;
     try {
-        // review 7 Nov (R3-3): while ETH-first takes are paused the maker advertises NO asks
+        // HTLC v1.3 (review 7 Nov): pause no longer trims asks — they go out as bal.m13 for v1.3 takers (order.test)
         AX.htlc.ETH_FIRST_PAUSED = true;
         var op = O.make(); op.pairs.USDT = pair3();
-        H.tokenBalance = function () { throw new Error('a paused maker must not even read its balance for asks'); };
-        AX.maker.clampAsks(op, function (r) { T.eq('paused: no asks advertised', r.pairs.USDT.asks.length, 0); T.eq('paused: legacy ask scalar cleared', r.pairs.USDT.buy, 0); });
+        H.tokenBalance = function (tok, cb) { cb(null, { coins: 120, sendable: '22' }); };
+        AX.maker.clampAsks(op, function (r) { T.eq('v1.3: asks are clamped as usual while USDT-paid takes need v1.3', r.pairs.USDT.asks.length, 2); });
         AX.htlc.ETH_FIRST_PAUSED = false;   // the normal clamp below
         var o = O.make(); o.pairs.USDT = pair3();
         H.tokenBalance = function (tok, cb) { cb(null, { coins: 120, sendable: '22' }); };

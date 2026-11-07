@@ -2,6 +2,7 @@
    MiniDapps install with READ trust by default; AtomiX needs WRITE (vault/seedrandom/newscript/txn*).
    checkmode fails fast with a SPECIFIC error; the pending belt catches it when checkmode is unavailable. */
 (function () {
+    function cov(c) { var v13 = String(c).indexOf('version=1.3') >= 0 || String(c).indexOf(AX.htlc.ADDRESS_V13) >= 0; return v13 ? { miniaddress: AX.htlc.ADDRESS_V13, address: AX.htlc.ADDRESS_V13_HEX } : { miniaddress: AX.htlc.ADDRESS, address: AX.htlc.ADDRESS_HEX }; }   // the covenant a scripts/newscript command names
     var saved = globalThis.MDS;
     function hex(n, b) { return '0x' + b.repeat(n); }
 
@@ -17,7 +18,7 @@
                 // The node answers a script query by ADDRESS with the row (or a failure when unknown); a fresh
                 // node knows nothing, so boot must register and the node reports the address it computed.
                 if (c.indexOf('scripts address:') === 0) return cb({ status: false, error: 'script not found' });
-                if (c.indexOf('newscript') === 0) return cb({ status: true, response: { miniaddress: AX.htlc.ADDRESS, address: AX.htlc.ADDRESS_HEX, track: false } });
+                if (c.indexOf('newscript') === 0) { var cv = cov(c); cv.track = false; return cb({ status: true, response: cv }); }
                 if (c.indexOf('txnlist') === 0) return cb({ status: true, response: [] });
                 if (c.indexOf('getaddress') === 0) return cb({ status: true, response: { miniaddress: 'MxTEST', address: '0xADDR', publickey: '0xPUB' } });
                 cb({ status: true, response: [] });

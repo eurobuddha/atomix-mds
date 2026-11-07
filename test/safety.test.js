@@ -1,4 +1,5 @@
 (function () {
+    function cov(c) { var v13 = String(c).indexOf('version=1.3') >= 0 || String(c).indexOf(AX.htlc.ADDRESS_V13) >= 0; return v13 ? { miniaddress: AX.htlc.ADDRESS_V13, address: AX.htlc.ADDRESS_V13_HEX } : { miniaddress: AX.htlc.ADDRESS, address: AX.htlc.ADDRESS_HEX }; }   // the covenant a scripts/newscript command names
     var H = AX.htlc, M = AX.mds, saved = M.cmdR, deleted = M.cmd, commands = [], failure = '', successes = 0;
     var balance = { coins: '54', sendable: '100', confirmed: '100', unconfirmed: '0' };
     var valid = { valid: { basic: true, mmrproofs: true, scripts: 1 }, validamounts: true, allsignaturesvalid: true, validtransaction: true };
@@ -8,7 +9,7 @@
     M.cmdR = function (command, done) {
         commands.push(command);
         var response = command.indexOf('balance ') === 0 ? balance : command.indexOf('coins ') === 0 ? [] : command.indexOf('txncheck ') === 0 ? valid
-            : command.indexOf('scripts address:') === 0 ? { miniaddress: H.ADDRESS, address: H.ADDRESS_HEX } : { txpowid: '0x' + '55'.repeat(32) };
+            : command.indexOf('scripts address:') === 0 ? cov(command) : { txpowid: '0x' + '55'.repeat(32) };
         done(null, response, { status: true, response: response });
     };
     try {
