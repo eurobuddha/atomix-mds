@@ -13,9 +13,9 @@
     function stub(o, n, f) { undo.push([o, n, o[n]]); o[n] = f; }
     function restore() { for (var i = undo.length - 1; i >= 0; i--) undo[i][0][undo[i][1]] = undo[i][2]; undo = []; }
     var HASH = '0x' + '22'.repeat(32), USDT = TR.USDT_TOKENID;
-    var coin = { coinid: '0xC', tokenid: USDT, tokenamount: '5', state: { '0': '0xMAKER', '2': '[ETH:' + EO.NET.usdt + ']', '3': '999999', '4': '0xMYPK', '5': HASH } };
+    var coin = { coinid: '0xC', tokenid: USDT, tokenamount: '5', state: { '0': '0x0A0A', '2': '[ETH:' + EO.NET.usdt + ']', '3': '999999', '4': '0x0B0B', '5': HASH, '1': '1', '6': '0x01' } };
     // H.claim's MA-19 guards reject non-hex state keys, so the direct H.claim checks use hex owner/receiver keys.
-    var hexCoin = { coinid: '0xC', tokenid: USDT, tokenamount: '5', state: { '0': '0xAA', '2': '[ETH:' + EO.NET.usdt + ']', '3': '999999', '4': '0xBB', '5': HASH } };
+    var hexCoin = { coinid: '0xC', tokenid: USDT, tokenamount: '5', state: { '0': '0xAA', '2': '[ETH:' + EO.NET.usdt + ']', '3': '999999', '4': '0xBB', '5': HASH, '1': '1', '6': '0x01' } };
 
     // ---------- H.claim: txncheck "scripts 0 of 1" → SCRIPT_MISSING → one newscript → rebuilt → posted ----------
     (function () {
@@ -118,7 +118,7 @@
         var calls = [], notes = [], now = 1000;
         ST._reset(); ST._setNow(function () { return now * 1000; });
         ST.configure({ rpc: { latestBlockTimestamp: function (cb) { cb(null, 2000000000); } }, ethPriv: '0x' + '11'.repeat(32), ethAddr: '0xETH',
-            myMinimaPk: '0xMYPK', myMinimaAddr: 'MxADDR', notify: function (t, b) { notes.push(t + '|' + b); }, onSwapsChanged: function () {} });
+            myMinimaPk: '0x0B0B', myMinimaAddr: 'MxADDR', notify: function (t, b) { notes.push(t + '|' + b); }, onSwapsChanged: function () {} });
         baseDbStubs([{ hash: HASH, myLegIsMinima: false, status: 'LOCKED' }], calls);
         var attempts = 0, failWith = function () { var e = new Error('Contract rejected the transaction. Nothing was posted.'); e.step = 'txncheck'; return e; };
         stub(H, 'claim', function (c, h, s, addr, cb) { attempts++; cb(failWith()); });
@@ -158,8 +158,8 @@
         var calls = [], notes = [], now = 1000;
         ST._reset(); ST._setNow(function () { return now * 1000; });
         ST.configure({ rpc: { latestBlockTimestamp: function (cb) { cb(null, 2000000000); } }, ethPriv: '0x' + '11'.repeat(32), ethAddr: '0xETH',
-            myMinimaPk: '0xMYPK', myMinimaAddr: 'MxADDR', notify: function (t, b) { notes.push(t + '|' + b); }, onSwapsChanged: function () {} });
-        var mine = { coinid: '0xD', tokenid: USDT, tokenamount: '5', state: { '0': '0xMYPK', '3': '50', '4': '0xTAKER', '5': HASH } };
+            myMinimaPk: '0x0B0B', myMinimaAddr: 'MxADDR', notify: function (t, b) { notes.push(t + '|' + b); }, onSwapsChanged: function () {} });
+        var mine = { coinid: '0xD', tokenid: USDT, tokenamount: '5', state: { '0': '0x0B0B', '3': '50', '4': '0x0C0C', '5': HASH, '1': '1', '2': '[minima]', '6': '0x01' } };
         baseDbStubs([{ hash: HASH, myLegIsMinima: true, status: 'STARTED', myTimelock: 50 }], calls);
         stub(H, 'scanByHashDeep', function (h, ca, d, cb) { cb(null, [mine]); });
         stub(DB, 'getSecret', function (h, cb) { cb(null, null); });

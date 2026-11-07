@@ -31,7 +31,7 @@
 
         // (1) a priced open lock is ingested; an unpriced coin is skipped
         scanCoins = [
-            { coinid: '0xC1', tokenamount: '10', created: 500, state: { '0': '0xO', '1': '9.9', '2': '[ETH:x]', '3': '600', '4': '0xR', '5': HASH } },
+            { coinid: '0xC1', tokenamount: '10', created: 500, state: { '0': '0xO', '1': '9.9', '2': '[ETH:x]', '3': '600', '4': '0xR', '5': HASH, '6': '0x01' } },
             { coinid: '0xC2', tokenamount: '10', created: 500, state: { '1': 'garbage', '5': HASH } }
         ];
         MK.poll(510, function () { });

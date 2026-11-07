@@ -14,7 +14,7 @@
     try {
         // ---------- startSell (MINIMA_TO_ERC20) ----------
         E.configure({ rpc: { latestBlockTimestamp: function (cb) { cb(null, 1700000000); } },
-            ethPriv: '0x' + '11'.repeat(32), ethAddr: '0xMYETH', myMinimaPk: '0xMYPK' });
+            ethPriv: '0x' + '11'.repeat(32), ethAddr: '0xMYETH', myMinimaPk: '0x0B0B' });
         var log = [], lockParams = null;
         stub(DB, 'insertSecret', function (h, s, cb) { log.push('secret'); cb(null, true); });
         stub(DB, 'insertMyHtlc', function (h, a, t, cb) { log.push('myhtlc'); cb(null); });
@@ -36,14 +36,14 @@
         T.eq('SELL lock receiver=maker mpk', lockParams.receiverPubkey, '0xMAKERMPK');
         T.eq('SELL lock owner-eth', lockParams.ownerEthKey, '0xMYETH');
         T.eq('SELL lock timelock = block+144', lockParams.timelockBlock, 1144);
-        T.eq('SELL lock myPubkey', lockParams.myPubkey, '0xMYPK');
+        T.eq('SELL lock myPubkey', lockParams.myPubkey, '0x0B0B');
         T.eq('SELL lock tokenId = active(mxUSDT)', lockParams.tokenId, TR.MXUSDT.tokenId);
         T.eq('SELL swap direction + legIsMinima', [log._swap.direction, log._swap.myLegIsMinima], ['MINIMA_TO_ERC20', true]);
         restore();
 
         // ---------- startBuy (ERC20_TO_MINIMA), allowance already MAX ----------
         E.configure({ rpc: { latestBlockTimestamp: function (cb) { cb(null, 1700000000); } },
-            ethPriv: '0x' + '11'.repeat(32), ethAddr: '0xMYETH', myMinimaPk: '0xMYPK' });
+            ethPriv: '0x' + '11'.repeat(32), ethAddr: '0xMYETH', myMinimaPk: '0x0B0B' });
         E._resetApprovals();
         var blog = [], ncArgs = null;
         stub(DB, 'insertSecret', function (h, s, cb) { blog.push('secret'); cb(null, true); });
@@ -65,7 +65,7 @@
         E.startBuy(maker, 'USDT', '5', '4.95', false, function (e, hash) { buyDone = { e: e, hash: hash }; });
         T.ok('startBuy ok', buyDone && !buyDone.e && buyDone.hash === HASH);
         T.eq('BUY op order', blog.slice(), ['secret', 'myhtlc:4.95:minima', 'upsert', 'event']);
-        T.eq('BUY newContract sender=myMinimaPk', ncArgs.mpk, '0xMYPK');
+        T.eq('BUY newContract sender=myMinimaPk', ncArgs.mpk, '0x0B0B');
         T.eq('BUY newContract receiver=maker eth', ncArgs.recv, '0xMAKERETH');
         T.eq('BUY newContract sellRaw 5 USDT @6dp', String(ncArgs.sell), '5000000');
         T.eq('BUY newContract reqRaw 4.95 @18dp', String(ncArgs.req), '4950000000000000000');
@@ -76,7 +76,7 @@
 
         // ---------- startBuy allowance short → approve submitted, retry asked ----------
         E.configure({ rpc: { latestBlockTimestamp: function (cb) { cb(null, 1700000000); } },
-            ethPriv: '0x' + '11'.repeat(32), ethAddr: '0xMYETH', myMinimaPk: '0xMYPK' });
+            ethPriv: '0x' + '11'.repeat(32), ethAddr: '0xMYETH', myMinimaPk: '0x0B0B' });
         E._resetApprovals();
         var approved = null;
         stub(EO, 'make', function () {
@@ -92,8 +92,8 @@
         restore();
 
         // ---------- confirmMyLock ----------
-        E.configure({ rpc: {}, ethPriv: '0x' + '11'.repeat(32), ethAddr: '0xMYETH', myMinimaPk: '0xMYPK' });
-        stub(H, 'scanByHash', function (hash, ca, depth, cb) { cb(null, [{ state: { '0': '0xMYPK', '5': HASH } }]); });
+        E.configure({ rpc: {}, ethPriv: '0x' + '11'.repeat(32), ethAddr: '0xMYETH', myMinimaPk: '0x0B0B' });
+        stub(H, 'scanByHash', function (hash, ca, depth, cb) { cb(null, [{ state: { '0': '0x0B0B', '5': HASH, '1': '1', '2': '[minima]', '6': '0x01' } }]); });
         E.confirmMyLock(HASH, true, function (found) { T.eq('confirm SELL lock present', found, true); });
         restore();
         stub(H, 'scanByHash', function (hash, ca, depth, cb) { cb(null, []); });

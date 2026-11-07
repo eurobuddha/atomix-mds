@@ -31,7 +31,7 @@
         stub(DB, 'getSwap', function (h, cb) { cb(null, { hash: h, status: 'STARTED', buyToken: 'USDT' }); });
     }
     function cfg() { ST._reset(); ST.configure({ rpc: { latestBlockTimestamp: function (cb) { cb(null, 2000000000); } },
-        ethPriv: '0x' + '11'.repeat(32), ethAddr: '0xETH', myMinimaPk: '0xMYPK', myMinimaAddr: 'MxADDR',
+        ethPriv: '0x' + '11'.repeat(32), ethAddr: '0xETH', myMinimaPk: '0x0B0B', myMinimaAddr: 'MxADDR',
         notify: function () {}, onSwapsChanged: function () {} }); }
 
     try {
@@ -39,7 +39,7 @@
         cfg();
         var calls = [];
         baseDbStubs([{ hash: HASH, myLegIsMinima: false, status: 'STARTED' }], '0xSECRET', { reqAmount: '4.95', reqToken: 'minima' }, calls);
-        var coin = { coinid: '0xC', tokenid: USDT, tokenamount: '4.95', state: { '0': '0xMAKER', '2': '[ETH:' + EO.NET.usdt + ']', '3': '999999', '4': '0xMYPK', '5': HASH } };
+        var coin = { coinid: '0xC', tokenid: USDT, tokenamount: '4.95', state: { '0': '0x0A0A', '2': '[ETH:' + EO.NET.usdt + ']', '3': '999999', '4': '0x0B0B', '5': HASH, '1': '1', '6': '0x01' } };
         stub(H, 'currentBlock', function (cb) { cb(null, 100); });
         stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, [coin]); });
         stub(H, 'scanByHashDeep', function (h, ca, d, cb) { cb(null, [coin]); });   // claim discovery is DEEP (0.1.17)
@@ -58,7 +58,7 @@
         cfg();
         var c2 = [];
         baseDbStubs([{ hash: HASH, myLegIsMinima: false, status: 'STARTED' }], '0xSECRET', { reqAmount: '4.95', reqToken: 'minima' }, c2);
-        var shortCoin = { coinid: '0xC', tokenid: USDT, tokenamount: '4.90', state: { '0': '0xMAKER', '2': '[minima]', '3': '999999', '4': '0xMYPK', '5': HASH } };
+        var shortCoin = { coinid: '0xC', tokenid: USDT, tokenamount: '4.90', state: { '0': '0x0A0A', '2': '[minima]', '3': '999999', '4': '0x0B0B', '5': HASH, '1': '1', '6': '0x01' } };
         stub(H, 'currentBlock', function (cb) { cb(null, 100); });
         stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, [shortCoin]); });
         stub(H, 'scanByHashDeep', function (h, ca, d, cb) { cb(null, [shortCoin]); });
@@ -80,7 +80,7 @@
         var withdrew = null;
         stub(EO, 'make', function () {
             return {
-                getContract: function (cid, cb) { cb(null, { receiver: '0xeth', owner: '0xMAKER', amount: 5000000n, tokenContract: EO.NET.usdt, timelock: 3000000000, withdrawn: false, refunded: false }); },
+                getContract: function (cid, cb) { cb(null, { receiver: '0xeth', owner: '0x0A0A', amount: 5000000n, tokenContract: EO.NET.usdt, timelock: 3000000000, withdrawn: false, refunded: false }); },
                 withdraw: function (cid, secret, cb) { withdrew = { cid: cid, secret: secret }; c3.push('withdraw'); cb(null, '0xETX'); }
             };
         });
@@ -96,7 +96,7 @@
         stub(H, 'currentBlock', function (cb) { cb(null, 100); });
         stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, []); });
         stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });
-        stub(EO, 'make', function () { return { getContract: function (cid, cb) { cb(null, { receiver: '0xeth', owner: '0xMAKER', amount: 5000000n, withdrawn: true, refunded: false, timelock: 3000000000 }); } }; });
+        stub(EO, 'make', function () { return { getContract: function (cid, cb) { cb(null, { receiver: '0xeth', owner: '0x0A0A', amount: 5000000n, withdrawn: true, refunded: false, timelock: 3000000000 }); } }; });
         ST.poll(function () {});
         T.ok('gc.withdrawn → COMPLETE', c4.indexOf('status:COMPLETE') >= 0);
         restore();
@@ -105,7 +105,7 @@
         cfg();
         var c5 = [];
         baseDbStubs([{ hash: HASH, myLegIsMinima: true, status: 'STARTED' }], '0xSECRET', null, c5);
-        var myLock = { coinid: '0xC', tokenid: USDT, tokenamount: '4.95', state: { '0': '0xMYPK', '3': '50', '5': HASH } };
+        var myLock = { coinid: '0xC', tokenid: USDT, tokenamount: '4.95', state: { '0': '0x0B0B', '3': '50', '5': HASH, '1': '1', '2': '[minima]', '6': '0x01' } };
         stub(H, 'currentBlock', function (cb) { cb(null, 100); });   // block 100 > timelock 50
         stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, []); });
         stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, [myLock]); });
@@ -124,7 +124,7 @@
         var c6 = [], clock = 1000000;
         ST._setNow(function () { return clock * 1000; });
         baseDbStubs([{ hash: HASH, myLegIsMinima: true, status: 'STARTED' }], '0xSECRET', null, c6);
-        var deadLock = { coinid: '0xC', tokenid: USDT, tokenamount: '4.95', state: { '0': '0xMYPK', '3': '50', '5': HASH } };
+        var deadLock = { coinid: '0xC', tokenid: USDT, tokenamount: '4.95', state: { '0': '0x0B0B', '3': '50', '5': HASH, '1': '1', '2': '[minima]', '6': '0x01' } };
         stub(H, 'currentBlock', function (cb) { cb(null, 100); });
         stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, []); });
         stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, [deadLock]); });
@@ -147,7 +147,7 @@
         cfg();
         var c7 = [], deepArgs = null;
         baseDbStubs([{ hash: HASH, myLegIsMinima: true, status: 'ERROR', myTimelock: 50 }], '0xSECRET', null, c7);
-        var oldLock = { coinid: '0xC', tokenid: USDT, tokenamount: '4.95', state: { '0': '0xMYPK', '3': '50', '5': HASH } };
+        var oldLock = { coinid: '0xC', tokenid: USDT, tokenamount: '4.95', state: { '0': '0x0B0B', '3': '50', '5': HASH, '1': '1', '2': '[minima]', '6': '0x01' } };
         stub(H, 'currentBlock', function (cb) { cb(null, 2000); });     // 1950 blocks past the timelock
         stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, []); });
         stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });            // shallow scan is blind
@@ -213,7 +213,7 @@
         stub(DB, 'logEvent', function (h, ev, tok, amt, note, cb) { r1.push('log:' + ev); cb && cb(null); });
         stub(DB, 'setSwapStatus', function (h, s, cb) { r1.push('status:' + s); cb && cb(null); });
         stub(DB, 'getSwap', function (h, cb) { cb(null, { hash: h, status: 'LOCKED', buyToken: 'mxUSDT' }); });
-        var takerCoin = { coinid: '0xC', tokenid: USDT, tokenamount: '5', state: { '0': '0xTAKER', '2': '[ETH:' + EO.NET.usdt + ']', '3': '999999', '4': '0xMYPK', '5': HASH } };
+        var takerCoin = { coinid: '0xC', tokenid: USDT, tokenamount: '5', state: { '0': '0x0C0C', '2': '[ETH:' + EO.NET.usdt + ']', '3': '999999', '4': '0x0B0B', '5': HASH, '1': '1', '6': '0x01' } };
         stub(H, 'currentBlock', function (cb) { cb(null, 100); });
         stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, [takerCoin]); });
         stub(H, 'scanByHashDeep', function (h, ca, d, cb) { cb(null, [takerCoin]); });
@@ -298,8 +298,8 @@
         stub(DB, 'logEvent', function (h, ev, tok, amt, note, cb) { events4[ev] = 1; r4.push('log:' + ev + ':' + note); cb && cb(null); });
         stub(DB, 'setSwapStatus', function (h, s, cb) { r4.push('status:' + s); cb && cb(null); });
         stub(DB, 'getSwap', function (h, cb) { cb(null, { hash: h, status: 'STARTED', buyToken: 'mxUSDT' }); });
-        var poisonCoin = { coinid: '0xBAD', tokenid: USDT, tokenamount: '0.1', state: { '0': '0xATTACKER', '2': '[minima]', '3': '999999', '4': '0xMYPK', '5': HASH } };
-        var realCoin = { coinid: '0xGOOD', tokenid: USDT, tokenamount: '4.95', state: { '0': '0xMAKER', '2': '[minima]', '3': '999999', '4': '0xMYPK', '5': HASH } };
+        var poisonCoin = { coinid: '0xBAD', tokenid: USDT, tokenamount: '0.1', state: { '0': '0x0D0D', '2': '[minima]', '3': '999999', '4': '0x0B0B', '5': HASH, '1': '1', '6': '0x01' } };
+        var realCoin = { coinid: '0xGOOD', tokenid: USDT, tokenamount: '4.95', state: { '0': '0x0A0A', '2': '[minima]', '3': '999999', '4': '0x0B0B', '5': HASH, '1': '1', '6': '0x01' } };
         stub(H, 'currentBlock', function (cb) { cb(null, 100); });
         stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, [poisonCoin, realCoin]); });   // poison seen FIRST
         stub(H, 'scanByHashDeep', function (h, ca, d, cb) { cb(null, [poisonCoin, realCoin]); });

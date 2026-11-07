@@ -11,7 +11,7 @@
     function stub(o, n, f) { undo.push([o, n, o[n]]); o[n] = f; }
     function restore() { for (var i = undo.length - 1; i >= 0; i--) undo[i][0][undo[i][1]] = undo[i][2]; undo = []; }
     var HASH = '0x' + '22'.repeat(32), USDT = TR.USDT_TOKENID;
-    var coin = { coinid: '0xC', tokenid: USDT, tokenamount: '5', state: { '0': '0xAA', '2': '[ETH:' + EO.NET.usdt + ']', '3': '999999', '4': '0xBB', '5': HASH } };
+    var coin = { coinid: '0xC', tokenid: USDT, tokenamount: '5', state: { '0': '0xAA', '2': '[ETH:' + EO.NET.usdt + ']', '3': '999999', '4': '0xBB', '5': HASH, '1': '1', '6': '0x01' } };
     function run(fn) {
         var cmds = [];
         stub(M, 'cmd', function (c, cb) { cmds.push(c); cb && cb({ status: true, response: [] }); });

@@ -9,13 +9,13 @@
     var HASH = '0x' + '33'.repeat(32), ME = '0x' + 'ab'.repeat(20);
     var swapRow = { hash: HASH, role: 'RESPONDER', direction: 'MINIMA_TO_ERC20', myLegIsMinima: false, status: 'CLAIMING',
         sellAmount: '4.95', sellToken: 'USDT', buyAmount: '5', buyToken: 'mxUSDT', myTimelock: 1000, contractId: '0xCID' };
-    var cpCoin = { coinid: '0xC', tokenid: AX.trading.USDT_TOKENID, tokenamount: '5', state: { '0': '0xMAKER', '3': '150', '4': '0xMYPK', '5': HASH } };
+    var cpCoin = { coinid: '0xC', tokenid: AX.trading.USDT_TOKENID, tokenamount: '5', state: { '0': '0x0A0A', '3': '150', '4': '0x0B0B', '5': HASH, '1': '1', '2': '[minima]', '6': '0x01' } };
 
     function scenario(o) {
         var calls = [], notes = [], now = o.now || 5000, status = o.status || 'CLAIMING';
         ST._reset(); ST._setNow(function () { return now * 1000; });
         ST.configure({ rpc: { latestBlockTimestamp: function (cb) { cb(null, 2000000000); } }, ethPriv: '0x' + '11'.repeat(32), ethAddr: ME,
-            myMinimaPk: '0xMYPK', myMinimaAddr: 'MxADDR', notify: function (t, b) { notes.push(t + '|' + b); }, onSwapsChanged: function () {} });
+            myMinimaPk: '0x0B0B', myMinimaAddr: 'MxADDR', notify: function (t, b) { notes.push(t + '|' + b); }, onSwapsChanged: function () {} });
         var row = {}; for (var k in swapRow) row[k] = swapRow[k]; row.status = status;
         stub(DB, 'allSwaps', function (cb) { cb(null, [row]); });
         stub(DB, 'getSwap', function (h, cb) { cb(null, row); });
