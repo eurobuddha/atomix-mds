@@ -1,3 +1,5 @@
+// review 7 Nov: these suites drive the ETH-first lock path, which ships PAUSED (AX.htlc.ETH_FIRST_PAUSED) until HTLC v1.3
+var __ethFirstWas = AX.htlc.ETH_FIRST_PAUSED; AX.htlc.ETH_FIRST_PAUSED = false;
 /* responder — the fund-safety accept-guards (auto-lock ONLY if a take fits my ladder) + coin selection. */
 (function () {
     var R = AX.responder, O = AX.order, D = AX.dec, EO = AX.ethops, TR = AX.trading;
@@ -138,3 +140,4 @@
     T.eq('keeper run: a failure frees the keeper', (t += 121000, R.keepWallet(function () {}), sent.length), 3);
     H.tokenBalance = origBal; AX.mds.cmdR = origCmd; R._reset(); R._resetKeeper(); R._setNow(Date.now); R.configure(null);
 })();
+AX.htlc.ETH_FIRST_PAUSED = __ethFirstWas;
