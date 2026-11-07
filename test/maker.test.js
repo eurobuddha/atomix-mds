@@ -1,3 +1,5 @@
+// review 7 Nov: this suite drives normal ask publishing, which ships PAUSED (AX.htlc.ETH_FIRST_PAUSED) until HTLC v1.3
+var __ethFirstWasM = AX.htlc.ETH_FIRST_PAUSED; AX.htlc.ETH_FIRST_PAUSED = false;
 /* maker — build order from config, publish (pegged + manual), tombstone, keep-alive/reprice, currency switch. */
 (function () {
     var MK = AX.maker, O = AX.order, B = AX.book, PEG = AX.peg, TR = AX.trading, MDS = AX.mds;
@@ -120,3 +122,4 @@
         MDS.kvGet = savedGet; MDS.kvSet = savedSet; MDS.kvDel = savedDel; B.publishFresh = savedPub;
     }
 })();
+AX.htlc.ETH_FIRST_PAUSED = __ethFirstWasM;

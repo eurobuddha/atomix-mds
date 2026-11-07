@@ -67,8 +67,14 @@
     T.ok('trim to zero ALSO clears the legacy scalar (no synthetic resurrect)', p.asks.length === 0 && p.buy === 0);
 
     // clampAsks: cumulative backing over combined coins; read-failure fails SAFE to 1
-    var savedFree = H.tokenBalance;
+    var savedFree = H.tokenBalance, savedPause = AX.htlc.ETH_FIRST_PAUSED;
     try {
+        // review 7 Nov (R3-3): while ETH-first takes are paused the maker advertises NO asks
+        AX.htlc.ETH_FIRST_PAUSED = true;
+        var op = O.make(); op.pairs.USDT = pair3();
+        H.tokenBalance = function () { throw new Error('a paused maker must not even read its balance for asks'); };
+        AX.maker.clampAsks(op, function (r) { T.eq('paused: no asks advertised', r.pairs.USDT.asks.length, 0); T.eq('paused: legacy ask scalar cleared', r.pairs.USDT.buy, 0); });
+        AX.htlc.ETH_FIRST_PAUSED = false;   // the normal clamp below
         var o = O.make(); o.pairs.USDT = pair3();
         H.tokenBalance = function (tok, cb) { cb(null, { coins: 120, sendable: '22' }); };
         AX.maker.clampAsks(o, function (r) {
@@ -82,7 +88,7 @@
         var o3 = O.make(); var single = O.pair(true, 0, 0, 0); single.asks = [O.level(1.0, 10)]; o3.pairs.USDT = single;
         H.tokenBalance = function () { throw new Error('must not be called for a single-tranche ladder'); };
         AX.maker.clampAsks(o3, function (r) { T.eq('clamp: single tranche skips the coin read', r.pairs.USDT.asks.length, 1); });
-    } finally { H.tokenBalance = savedFree; }
+    } finally { H.tokenBalance = savedFree; AX.htlc.ETH_FIRST_PAUSED = savedPause; }
 
     // ---- inspect report builder (pure) ----
     var swap = { status: 'STARTED', role: 'INITIATOR', direction: 'MINIMA_TO_ERC20', sellAmount: '6.5', sellToken: 'mxUSDT',
