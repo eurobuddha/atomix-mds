@@ -1,5 +1,6 @@
 // review 7 Nov: these suites drive the ETH-first lock path, which ships PAUSED (AX.htlc.ETH_FIRST_PAUSED) until HTLC v1.3
 var __ethFirstWas = AX.htlc.ETH_FIRST_PAUSED; AX.htlc.ETH_FIRST_PAUSED = false;
+var __xcheckWas = AX.settle && AX.settle.secondEndpointAgrees; if (AX.settle) AX.settle.secondEndpointAgrees = function (cid, c, cb) { cb(true); };   // this suite tests the lock logic, not the RPC cross-check
 /* swap-status visibility (0.1.39, native 0.1.84 SwapStatusVisibilityTest) — live 2026-10-26: a maker declined a
  * buy (TOO_MANY_COINS) in silence and the taker saw "started" for two hours. Covers: maker decline recording
  * (dedupe, notice cap, every former silent skip in processIncomingBuy), the sealed notice round trip + taker
@@ -251,3 +252,4 @@ var __ethFirstWas = AX.htlc.ETH_FIRST_PAUSED; AX.htlc.ETH_FIRST_PAUSED = false;
     }
 })();
 AX.htlc.ETH_FIRST_PAUSED = __ethFirstWas;
+if (AX.settle) AX.settle.secondEndpointAgrees = __xcheckWas;

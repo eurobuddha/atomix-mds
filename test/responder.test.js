@@ -1,5 +1,6 @@
 // review 7 Nov: these suites drive the ETH-first lock path, which ships PAUSED (AX.htlc.ETH_FIRST_PAUSED) until HTLC v1.3
 var __ethFirstWas = AX.htlc.ETH_FIRST_PAUSED; AX.htlc.ETH_FIRST_PAUSED = false;
+var __xcheckWas = AX.settle && AX.settle.secondEndpointAgrees; if (AX.settle) AX.settle.secondEndpointAgrees = function (cid, c, cb) { cb(true); };   // this suite tests the lock logic, not the RPC cross-check
 /* responder — the fund-safety accept-guards (auto-lock ONLY if a take fits my ladder) + coin selection. */
 (function () {
     var R = AX.responder, O = AX.order, D = AX.dec, EO = AX.ethops, TR = AX.trading;
@@ -141,3 +142,4 @@ var __ethFirstWas = AX.htlc.ETH_FIRST_PAUSED; AX.htlc.ETH_FIRST_PAUSED = false;
     H.tokenBalance = origBal; AX.mds.cmdR = origCmd; R._reset(); R._resetKeeper(); R._setNow(Date.now); R.configure(null);
 })();
 AX.htlc.ETH_FIRST_PAUSED = __ethFirstWas;
+if (AX.settle) AX.settle.secondEndpointAgrees = __xcheckWas;
