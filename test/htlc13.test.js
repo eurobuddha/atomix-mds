@@ -11,9 +11,9 @@
     try {
         // ---- the script ----
         T.eq('v1.3 = v1.2 + the length check only',
-            H.SCRIPT_V13.replace('LET version=1.3 ', '').replace('ASSERT LEN(secret) EQ 32 ', ''), H.SCRIPT.replace('LET version=1.2 ', ''));
+            H.SCRIPT_V13.replace('LET version=1.3 ', '').replace('ASSERT HEX(secret) EQ secret ASSERT LEN(secret) EQ 32 ', ''), H.SCRIPT.replace('LET version=1.2 ', ''));
         T.ok('the check precedes SHA2(secret); the refund branch precedes the check',
-            H.SCRIPT_V13.indexOf('LEN(secret)') < H.SCRIPT_V13.indexOf('SHA2(secret)')
+            H.SCRIPT_V13.indexOf('ASSERT HEX(secret) EQ secret ASSERT LEN(secret)') > 0 && H.SCRIPT_V13.indexOf('LEN(secret)') < H.SCRIPT_V13.indexOf('SHA2(secret)')
             && H.SCRIPT_V13.indexOf('SIGNEDBY(owner) AND (@BLOCK GT timelock)') < H.SCRIPT_V13.indexOf('LEN(secret)'));
         T.ok('both addresses are HTLC addresses', H.isHtlcAddress(H.ADDRESS) && H.isHtlcAddress(H.ADDRESS_V13) && H.isHtlcAddress(H.ADDRESS_V13_HEX) && !H.isHtlcAddress('MxOTHER'));
 
