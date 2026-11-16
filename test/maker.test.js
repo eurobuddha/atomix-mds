@@ -52,6 +52,8 @@ var __ethFirstWasM = AX.htlc.ETH_FIRST_PAUSED; AX.htlc.ETH_FIRST_PAUSED = false;
         T.eq('manual ladder bid', published[0].pairs.USDT.bids[0].p, 0.98);
         T.eq('manual ladder ask', published[0].pairs.USDT.asks[0].p, 1.02);
         T.eq('manual scalar mirrors best', [published[0].pairs.USDT.buy, published[0].pairs.USDT.sell], [1.02, 0.98]);
+        T.eq('a live manual publish clears the withdrawn flag the tombstone set', MK._state().state.withdrawn, false);
+        T.eq('…and it is persisted (the screen reads peg_state)', JSON.parse(kv[Object.keys(kv).filter(function (k) { return /^peg_state/.test(k); })[0]]).withdrawn, false);
 
         // ---- keep-alive: reprice when the mid moved past the threshold ----
         PEG._reset(); PEG._setPrice(1.0, 0);
