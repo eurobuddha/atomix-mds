@@ -30,6 +30,15 @@
     var ob = mkOrder();
     P.applyPeg(ob, { enable: true, step: 2, size: 10, bias: 0, levels: 2, spread: 999 });
     T.eq('spread is capped at 40% (first rungs at ±20%)', [ob.pairs.USDT.asks[0].p, ob.pairs.USDT.bids[0].p], [1.2, 0.8]);
+    // ---- randomised sizes: whole numbers within +-rand % of the size, fixed by the seed, different per rung and side ----
+    var sizesOf = function (seed, rand) { var o = mkOrder(); P.applyPeg(o, { enable: true, step: 1, askSize: 5000, bidSize: 5000, bias: 0, levels: 6, rand: rand, randSeed: seed }); return { a: o.pairs.USDT.asks.map(function (x) { return x.a; }), b: o.pairs.USDT.bids.map(function (x) { return x.a; }) }; };
+    var z1 = sizesOf(7, 20), z2 = sizesOf(7, 20), z3 = sizesOf(8, 20), z0 = sizesOf(7, 0);
+    T.eq('same seed, same sizes (a republish changes nothing)', z1, z2);
+    T.eq('a new seed gives a new set', JSON.stringify(z1) !== JSON.stringify(z3), true);
+    T.eq('rand 0: every rung exactly the size', z0.a.concat(z0.b), [5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000]);
+    T.eq('all whole numbers within +-20%', z1.a.concat(z1.b).every(function (v) { return v === Math.round(v) && v >= 4000 && v <= 6000; }), true);
+    T.eq('the rungs differ from each other', z1.a.filter(function (v, i, arr) { return arr.indexOf(v) === i; }).length > 2, true);
+    T.eq('bids are not a mirror of the offers', JSON.stringify(z1.a) !== JSON.stringify(z1.b), true);
     // sanitize re-derives the wire scalars from the best level (buy=ASK, sell=BID) for legacy scalar-only peers.
     T.eq('scalar mirrors best level (buy=ask, sell=bid)', [o1.pairs.USDT.buy, o1.pairs.USDT.sell], [1.01, 0.99]);
 
