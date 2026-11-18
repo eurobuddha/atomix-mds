@@ -19,6 +19,17 @@
     T.eq('ask = mid*(1+1%)', o1.pairs.USDT.asks[0].p, 1.01);
     T.eq('bid = mid*(1-1%)', o1.pairs.USDT.bids[0].p, 0.99);
     T.eq('ask size', o1.pairs.USDT.asks[0].a, 10);
+    // ---- spread: the first rung of each side sits spread/2 from the mid, every further rung adds one step ----
+    var os = mkOrder();
+    P.applyPeg(os, { enable: true, step: 1, size: 10, bias: 0, levels: 3, spread: 3 });
+    T.eq('spread 3%: offers at +1.5, +2.5, +3.5', os.pairs.USDT.asks.map(function (x) { return x.p; }), [1.015, 1.025, 1.035]);
+    T.eq('spread 3%: bids at -1.5, -2.5, -3.5', os.pairs.USDT.bids.map(function (x) { return x.p; }), [0.985, 0.975, 0.965]);
+    var o0 = mkOrder();
+    P.applyPeg(o0, { enable: true, step: 1, size: 10, bias: 0, levels: 3, spread: 0 });
+    T.eq('no spread: the ladder is as it always was (1, 2, 3 steps)', o0.pairs.USDT.asks.map(function (x) { return x.p; }), [1.01, 1.02, 1.03]);
+    var ob = mkOrder();
+    P.applyPeg(ob, { enable: true, step: 2, size: 10, bias: 0, levels: 2, spread: 999 });
+    T.eq('spread is capped at 40% (first rungs at ±20%)', [ob.pairs.USDT.asks[0].p, ob.pairs.USDT.bids[0].p], [1.2, 0.8]);
     // sanitize re-derives the wire scalars from the best level (buy=ASK, sell=BID) for legacy scalar-only peers.
     T.eq('scalar mirrors best level (buy=ask, sell=bid)', [o1.pairs.USDT.buy, o1.pairs.USDT.sell], [1.01, 0.99]);
 
