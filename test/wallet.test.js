@@ -7,7 +7,7 @@
     var GP = 1000000000n;   // 1 gwei
 
     // ---- helpers ----
-    T.eq('shortAddr 8…6', W.shortAddr('0x7373cf1ff0677a59e9ec7d327c1de0dd67dd625e'), '0x7373cf…dd625e');
+    T.ok('RULE 1 (0.1.65): no address-shortening helper', W.shortAddr === undefined);
     T.eq('isEthAddr ok', W.isEthAddr(TO), true);
     T.eq('isEthAddr rejects short', W.isEthAddr('0x1234'), false);
     T.eq('isEthAddr rejects non-hex', W.isEthAddr('0x' + 'zz'.repeat(20)), false);

@@ -11,8 +11,7 @@
     T.eq('abbrev 12000 → 12k (lowercase, native)', fmt.abbrev(12000), '12k');
     T.eq('abbrev only-k (no M): 2.5e6 → 2500k', fmt.abbrev(2500000), '2500k');
     T.eq('abbrev ≤0 → em-dash', fmt.abbrev(0), '—');
-    T.eq('shorten id', fmt.shorten('0xDE6AB35C589E110903ED3E24ED48526318BDCF5CEF03A81571C7BF5669851F07'), '0xDE6AB3…851F07');
-    T.eq('shorten short passthrough', fmt.shorten('0xABCD'), '0xABCD');
+    T.ok('RULE 1 (0.1.65): no identifier-shortening helper', fmt.shorten === undefined);
     // sell 4.95 mxUSDT at bid 0.99 → 4.9005 USDT (floor 6dp)
     T.eq('quoteOut sell', fmt.quoteOut('4.95', 0.99, true), '4.9005');
     // buy: 5 USDT at ask 1.01 → 4.950495 mxUSDT

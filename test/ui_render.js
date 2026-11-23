@@ -97,7 +97,7 @@ AX.ui.closeDialog();
 AX.ui.state.tab = 'wallet'; AX.ui.render();
 ok('wallet: minima balance', root().textContent.indexOf('493.8 mxUSDT') > -1);
 ok('wallet: USDT card', root().textContent.indexOf('8.44 USDT') > -1);
-ok('wallet: ETH address sub-line (8…6)', root().textContent.indexOf('0x7373cf…dd625e') > -1);
+ok('wallet: ETH address sub-line in FULL (RULE 1)', root().textContent.indexOf('0x7373cf1ff0677a59e9ec7d327c1de0dd67dd625e') > -1 && root().textContent.indexOf('…dd625e') < 0);
 ok('wallet: Minima breakdown line', root().textContent.indexOf('confirmed 500.3') > -1 && root().textContent.indexOf('7 coins') > -1);
 ok('wallet: Send pill present', root().textContent.indexOf('↑  Send') > -1);
 ok('wallet: NO stub button behavior text', root().textContent.indexOf('Coming in a later phase') < 0);
