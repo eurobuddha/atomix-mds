@@ -64,6 +64,20 @@ try { w.AX.boot.init(function () { /* async result irrelevant here — jsdom has
 catch (e) { syncThrow = e.message; }
 ok('AX.boot.init reaches the MDS transport without a sync throw' + (syncThrow ? ' (threw: ' + syncThrow + ')' : ''), syncThrow === null);
 
+// A2 (0.1.69): the page never publishes a balance it could not read (Number('—') || 0 published a 0 market)
+{
+    const st = w.AX.ui.state, mb = w.AX.app._makerBalances;
+    st.balsRead = {}; st.balsRaw = { usdtRaw: '0' };
+    ok('makerBalances: nothing read yet → null', mb() === null);
+    st.balsRead = { minima: true, usdt: false }; st.balsRaw = { minimaSendable: '21615.6', usdtRaw: '0' }; st.bals.usdt = '—';
+    ok('makerBalances: USDT read failed → null (not 0)', mb() === null);
+    st.balsRead = { minima: false, usdt: true }; st.balsRaw = { minimaSendable: null, usdtRaw: '8440000' };
+    ok('makerBalances: Minima read failed → null (not 0)', mb() === null);
+    st.balsRead = { minima: true, usdt: true }; st.balsRaw = { minimaSendable: '21615.6123456789', usdtRaw: '8440001' };
+    const b = mb();
+    ok('makerBalances: both read → the exact figures (not the 6dp display)', !!b && b.minima === 21615.6123456789 && b.usdt === 8.440001);
+}
+
 console.log('\n' + (fail === 0 ? '✅ BROWSER CHAIN PASS' : '❌ BROWSER CHAIN FAIL') + ` — ${pass} passed, ${fail} failed`);
 if (fail) { console.log(fails.join('\n')); process.exit(1); }
 process.exit(0);   // exit before jsdom's void-XHR async error noise fires (boot's command has no node to talk to)

@@ -133,6 +133,39 @@ var __ethFirstWasM = AX.htlc.ETH_FIRST_PAUSED; AX.htlc.ETH_FIRST_PAUSED = false;
         MK.keepAlive({ minima: 500, usdt: 500 }, function () {});
         T.eq('keep-alive publishes once the kv agrees', published.length, 1);
         delete kv.trading_currency;
+
+        // ---- A2 (0.1.69): an unreadable balance never disables the dead-feed safety ----
+        var notes = [], tNow = 5e12;
+        MK.configure({ identity: identity, myMinimaPk: '0xMYPK', ethAddr: '0xETH', notify: function (a, b) { notes.push(a + ' | ' + b); }, onOrder: function () {} });
+        MK._setNow(function () { return tNow; }); MK._resetBalanceWatch();
+        T.eq('publish refuses an unread balance (no order stamped 0)', (function () { var e0 = null; published.length = 0; MK.publish(null, function (e) { e0 = e; }); return [!!e0, published.length]; })(), [true, 0]);
+        PEG._reset(); PEG._setPrice(1.0, 0);
+        MK.saveConfig({ pegEnable: true, step: 1, size: 10, levels: 1, reprice: 1 }, { bids: [], asks: [] }, function () {});
+        MK.publish({ minima: 500, usdt: 500 }, function () {});
+        T.ok('pegged market live before the feed dies', MK.currentOrder() && MK.currentOrder().pairs.USDT && MK.currentOrder().pairs.USDT.asks.length === 1);
+        published.length = 0;
+        MK.keepAlive(null, function () {});
+        T.eq('unread balance + fresh price → the market stands, nothing published', published.length, 0);
+        PEG._setPrice(1.0, PEG.HARD_STALE_MS + 60000);   // the feed is now past the hard ceiling: PEG_STALE
+        MK.keepAlive(null, function () {});
+        T.eq('unread balance + PEG_STALE → tombstoned all the same', [published.length, published[0] && published[0].pairs.USDT.en], [1, false]);
+        T.eq('… and marked withdrawn', MK._state().state.withdrawn, true);
+        T.ok('… so takes are declined (armSafe empty)', Object.keys(MK.currentOrder().pairs).length === 0);
+        MK.keepAlive(null, function () {});
+        T.eq('… once: an already-withdrawn market is not tombstoned again every pass', published.length, 1);
+        // reads failing longer than KEEPALIVE_MS: told once, and the live ladder stops answering takes
+        PEG._setPrice(1.0, 0); MK._resetBalanceWatch();
+        MK.publish({ minima: 500, usdt: 500 }, function () {});
+        notes.length = 0; MK.keepAlive(null, function () {});
+        tNow += MK.KEEPALIVE_MS - 1000; MK.keepAlive(null, function () {});
+        T.ok('reads failing < KEEPALIVE_MS → ladder still answers', MK.currentOrder() && MK.currentOrder().pairs.USDT && MK.currentOrder().pairs.USDT.asks.length === 1);
+        T.eq('… and no notice yet', notes.filter(function (n) { return /^Balance unreadable/.test(n); }).length, 0);
+        tNow += 2000; MK.keepAlive(null, function () {}); tNow += 60000; MK.keepAlive(null, function () {});
+        T.eq('reads failing > KEEPALIVE_MS → told exactly once', notes.filter(function (n) { return /^Balance unreadable/.test(n); }).length, 1);
+        T.ok('… and currentOrder() declines every take', Object.keys(MK.currentOrder().pairs).length === 0);
+        MK.keepAlive({ minima: 500, usdt: 500 }, function () {});
+        T.ok('a good read restores the live ladder', MK.currentOrder() && MK.currentOrder().pairs.USDT && MK.currentOrder().pairs.USDT.asks.length === 1);
+        MK._setNow(Date.now); MK._resetBalanceWatch();
     } finally {
         MDS.kvGet = savedGet; MDS.kvSet = savedSet; MDS.kvDel = savedDel; B.publishFresh = savedPub;
     }
