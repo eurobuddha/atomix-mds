@@ -10,7 +10,9 @@
     function mockMds(o) {
         return {
             cmd: function (c, cb) {
-                if (c.indexOf('checkmode') === 0) return cb(o.checkmode || { status: false, error: 'unknown command' });
+                // a plain node has no checkmode (only the MDS host answers it): the real reply
+                if (c.indexOf('checkmode') === 0) return cb(o.checkmode || { status: false, error: 'Command not found' });
+                if (c === 'status') return cb(o.status || { status: true, response: { version: '1.0.45', locked: false } });
                 if (c.indexOf('random size:64') === 0) return cb({ status: true, response: { random: hex(64, 'ab') } });
                 if (c.indexOf('random size:8') === 0) return cb({ status: true, response: { random: hex(8, 'cd') } });
                 if (c.indexOf('vault') === 0) return cb(o.vault || { status: false, error: 'no vault stub' });
@@ -45,6 +47,25 @@
         globalThis.MDS = mockMds({ vault: { status: false, pending: true, response: null } });
         AX.boot.init(function (err) {
             T.ok('pending vault (no checkmode) → permission error', err && err.permission === true);
+        });
+
+        // (C2) 0.1.62 — no checkmode on this host, a password-locked node: `status` says locked:true → the friendly
+        //      locked card, not seedrandom's bare "DB locked!" (the old preflight never looked anywhere but checkmode).
+        globalThis.MDS = mockMds({ status: { status: true, response: { version: '1.0.45', locked: true } },
+            vault: { status: true, response: { seed: hex(32, '11') } }, seedrandom: { status: false, error: 'DB locked!' } });
+        AX.boot.init(function (err) {
+            T.ok('no checkmode + status locked → locked error', err && err.locked === true && !err.permission);
+        });
+        // (C3) belt: no checkmode, status unreadable, seedrandom says "DB locked!" → still the locked card
+        globalThis.MDS = mockMds({ status: { status: false, error: 'busy' }, vault: { status: true, response: { seed: hex(32, '11') } },
+            seedrandom: { status: false, error: 'DB locked!' } });
+        AX.boot.init(function (err) {
+            T.ok('seedrandom "DB locked!" → locked error', err && err.locked === true);
+        });
+        // (C4) no checkmode, an unlocked node → boot proceeds exactly as before
+        globalThis.MDS = mockMds({ vault: { status: true, response: { seed: hex(32, '11') } }, seedrandom: { status: true, response: { seedrandom: hex(32, '22') } } });
+        AX.boot.init(function (err, ctx) {
+            T.ok('no checkmode + unlocked → boot succeeds', !err && !!ctx);
         });
 
         // (D) WRITE mode + real responses → boot completes with identities + a derived ETH address.
