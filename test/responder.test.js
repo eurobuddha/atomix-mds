@@ -112,7 +112,9 @@ var __xcheckWas = AX.settle && AX.settle.secondEndpointAgrees; if (AX.settle) AX
     T.eq('keeper: MINIMA allows up to 120', R.keepPlan(bal(120, 9e5), '0x00', ADDR), null);
     T.eq('keeper: 121 MINIMA coins → merge', R.keepPlan(bal(121, 9e5), '0x00', ADDR).kind, 'merge');
     var s = R.keepPlan(bal(1, 500), MX, ADDR);
-    T.eq('keeper: one coin → split into 10 to myself', s && s.cmd, 'send amount:500 address:0xAA tokenid:' + MX + ' split:10 coinage:3 mine:true');
+    T.eq('keeper: one coin → HALF of it split into 9 to myself (the change coin is the 10th)', s && s.cmd, 'send amount:250 address:0xAA tokenid:' + MX + ' split:9 coinage:3 mine:true');
+    T.eq('keeper: the split names the address it must prove first', s.addr, '0xAA');
+    T.eq('keeper: the half is truncated at 8dp, never rounded', R.keepPlan(bal(1, '10.123456789'), MX, ADDR).cmd.split(' ')[1], 'amount:5.06172839');
     T.eq('keeper: two coins is enough', R.keepPlan(bal(2, 500), MX, ADDR), null);
     T.eq('keeper: dust is never split', R.keepPlan(bal(1, 9), MX, ADDR), null);
     T.eq('keeper: no coins → nothing', R.keepPlan(bal(0, 0), MX, ADDR), null);
@@ -123,8 +125,12 @@ var __xcheckWas = AX.settle && AX.settle.secondEndpointAgrees; if (AX.settle) AX
     // 0.1.62: the commands go through AX.mds to a stand-in that reads them as the REAL node does (split on every ";",
     // trimmed, LAST duplicate parameter wins, send/consolidate refuse coinage < 3 with "Coinage MUST be >= 3"); the old
     // recorder accepted anything, so the keeper's `coinage:1` split (refused by every node) passed here.
+    // 0.1.68: the stand-in also answers the ownership reads the split needs, shaped like the real node: `scripts
+    // address:` throws "Script with that address not found" for an address the wallet does not hold (status:false), and
+    // `keys action:list` returns {keys:[{publickey}], total}. Reads answer at once; signing commands are held.
+    var PK = '0x' + 'C0'.repeat(32), OWNED = { '0XAA': { address: '0xAA', miniaddress: 'MxAA', simple: true, publickey: PK } };
     function realNode() {
-        var n = { ran: [], held: [], refuse: null };
+        var n = { ran: [], held: [], refuse: null, keys: function () { return { keys: [{ publickey: PK }, { publickey: '0x' + 'D1'.repeat(32) }], total: 2 }; } };
         function trim(x) { return x.replace(/^[\u0000- ]+|[\u0000- ]+$/g, ''); }
         function parse(piece) {
             var toks = piece.split(/\s+/), verb = toks.shift().toLowerCase(), p = {};
@@ -134,6 +140,11 @@ var __xcheckWas = AX.settle && AX.settle.secondEndpointAgrees; if (AX.settle) AX
         n.cmd = function (q, cb) {
             var out = String(q).split(';').map(trim).filter(Boolean).map(function (piece) {
                 var c = parse(piece); n.ran.push(piece);
+                if (c.verb === 'scripts') {
+                    var row = OWNED[String(c.p.address).toUpperCase()];
+                    return row ? { status: true, response: row } : { status: false, error: 'Script with that address not found' };
+                }
+                if (c.verb === 'keys') { var k = n.keys(); return k ? { status: true, response: k } : { status: false, error: 'busy' }; }
                 if ((c.verb === 'send' || c.verb === 'consolidate') && Number(c.p.coinage === undefined ? 3 : c.p.coinage) < 3)
                     return { status: false, error: 'Coinage MUST be >= 3' };
                 if (n.refuse) return { status: false, error: n.refuse };
@@ -141,6 +152,7 @@ var __xcheckWas = AX.settle && AX.settle.secondEndpointAgrees; if (AX.settle) AX
             });
             if (out[0]) cb(out[0]); else n.held.push(cb);
         };
+        n.signing = function () { return n.ran.filter(function (x) { return /^(send|consolidate) /.test(x); }); };
         n.answer = function () { n.held.shift()({ status: true, response: { txpowid: '0x' + 'AB'.repeat(32) } }); };
         return n;
     }
@@ -164,30 +176,71 @@ var __xcheckWas = AX.settle && AX.settle.secondEndpointAgrees; if (AX.settle) AX
         // one coin → the split: the node must ACCEPT it (old keeper: coinage:1 → "Coinage MUST be >= 3", every 2-3 min)
         balNow = bal(1, 500);
         R.keepWallet(function () { nexts++; });
-        T.eq('keeper run: the split reaches the node with coinage:3', node.ran[1], 'send amount:500 address:' + ADDR + ' tokenid:' + MX + ' split:10 coinage:3 mine:true');
+        T.eq('keeper run: ownership proven first (scripts, then a complete key list), then the split with coinage:3', node.ran.slice(1),
+            ['scripts address:' + ADDR, 'keys action:list', 'send amount:250 address:' + ADDR + ' tokenid:' + MX + ' split:9 coinage:3 mine:true']);
         T.eq('keeper run: the node accepted the split (reply in flight, not refused)', node.held.length, 1);
         node.answer();
         T.ok('keeper run: a posted split is notified', notes.length === 2 && /^Splitting/.test(notes[1]));
         // a refused op is quiet (log only, no notification) and backs off: 4 min after one failure, 8 after two
         node.refuse = 'Insufficient funds';
         t += 121000; R.keepWallet(function () {});
-        T.eq('keeper run: acts again after the gap', node.ran.length, 3);
+        T.eq('keeper run: acts again after the gap', node.signing().length, 3);
         T.eq('keeper run: a refused op raises no notification', notes.length, 2);
         t += 121000; R.keepWallet(function () {});
-        T.eq('keeper run: after one failure the gap doubles (no retry at 2 min)', node.ran.length, 3);
+        T.eq('keeper run: after one failure the gap doubles (no retry at 2 min)', node.signing().length, 3);
         t += 120000; R.keepWallet(function () {});
-        T.eq('keeper run: retried at 4 min', node.ran.length, 4);
+        T.eq('keeper run: retried at 4 min', node.signing().length, 4);
         t += 241000; R.keepWallet(function () {});
-        T.eq('keeper run: after two failures no retry at 4 min', node.ran.length, 4);
+        T.eq('keeper run: after two failures no retry at 4 min', node.signing().length, 4);
         t += 240000; R.keepWallet(function () {});
-        T.eq('keeper run: retried at 8 min, still quiet', [node.ran.length, notes.length], [5, 2]);
+        T.eq('keeper run: retried at 8 min, still quiet', [node.signing().length, notes.length], [5, 2]);
         node.refuse = null; t += 961000; R.keepWallet(function () {}); node.answer();   // three failures: 16 min
         t += 121000; R.keepWallet(function () {});
-        T.eq('keeper run: a success resets the gap to 2 min', node.ran.length, 7);
+        T.eq('keeper run: a success resets the gap to 2 min', node.signing().length, 7);
     } finally {
         while (node.held.length) node.answer();   // release the signing gate for the suites after this one
         H.tokenBalance = origBal; globalThis.MDS = savedMds; R._reset(); R._resetKeeper(); R._setNow(Date.now); R.configure(null);
     }
+
+    // A1 (0.1.68): a split goes ONLY to an address the node is proven to own, right before the send.
+    function splitRun(addr, tweak) {
+        var nd = realNode(), logs = [];
+        if (tweak) tweak(nd);
+        H.tokenBalance = function (tok, cb) { cb(null, bal(1, 500)); };
+        globalThis.MDS = { cmd: nd.cmd, log: function (x) { logs.push(x); } };
+        R._reset(); R._resetKeeper(); R._setNow(function () { return 1e12; });
+        R.configure({ myMinimaAddr: addr, notify: function () {} });
+        try { R.keepWallet(function () {}); return { node: nd, logs: logs }; }
+        finally { while (nd.held.length) nd.answer(); H.tokenBalance = origBal; globalThis.MDS = savedMds; R._reset(); R._resetKeeper(); R._setNow(Date.now); R.configure(null); }
+    }
+    var ok1 = splitRun('0xAA');
+    T.eq('keeper proof: an owned address → the split is sent', ok1.node.signing(), ['send amount:250 address:0xAA tokenid:' + MX + ' split:9 coinage:3 mine:true']);
+    var un = splitRun('0xBB');
+    T.eq('keeper proof: an address the node has no script for → nothing sent', un.node.signing(), []);
+    T.ok('keeper proof: … and it is logged with the full address', un.logs.some(function (l) { return /split failed .*not sent .*0xBB/.test(l); }));
+    var kf = splitRun('0xAA', function (nd) { nd.keys = function () { return null; }; });
+    T.eq('keeper proof: the keys read fails → nothing sent', kf.node.signing(), []);
+    var inc = splitRun('0xAA', function (nd) { nd.keys = function () { return { keys: [{ publickey: PK }], total: 64 }; }; });
+    T.eq('keeper proof: an incomplete key list (1 of 64) → nothing sent', inc.node.signing(), []);
+    var gone = splitRun('0xAA', function (nd) { nd.keys = function () { return { keys: [{ publickey: '0x' + 'D1'.repeat(32) }], total: 1 }; }; });
+    T.eq('keeper proof: the address key is not in a complete list (orphaned after a reseed) → nothing sent', gone.node.signing(), []);
+    OWNED['0XCC'] = { address: '0xCC', miniaddress: 'MxCC', simple: false, publickey: PK };
+    T.eq('keeper proof: a non-simple (script) address → nothing sent', splitRun('0xCC').node.signing(), []);
+
+    // NIT (0.1.68): merge and split back off separately — a split the node keeps refusing never delays a merge
+    (function () {
+        var nd = realNode(), t2 = 2e12, b2 = bal(1, 500);
+        H.tokenBalance = function (tok, cb) { cb(null, b2); };
+        globalThis.MDS = { cmd: nd.cmd, log: function () {} };
+        R._reset(); R._resetKeeper(); R._setNow(function () { return t2; });
+        R.configure({ myMinimaAddr: '0xBB', notify: function () {} });   // unprovable → every split fails
+        try {
+            R.keepWallet(function () {}); t2 += 121000; R.keepWallet(function () {}); t2 += 241000; R.keepWallet(function () {});
+            T.eq('keeper backoff: three failed splits, nothing sent', nd.signing(), []);
+            b2 = bal(56, 500); t2 += 121000; R.keepWallet(function () {});
+            T.eq('keeper backoff: a merge runs 2 min later despite the split backoff (8 min)', nd.signing(), ['consolidate tokenid:' + MX + ' coinage:3 maxcoins:20 maxsigs:5']);
+        } finally { while (nd.held.length) nd.answer(); H.tokenBalance = origBal; globalThis.MDS = savedMds; R._reset(); R._resetKeeper(); R._setNow(Date.now); R.configure(null); }
+    })();
 })();
 AX.htlc.ETH_FIRST_PAUSED = __ethFirstWas;
 if (AX.settle) AX.settle.secondEndpointAgrees = __xcheckWas;
