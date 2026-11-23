@@ -95,7 +95,7 @@
         buyAmount: '6.435', buyToken: 'USDT', myTimelock: 999, myLegIsMinima: true, contractId: '0xCID' };
     var lines = AX.inspect.buildReport({ swap: swap, block: 100, secretKnown: true,
         myMin: { tokenamount: '6.5', state: { '3': '160' } }, cpMin: null, gc: null, events: [{ note: 'counterparty amount/token mismatch' }] });
-    T.ok('report: header line', lines[0].indexOf('Sell 6.5 mxUSDT → 6.435 USDT') === 0);
+    T.ok('report: header line', lines[0].indexOf('Sell 6.5 MxUSD → 6.435 USDT') === 0);
     T.ok('report: my leg refundable w/ minutes', lines[1].indexOf('LOCKED — refundable at block 160 (~50 min)') > 0);
     T.ok('report: counterparty NOT FOUND yet', lines.some(function (l) { return l.indexOf('NOT FOUND yet') > 0; }));
     T.ok('report: secret known', lines.some(function (l) { return l === '• Secret: known (you can claim)'; }));

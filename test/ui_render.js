@@ -59,7 +59,7 @@ AX.ui.state.tab = 'market'; AX.ui.render();
 ok('market: order book count', root().textContent.indexOf('Order book  ·  2 live') > -1);
 ok('market: depth rows rendered', root().querySelectorAll('.depth').length >= 1);
 ok('market: best row deepest-first (cap30 before cap5)', root().querySelector('.depth.best').textContent.indexOf('30') > -1);
-ok('market: legend', root().textContent.indexOf('SELL mxUSDT (bid)') > -1);
+ok('market: legend', root().textContent.indexOf('SELL MxUSD (bid)') > -1);
 // market history (empty state → chart canvas + no-backfill note)
 ok('market: history header', root().textContent.indexOf('MARKET HISTORY') > -1);
 ok('market: chart canvas present', !!root().querySelector('canvas'));
@@ -71,7 +71,7 @@ AX.ui.state.market = { chart: [{ price: 0.99, createdBlock: 100 }, { price: 1.01
              { price: 0.98, sizeMinima: '2', status: 'OPEN', observedAt: Date.now() - 5000 },
              { price: 0.97, sizeMinima: '1', status: 'REFUNDED', observedAt: Date.now() - 7200000 }] };
 AX.ui.render();
-ok('market: last price in stats', root().textContent.indexOf('last 1.01 USDT/mxUSDT') > -1);
+ok('market: last price in stats', root().textContent.indexOf('last 1.01 USDT/MxUSD') > -1);
 ok('market: filled/open counts', root().textContent.indexOf('1 filled · 1 open') > -1);
 ok('market: filled pill', root().textContent.indexOf('filled') > -1 && root().textContent.indexOf('cancelled') > -1);
 ok('market: relative time', root().textContent.indexOf('min. ago') > -1);
@@ -95,7 +95,7 @@ ok('report: check again', root().textContent.indexOf('Check again') > -1);
 AX.ui.closeDialog();
 
 AX.ui.state.tab = 'wallet'; AX.ui.render();
-ok('wallet: minima balance', root().textContent.indexOf('493.8 mxUSDT') > -1);
+ok('wallet: minima balance', root().textContent.indexOf('493.8 MxUSD') > -1);
 ok('wallet: USDT card', root().textContent.indexOf('8.44 USDT') > -1);
 ok('wallet: ETH address sub-line in FULL (RULE 1)', root().textContent.indexOf('0x7373cf1ff0677a59e9ec7d327c1de0dd67dd625e') > -1 && root().textContent.indexOf('…dd625e') < 0);
 ok('wallet: Minima breakdown line', root().textContent.indexOf('confirmed 500.3') > -1 && root().textContent.indexOf('7 coins') > -1);
@@ -146,7 +146,7 @@ AX.ui.closeDialog();
 
 // coins dialog (breakdown tap target)
 AX.ui.coinsDialog([{ amount: '400.3', coinid: '0x' + 'aa'.repeat(32) }, { amount: '93.5', coinid: '0x' + 'bb'.repeat(32) }]);
-ok('coins: title', root().textContent.indexOf('Your mxUSDT coins') > -1);
+ok('coins: title', root().textContent.indexOf('Your MxUSD coins') > -1);
 ok('coins: rows', root().textContent.indexOf('400.3') > -1 && root().textContent.indexOf('93.5') > -1);
 AX.ui.closeDialog();
 

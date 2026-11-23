@@ -77,3 +77,19 @@
     T.eq('no active market shows everything',
         TR.visibleIn(minimaSwap('COMPLETE', TIP - 40000, true), null, TIP, NOW_MS), true);
 })();
+
+/* 0.1.66 — the Minima dollar token is MxUSD on every screen, notification and export; "USDT" names only the Ethereum
+   leg. Rows on disk keep their legacy "mxUSDT" label (stored data is never rewritten) and SHOW as MxUSD. */
+(function () {
+    var TR = AX.trading, was = TR.active().key;
+    T.eq('label: the token is MxUSD', TR.MXUSDT.coinLabel, 'MxUSD');
+    ['mxusdt', 'minima'].forEach(function (k) {
+        TR.loadKey(k);
+        T.eq('label (' + k + ' active): token id → MxUSD', TR.labelForToken(TR.USDT_TOKENID), 'MxUSD');
+        T.eq('label (' + k + ' active): a legacy "mxUSDT" row shows MxUSD', TR.labelForToken('mxUSDT'), 'MxUSD');
+        T.eq('label (' + k + ' active): the Ethereum leg stays USDT', TR.labelForToken('USDT'), 'USDT');
+        T.eq('label (' + k + ' active): 0x00 → MINIMA', TR.labelForToken('0x00'), 'MINIMA');
+    });
+    T.ok('label: legacy and new labels attribute to the same market', TR.forCoinLabel('mxUSDT') === TR.MXUSDT && TR.forCoinLabel('MxUSD') === TR.MXUSDT);
+    TR.loadKey(was);
+})();

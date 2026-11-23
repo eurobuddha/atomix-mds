@@ -40,7 +40,7 @@
     // ---- the 2026-09-15 shape: withdrawn ETH leg, coin gone, block past the observed timelock → LOST, once ----
     var a = scenario({});
     T.ok('lost swap is finalised: ERROR + one SWAP_LOST + one notification', a.calls.indexOf('status:ERROR') >= 0
-        && a.calls.filter(function (c) { return c.indexOf('log:SWAP_LOST:counterparty withdrew your 4.95 USDT and reclaimed their 5 mxUSDT') === 0; }).length === 1
+        && a.calls.filter(function (c) { return c.indexOf('log:SWAP_LOST:counterparty withdrew your 4.95 USDT and reclaimed their 5 MxUSD') === 0; }).length === 1
         && a.notes.length === 1 && a.notes[0].indexOf(HASH) > 0);
     a.again(200);
     T.ok('a second pass does not repeat it', a.calls.filter(function (c) { return c.indexOf('log:SWAP_LOST') === 0; }).length === 1 && a.notes.length === 1);

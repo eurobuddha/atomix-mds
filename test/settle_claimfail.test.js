@@ -171,5 +171,5 @@
 
     // ---------- statusDetail shows the reason on the row when the host projects it ----------
     T.ok('statusDetail names a failing claim', /Claim FAILING — script proof missing/.test(AX.inspect.statusDetail({ status: 'CLAIMING', lastFail: 'script proof missing — x.', buyamount: '5', buytoken: 'mxUSDT' })));
-    T.ok('statusDetail unchanged without a failure', /claiming your 5 mxUSDT now/.test(AX.inspect.statusDetail({ status: 'CLAIMING', buyamount: '5', buytoken: 'mxUSDT' })));
+    T.ok('statusDetail unchanged without a failure', /claiming your 5 MxUSD now/.test(AX.inspect.statusDetail({ status: 'CLAIMING', buyamount: '5', buytoken: 'mxUSDT' })));
 })();
