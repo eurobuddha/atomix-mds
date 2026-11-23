@@ -63,6 +63,31 @@
             var r5 = fakeRpc(function () { return 0; }, { gp: 1000000000n, baseFee: 5000000000n }); // gp*1.125=1.125gwei < floor 5.825gwei
             ETX.send(r5, PRIV, '0xADDR5', 1, '0xTo', '0xdata', 0n, 500000n, function () {});
             T.eq('gas floored at base+12.5%+tip', String(gps[0]), '5825000000');
+
+            // 5b) 0.1.67 hard ceiling (8000 gwei) after headroom + floor, before signing: a hostile/broken RPC's absurd quote
+            //     is refused (nothing signed, nonce untouched); a real spike and the desktop's own highest price still pass.
+            function feeCase(gp, baseFee) {
+                ETX.resetAll(); gps.length = 0; nonces.length = 0;
+                var rr = fakeRpc(function () { return 3; }, { gp: gp, baseFee: baseFee }), out = {};
+                ETX.send(rr, PRIV, '0xADDRFEE', 1, '0xTo', '0xdata', 0n, 120000n, function (e, h) { out.e = e; out.h = h; });
+                out.signed = gps.length; out.sent = rr.sent.length; return out;
+            }
+            var GWEI = 1000000000n;
+            var hostile = feeCase(100000n * GWEI, 0n);
+            T.ok('ceiling: a 100000 gwei quote is refused loudly', hostile.e && hostile.e.feeRefused === true && /ETH_FEE_REFUSED/.test(hostile.e.message));
+            T.eq('ceiling: nothing signed or sent', [hostile.signed, hostile.sent], [0, 0]);
+            var hostileBase = feeCase(1n * GWEI, 9000n * GWEI);
+            T.ok('ceiling: a hostile base fee cannot lift the floor past it', hostileBase.e && hostileBase.e.feeRefused === true && hostileBase.signed === 0);
+            var spike = feeCase(1500n * GWEI, 1200n * GWEI);
+            T.ok('ceiling: a 1500 gwei spike still signs (claims/refunds near a deadline are not blocked)', !spike.e && spike.signed === 1);
+            var desk = feeCase((5000n * GWEI * 170n * 10n) / (100n * 12n), 2500n * GWEI);   // the desktop proxy's High tier at its anchor cap
+            T.ok('ceiling: the desktop host highest tier price (7968.749999999 gwei) still signs', !desk.e && desk.signed === 1 && String(gps[0]) === '7968749999999');
+            ETX.resetAll(); nonces.length = 0;
+            var q = { gp: 100000n * GWEI }, rq = fakeRpc(function () { return 3; }, q);
+            ETX.send(rq, PRIV, '0xADDRFEE2', 1, '0xTo', '0xdata', 0n, 120000n, function () {});   // refused
+            q.gp = 1n * GWEI;
+            ETX.send(rq, PRIV, '0xADDRFEE2', 1, '0xTo', '0xdata', 0n, 120000n, function () {});
+            T.eq('ceiling: a refusal consumes no nonce (the next send signs nonce 3)', nonces.slice(), [3]);
         } finally { AX.eth.signLegacyTx = savedSign; }
     }
 
