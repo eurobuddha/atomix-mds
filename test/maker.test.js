@@ -72,6 +72,19 @@ var __ethFirstWasM = AX.htlc.ETH_FIRST_PAUSED; AX.htlc.ETH_FIRST_PAUSED = false;
         MK.keepAlive({ minima: 500, usdt: 500 }, function () {});
         T.eq('no move, fresh publish → no republish', published.length, 0);
 
+        // ---- 0.1.64: a failed balance read is never published as 0 (it took the market off every book) ----
+        MK._setLastPublish(0);   // keep-alive due
+        published.length = 0;
+        [null, undefined, { minima: NaN, usdt: 500 }, { minima: 500 }, { minima: '500', usdt: 500 }].forEach(function (a) { MK.keepAlive(a, function () {}); });
+        T.eq('failed balance read → nothing republished', published.length, 0);
+        MK.keepAlive({ minima: 0, usdt: 500 }, function () {});
+        T.eq('a real zero balance still republishes', published.length, 1);
+        var SF = MK.sellableFrom;
+        T.eq('sellableFrom: refused / pending / no answer → null', [SF(null), SF({ status: false, error: 'x' }), SF({ status: true, pending: true, response: [] }), SF({ status: true })], [null, null, null, null]);
+        T.eq('sellableFrom: unreadable sendable → null', [SF({ status: true, response: [{}] }), SF({ status: true, response: [{ sendable: 'abc' }] }), SF({ status: true, response: [{ sendable: '' }] })], [null, null, null]);
+        T.eq('sellableFrom: no coins of the token is a real 0', SF({ status: true, response: [] }), 0);
+        T.eq('sellableFrom: the sendable figure', SF({ status: true, response: [{ sendable: '21615.6', confirmed: '21700' }] }), 21615.6);
+
         // ---- currency switch tombstones the old market ----
         published.length = 0;
         MK.onCurrencySwitch({ minima: 500, usdt: 500 }, function () {});
