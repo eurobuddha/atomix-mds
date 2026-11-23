@@ -112,34 +112,82 @@ var __xcheckWas = AX.settle && AX.settle.secondEndpointAgrees; if (AX.settle) AX
     T.eq('keeper: MINIMA allows up to 120', R.keepPlan(bal(120, 9e5), '0x00', ADDR), null);
     T.eq('keeper: 121 MINIMA coins → merge', R.keepPlan(bal(121, 9e5), '0x00', ADDR).kind, 'merge');
     var s = R.keepPlan(bal(1, 500), MX, ADDR);
-    T.eq('keeper: one coin → split into 10 to myself', s && s.cmd, 'send amount:500 address:0xAA tokenid:' + MX + ' split:10 coinage:1 mine:true');
+    T.eq('keeper: one coin → split into 10 to myself', s && s.cmd, 'send amount:500 address:0xAA tokenid:' + MX + ' split:10 coinage:3 mine:true');
     T.eq('keeper: two coins is enough', R.keepPlan(bal(2, 500), MX, ADDR), null);
     T.eq('keeper: dust is never split', R.keepPlan(bal(1, 9), MX, ADDR), null);
     T.eq('keeper: no coins → nothing', R.keepPlan(bal(0, 0), MX, ADDR), null);
     T.eq('keeper: unconfirmed funds → wait (never act mid-settlement)', R.keepPlan(bal(56, 500, '0.5'), MX, ADDR), null);
     T.eq('keeper: no address → no split', R.keepPlan(bal(1, 500), MX, ''), null);
 
-    // runner: one op at a time, never while a lock holds coins, rate-limited, next() never waits on the node
-    var H = AX.htlc, origBal = H.tokenBalance, origCmd = AX.mds.cmdR, sent = [], pending = null, t = 1e12;
-    H.tokenBalance = function (tok, cb) { cb(null, bal(56, 21615.6)); };
-    AX.mds.cmdR = function (cmd, cb) { sent.push(cmd); pending = cb; };
+    // runner: one op at a time, never while a lock holds coins, rate-limited, next() never waits on the node.
+    // 0.1.62: the commands go through AX.mds to a stand-in that reads them as the REAL node does (split on every ";",
+    // trimmed, LAST duplicate parameter wins, send/consolidate refuse coinage < 3 with "Coinage MUST be >= 3"); the old
+    // recorder accepted anything, so the keeper's `coinage:1` split (refused by every node) passed here.
+    function realNode() {
+        var n = { ran: [], held: [], refuse: null };
+        function trim(x) { return x.replace(/^[\u0000- ]+|[\u0000- ]+$/g, ''); }
+        function parse(piece) {
+            var toks = piece.split(/\s+/), verb = toks.shift().toLowerCase(), p = {};
+            toks.forEach(function (t) { var i = t.indexOf(':'); if (i > 0) p[t.slice(0, i)] = t.slice(i + 1); });   // last one wins
+            return { verb: verb, p: p };
+        }
+        n.cmd = function (q, cb) {
+            var out = String(q).split(';').map(trim).filter(Boolean).map(function (piece) {
+                var c = parse(piece); n.ran.push(piece);
+                if ((c.verb === 'send' || c.verb === 'consolidate') && Number(c.p.coinage === undefined ? 3 : c.p.coinage) < 3)
+                    return { status: false, error: 'Coinage MUST be >= 3' };
+                if (n.refuse) return { status: false, error: n.refuse };
+                return null;   // accepted: the reply is held until the test releases it (a txn in flight)
+            });
+            if (out[0]) cb(out[0]); else n.held.push(cb);
+        };
+        n.answer = function () { n.held.shift()({ status: true, response: { txpowid: '0x' + 'AB'.repeat(32) } }); };
+        return n;
+    }
+    var H = AX.htlc, origBal = H.tokenBalance, savedMds = globalThis.MDS, node = realNode(), t = 1e12, balNow = bal(56, 21615.6), notes = [];
+    H.tokenBalance = function (tok, cb) { cb(null, balNow); };
+    globalThis.MDS = { cmd: node.cmd, log: function () {} };
     R._reset(); R._resetKeeper(); R._setNow(function () { return t; });
-    R.configure({ myMinimaAddr: ADDR });
-    var nexts = 0; R.keepWallet(function () { nexts++; });
-    T.eq('keeper run: merge sent', sent.length, 1);
-    T.eq('keeper run: poll continues without waiting', nexts, 1);
-    R.keepWallet(function () { nexts++; });
-    T.eq('keeper run: no second op while one is in flight', sent.length, 1);
-    pending(null, { txpowid: '0x01' });
-    t += 60000; R.keepWallet(function () { nexts++; });
-    T.eq('keeper run: rate-limited for 2 minutes after an op', sent.length, 1);
-    t += 61000; R.addIncoming('0x' + 'ab'.repeat(32));
-    R._selectCoins([{ coinid: '0xC1', tokenamount: '5' }], '1');
-    R.keepWallet(function () { nexts++; });
-    T.eq('keeper run: acts again after the gap', sent.length, 2);
-    pending(new Error('boom'), null);
-    T.eq('keeper run: a failure frees the keeper', (t += 121000, R.keepWallet(function () {}), sent.length), 3);
-    H.tokenBalance = origBal; AX.mds.cmdR = origCmd; R._reset(); R._resetKeeper(); R._setNow(Date.now); R.configure(null);
+    R.configure({ myMinimaAddr: ADDR, notify: function (a, b) { notes.push(a + ' | ' + b); } });
+    try {
+        var nexts = 0; R.keepWallet(function () { nexts++; });
+        T.eq('keeper run: merge reached the node', node.ran, ['consolidate tokenid:' + MX + ' coinage:3 maxcoins:20 maxsigs:5']);
+        T.eq('keeper run: poll continues without waiting', nexts, 1);
+        R.keepWallet(function () { nexts++; });
+        T.eq('keeper run: no second op while one is in flight', node.ran.length, 1);
+        node.answer();
+        T.ok('keeper run: a posted merge is notified', notes.length === 1 && /^Merging/.test(notes[0]));
+        t += 60000; R.keepWallet(function () { nexts++; });
+        T.eq('keeper run: rate-limited for 2 minutes after an op', node.ran.length, 1);
+        t += 61000; R.addIncoming('0x' + 'ab'.repeat(32));
+        R._selectCoins([{ coinid: '0xC1', tokenamount: '5' }], '1');
+        // one coin → the split: the node must ACCEPT it (old keeper: coinage:1 → "Coinage MUST be >= 3", every 2-3 min)
+        balNow = bal(1, 500);
+        R.keepWallet(function () { nexts++; });
+        T.eq('keeper run: the split reaches the node with coinage:3', node.ran[1], 'send amount:500 address:' + ADDR + ' tokenid:' + MX + ' split:10 coinage:3 mine:true');
+        T.eq('keeper run: the node accepted the split (reply in flight, not refused)', node.held.length, 1);
+        node.answer();
+        T.ok('keeper run: a posted split is notified', notes.length === 2 && /^Splitting/.test(notes[1]));
+        // a refused op is quiet (log only, no notification) and backs off: 4 min after one failure, 8 after two
+        node.refuse = 'Insufficient funds';
+        t += 121000; R.keepWallet(function () {});
+        T.eq('keeper run: acts again after the gap', node.ran.length, 3);
+        T.eq('keeper run: a refused op raises no notification', notes.length, 2);
+        t += 121000; R.keepWallet(function () {});
+        T.eq('keeper run: after one failure the gap doubles (no retry at 2 min)', node.ran.length, 3);
+        t += 120000; R.keepWallet(function () {});
+        T.eq('keeper run: retried at 4 min', node.ran.length, 4);
+        t += 241000; R.keepWallet(function () {});
+        T.eq('keeper run: after two failures no retry at 4 min', node.ran.length, 4);
+        t += 240000; R.keepWallet(function () {});
+        T.eq('keeper run: retried at 8 min, still quiet', [node.ran.length, notes.length], [5, 2]);
+        node.refuse = null; t += 961000; R.keepWallet(function () {}); node.answer();   // three failures: 16 min
+        t += 121000; R.keepWallet(function () {});
+        T.eq('keeper run: a success resets the gap to 2 min', node.ran.length, 7);
+    } finally {
+        while (node.held.length) node.answer();   // release the signing gate for the suites after this one
+        H.tokenBalance = origBal; globalThis.MDS = savedMds; R._reset(); R._resetKeeper(); R._setNow(Date.now); R.configure(null);
+    }
 })();
 AX.htlc.ETH_FIRST_PAUSED = __ethFirstWas;
 if (AX.settle) AX.settle.secondEndpointAgrees = __xcheckWas;
