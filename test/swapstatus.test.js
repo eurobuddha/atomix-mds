@@ -237,6 +237,16 @@ var __xcheckWas = AX.settle && AX.settle.secondEndpointAgrees; if (AX.settle) AX
         ST._reset(); ST.poll(function () {});
         T.eq('refund re-broadcast: still ONE REFUND_SENT', [refunds, evsOf(HE, DB.EV_REFUND_SENT).length], [2, 1]);
 
+        // A3 (0.1.70): a fee-refused ETH REFUND (deadline path) is never silent and is retried on the next poll
+        var feeRefunds = 0;
+        stub(EO, 'make', function () { return {
+            getContract: function (cid, cb) { cb(null, { owner: '0xME', receiver: '0xMAKER', timelock: NOW + 600, withdrawn: false, refunded: false, preimage: H32('00') }); },
+            refund: function (cid, cb) { feeRefunds++; var e = new Error('ETH_FEE_REFUSED: test quote'); e.feeRefused = true; cb(e); } }; });
+        ST._reset(); notes = [];
+        ST.poll(function () {}); ST.poll(function () {});
+        T.eq('refund fee refusal: retried on the next poll', feeRefunds, 2);
+        T.eq('refund fee refusal: told exactly once, with the FULL hash', notes.filter(function (n) { return /held back/.test(n) && n.indexOf(DB.norm(HE)) > 0; }).length, 1);
+
         var v = ST.visibility(swaps[DB.norm(HE)], evsOf(HE).slice().reverse().concat([{ event: DB.EV_MAKER_NOTICE, note: 'declined|too many coins', date: 1 }]));
         T.eq('projection: deadlines', [v.blocks, v.respondBy, v.refundAt], [false, NOW + 600 - H.CP_SECS_CHECK, NOW + 600]);
         T.eq('projection: notice split into state + reason', [v.notice.state, v.notice.reason], ['declined', 'too many coins']);

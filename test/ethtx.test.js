@@ -88,6 +88,38 @@
             q.gp = 1n * GWEI;
             ETX.send(rq, PRIV, '0xADDRFEE2', 1, '0xTo', '0xdata', 0n, 120000n, function () {});
             T.eq('ceiling: a refusal consumes no nonce (the next send signs nonce 3)', nonces.slice(), [3]);
+
+            // 5c) 0.1.70: an over-ceiling quote is re-quoted on two OTHER endpoints of the (unchanged) fallback list and the
+            //     median of the three is used — one hostile endpoint can neither make us sign an absurd fee nor block a send.
+            var FB = AX.ethrpc.FALLBACKS;
+            function quoteCase(primary, answers) {   // answers: endpoint → gwei quote | null (down); baseFee 0 everywhere
+                ETX.resetAll(); gps.length = 0; nonces.length = 0;
+                var rr = fakeRpc(function () { return 4; }, { gp: 100000n * GWEI }), out = { asked: [] };
+                rr.url = primary;
+                rr.callOn = function (ep, method, params, cb) {
+                    if (method === 'eth_gasPrice') out.asked.push(ep);
+                    var g = answers[ep];
+                    if (g == null) return cb(new Error(ep + ' down'));
+                    if (method === 'eth_gasPrice') return cb(null, '0x' + (BigInt(g) * GWEI).toString(16));
+                    cb(null, { baseFeePerGas: '0x0' });
+                };
+                ETX.send(rr, PRIV, '0xADDRQ', 1, '0xTo', '0xdata', 0n, 120000n, function (e, h) { out.e = e; out.h = h; });
+                out.signed = gps.slice(); out.sent = rr.sent.length; return out;
+            }
+            var honest = {}; honest[FB[1]] = 20; honest[FB[2]] = 30;
+            var q1 = quoteCase(FB[0], honest);
+            T.eq('requote: one hostile endpoint → signs at the median of three (30 gwei +12.5%)', [!!q1.e, q1.signed.map(String), q1.sent], [false, ['33750000000'], 1]);
+            T.eq('requote: asks two OTHER fallback endpoints in list order, never the one that quoted', q1.asked, [FB[1], FB[2]]);
+            var gap = {}; gap[FB[2]] = 20; gap[FB[4]] = 25;
+            var q2 = quoteCase(FB[0], gap);
+            T.eq('requote: a down endpoint is skipped for the next one', [!!q2.e, q2.asked.length >= 3, q2.signed.map(String)], [false, true, ['28125000000']]);
+            var two = {}; two[FB[1]] = 90000; two[FB[2]] = 20;
+            var q3 = quoteCase(FB[0], two);
+            T.ok('requote: two of three over the ceiling → still refused, nothing signed', q3.e && q3.e.feeRefused === true && q3.signed.length === 0 && /median/.test(q3.e.message));
+            var lone = {}; lone[FB[3]] = 20;
+            var q4 = quoteCase(FB[0], lone);
+            T.ok('requote: fewer than two other answers → refused (no median of one)', q4.e && q4.e.feeRefused === true && q4.signed.length === 0);
+            T.eq('requote: the fallback list itself is untouched (four copies stay in lockstep)', FB.length, 9);
         } finally { AX.eth.signLegacyTx = savedSign; }
     }
 

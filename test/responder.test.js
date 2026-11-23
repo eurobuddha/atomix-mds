@@ -242,5 +242,37 @@ var __xcheckWas = AX.settle && AX.settle.secondEndpointAgrees; if (AX.settle) AX
         } finally { while (nd.held.length) nd.answer(); H.tokenBalance = origBal; globalThis.MDS = savedMds; R._reset(); R._resetKeeper(); R._setNow(Date.now); R.configure(null); }
     })();
 })();
+/* A3 (0.1.70): a USDT counter-leg refused by the fee ceiling sent nothing — it must not leave a LOCKED row behind
+   (that row dedups every later poll out, so the take is never answered and the taker refunds at the timelock). */
+(function () {
+    var R = AX.responder, O = AX.order, EO = AX.ethops, DB = AX.swapdb, TR = AX.trading, H = AX.htlc, undo = [];
+    function stub(o, n, f) { undo.push([o, n, o[n]]); o[n] = f; }
+    var HASH = '0x' + '5e'.repeat(32), rows = {}, nc = 0, logs = [];
+    try {
+        var o = O.make(), p = O.pair(true, 0, 0, 1); p.bids = [O.level(0.99, 100)]; o.pairs.USDT = p;
+        AX.peg._reset();
+        stub(globalThis, 'MDS', { log: function (x) { logs.push(x); } });
+        stub(DB, 'hasEvent', function (h, ev, cb) { cb(null, false); });
+        stub(DB, 'getSwap', function (h, cb) { cb(null, rows[h] || null); });
+        stub(DB, 'upsertSwap', function (sw, cb) { rows[sw.hash] = sw; cb && cb(null); });
+        stub(DB, 'deleteSwap', function (h, cb) { delete rows[h]; cb && cb(null); });
+        stub(DB, 'logEvent', function (h, ev, a, b, c, cb) { cb && cb(null); });
+        stub(EO, 'ensureAllowance', function (ops, tok, need, cb) { cb(null, true); });
+        stub(EO, 'make', function () { return { newContract: function (mpk, recv, h, tl, tok, sell, req, otc, cb) {
+            nc++; var e = new Error('ETH_FEE_REFUSED: test quote'); e.feeRefused = true; cb(e); } }; });
+        R._reset();
+        R.configure({ rpc: { latestBlockTimestamp: function (cb) { cb(null, Math.floor(Date.now() / 1000)); } }, ethPriv: '0x' + '11'.repeat(32),
+            ethAddr: '0xMAKERETH', myMinimaPk: '0x0B0B', myMinimaAddr: 'MxADDR', getOrder: function () { return o; }, notify: function () {} });
+        var coin = { tokenid: TR.active().tokenId, tokenamount: '50', state: { '1': '49', '2': '[ETH:' + EO.NET.usdt + ']', '3': '1000', '5': HASH, '6': '0xTAKERETH', '7': 'FALSE' } };
+        R.onSellTake(coin, 100, function () {});
+        T.eq('A3 responder: the fee-refused counter-leg leaves NO swap row (nothing was sent)', [nc, !!rows[HASH]], [1, false]);
+        T.ok('A3 responder: the refusal is logged with the full hash', logs.some(function (l) { return l.indexOf(HASH) >= 0 && /not sent/.test(l); }));
+        R.onSellTake(coin, 101, function () {});
+        T.eq('A3 responder: the next poll locks again (not deduped out)', nc, 2);
+    } finally {
+        for (var i = undo.length - 1; i >= 0; i--) undo[i][0][undo[i][1]] = undo[i][2];
+        R._reset(); R.configure(null);
+    }
+})();
 AX.htlc.ETH_FIRST_PAUSED = __ethFirstWas;
 if (AX.settle) AX.settle.secondEndpointAgrees = __xcheckWas;

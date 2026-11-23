@@ -286,6 +286,37 @@
         T.ok('R3: zero preimage NOT harvested (no bogus secret stored)', secrets3[HASH] == null);
         restore();
 
+        // ---------- A3 (0.1.70): a fee-refused ETH WITHDRAW (deadline path) is told once and retried on the next poll ----------
+        cfg();
+        var wdNotes = [], wdCalls = 0, wdLogs = [];
+        ST.configure({ rpc: { latestBlockTimestamp: function (cb) { cb(null, 2000000000); } }, ethPriv: '0x' + '11'.repeat(32), ethAddr: '0xETH',
+            myMinimaPk: '0x0B0B', myMinimaAddr: 'MxADDR', notify: function (t, b) { wdNotes.push(t + ': ' + b); }, onSwapsChanged: function () {} });
+        stub(globalThis, 'MDS', { log: function (x) { wdLogs.push(x); } });
+        stub(AX.mds, 'cmdR', function (cmd, cb) { var data = cmd.match(/^hash type:sha2 data:(0x[0-9a-f]+)$/i); cb(null, data ? { hash: '0x' + AXSHA256(AX.hex.from(data[1])) } : null); });
+        stub(DB, 'getEvents', function (h, cb) { cb(null, []); });
+        stub(DB, 'allSwaps', function (cb) { cb(null, [{ hash: HASH, myLegIsMinima: true, status: 'LOCKED', buyToken: 'USDT' }]); });
+        stub(DB, 'getSecret', function (h, cb) { cb(null, NSECRET); });
+        stub(DB, 'insertSecret', function (h, s2, cb) { cb(null); });
+        stub(DB, 'getRequest', function (h, cb) { cb(null, null); });
+        stub(DB, 'hasEvent', function (h, ev, cb) { cb(null, false); });
+        stub(DB, 'logEvent', function (h, ev, tok, amt, note, cb) { cb && cb(null); });
+        stub(DB, 'setSwapStatus', function (h, s2, cb) { cb && cb(null); });
+        stub(DB, 'getSwap', function (h, cb) { cb(null, { hash: h, status: 'LOCKED', buyToken: 'USDT' }); });
+        stub(H, 'currentBlock', function (cb) { cb(null, 100); });
+        stub(H, 'scanByHash', function (h, ca, d, cb) { cb(null, []); });
+        stub(H, 'scanByKey', function (pk, ca, d, cb) { cb(null, []); });
+        stub(H, 'scanNotifySecret', function (h, d, cb) { cb(null, []); });
+        stub(EO, 'make', function () { return {
+            getContract: function (cid, cb) { cb(null, { owner: '0xTAKERETH', receiver: '0xeth', withdrawn: false, refunded: false, amount: 5000000n, tokenContract: EO.NET.usdt, timelock: 3000000000, preimage: '0x' + '00'.repeat(32) }); },
+            withdraw: function (cid, secret, cb) { wdCalls++; var e = new Error('ETH_FEE_REFUSED: test quote'); e.feeRefused = true; cb(e); }
+        }; });
+        ST.poll(function () {});
+        ST.poll(function () {});
+        T.eq('A3 withdraw: a fee refusal is retried on the very next poll (not after ETH_RETRY_SECS)', wdCalls, 2);
+        T.eq('A3 withdraw: told exactly once per swap, with the full hash', wdNotes.filter(function (n) { return /held back/.test(n) && n.indexOf(HASH) > 0; }).length, 1);
+        T.eq('A3 withdraw: logged on every refusal', wdLogs.filter(function (l) { return /NOT SENT/.test(l); }).length, 2);
+        restore();
+
         // ---------- (R4) a hostile mismatch coin must NOT poison the REAL claim (EV_COLLECT-poison, shared native gap) ----------
         // Attacker locks a dust coin carrying my ACTIVE hash + my receiver key but the wrong amount. Old behavior
         // logged EV_COLLECT → hasEvent(EV_COLLECT) then blocked the real coin's claim FOREVER (mutual-refund grief).
